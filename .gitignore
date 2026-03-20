@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Database (local only — production uses Turso cloud)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Netlify
+.netlify/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+deno.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build
+dist/
+build/
+
+# Uploads (local dev only — production uses Cloudinary)
+public/assets/images/uploads/*
+!public/assets/images/uploads/.gitkeep

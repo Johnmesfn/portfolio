@@ -1,0 +1,20 @@
+{
+  "name": "portfolio-cms",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'Static site — no build needed'",
+    "seed": "node lib/seed.mjs",
+    "deploy": "netlify deploy --prod"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^17.3.1",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}
