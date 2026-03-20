@@ -4,14 +4,14 @@
   "type": "module",
   "scripts": {
     "dev": "netlify dev",
-    "build": "echo 'Static site — no build needed'",
+    "build": "echo 'Static site'",
     "seed": "node lib/seed.mjs",
-    "deploy": "netlify deploy --prod"
+    "deploy": "netlify deploy --prod",
+    "logs": "netlify logs:function api"
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",
     "bcryptjs": "^2.4.3",
-    "dotenv": "^17.3.1",
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {

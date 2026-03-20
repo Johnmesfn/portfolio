@@ -4,6 +4,27 @@ import bcrypt from "bcryptjs";
 
 const SECRET = process.env.JWT_SECRET || "change-this";
 
+// ─── Startup diagnostics ───
+console.log("[API] Function loaded");
+console.log(
+  "[API] TURSO_DATABASE_URL:",
+  process.env.TURSO_DATABASE_URL
+    ? "✅ Set (" + process.env.TURSO_DATABASE_URL.substring(0, 25) + "...)"
+    : "❌ MISSING",
+);
+console.log(
+  "[API] TURSO_AUTH_TOKEN:",
+  process.env.TURSO_AUTH_TOKEN ? "✅ Set" : "❌ MISSING",
+);
+console.log(
+  "[API] JWT_SECRET:",
+  process.env.JWT_SECRET ? "✅ Set" : "⚠️ Using default",
+);
+console.log(
+  "[API] CLOUDINARY_CLOUD_NAME:",
+  process.env.CLOUDINARY_CLOUD_NAME ? "✅ Set" : "⚠️ Not set",
+);
+
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
@@ -11,19 +32,24 @@ const CORS_HEADERS = {
   "Content-Type": "application/json",
 };
 
-// Schema init (once per cold start)
 let schemaReady = false;
 async function ensureSchema() {
   if (schemaReady) return;
-  await initSchema();
-  schemaReady = true;
+  try {
+    await initSchema();
+    schemaReady = true;
+    console.log("[API] Schema ready");
+  } catch (err) {
+    console.error("[API] Schema init FAILED:", err.message);
+    throw err;
+  }
 }
 
-// ─── Response Helpers ───
 function ok(data) {
   return { statusCode: 200, headers: CORS_HEADERS, body: JSON.stringify(data) };
 }
 function bad(msg, code = 400) {
+  console.log(`[API] Error ${code}: ${msg}`);
   return {
     statusCode: code,
     headers: CORS_HEADERS,
@@ -34,9 +60,7 @@ function unauthorized() {
   return bad("Unauthorized", 401);
 }
 
-// ─── Auth Helper ───
 function verifyAuth(headers) {
-  // Netlify headers are lowercase
   const authHeader = headers["authorization"] || headers["Authorization"];
   const token = authHeader?.split(" ")[1];
   if (!token) return null;
@@ -47,7 +71,6 @@ function verifyAuth(headers) {
   }
 }
 
-// ─── CRUD Config ───
 const TABLES = {
   contacts: ["type", "value", "icon", "sort_order"],
   social_links: ["platform", "url", "icon", "sort_order"],
@@ -87,7 +110,6 @@ const TABLES = {
   testimonials: ["name", "avatar_url", "text", "sort_order"],
 };
 
-// ─── Generic CRUD ───
 async function handleCrud(table, method, id, body, user) {
   const fields = TABLES[table];
   if (!fields) return bad("Unknown resource", 404);
@@ -99,14 +121,12 @@ async function handleCrud(table, method, id, body, user) {
     const row = await get(`SELECT * FROM ${table} WHERE id = ?`, [id]);
     return row ? ok(row) : bad("Not found", 404);
   }
-
-  // Mutations need auth
   if (!user) return unauthorized();
 
   if (method === "POST") {
     const cols = fields.filter((f) => body[f] !== undefined);
     const vals = cols.map((f) => body[f]);
-    if (cols.length === 0) return bad("No valid fields provided");
+    if (!cols.length) return bad("No valid fields");
     const result = await run(
       `INSERT INTO ${table} (${cols.join(",")}) VALUES (${cols.map(() => "?").join(",")})`,
       vals,
@@ -117,7 +137,7 @@ async function handleCrud(table, method, id, body, user) {
   if (method === "PUT" && id) {
     const cols = fields.filter((f) => body[f] !== undefined);
     const vals = cols.map((f) => body[f]);
-    if (cols.length === 0) return bad("No valid fields provided");
+    if (!cols.length) return bad("No valid fields");
     await run(
       `UPDATE ${table} SET ${cols.map((f) => `${f}=?`).join(",")} WHERE id=?`,
       [...vals, id],
@@ -133,7 +153,6 @@ async function handleCrud(table, method, id, body, user) {
   return bad("Method not allowed", 405);
 }
 
-// ─── Cloudinary Upload ───
 async function handleUpload(body) {
   const { image } = body;
   if (!image) return bad("No image data");
@@ -143,9 +162,7 @@ async function handleUpload(body) {
   const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
   if (!cloudName || !apiKey || !apiSecret) {
-    return bad(
-      "Cloudinary not configured. Set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET.",
-    );
+    return bad("Cloudinary not configured");
   }
 
   const timestamp = Math.floor(Date.now() / 1000);
@@ -167,63 +184,49 @@ async function handleUpload(body) {
   );
   const data = await res.json();
 
-  if (data.secure_url) {
-    return ok({ url: data.secure_url });
-  }
+  if (data.secure_url) return ok({ url: data.secure_url });
   return bad("Upload failed: " + (data.error?.message || "Unknown"));
 }
 
-// ═══════════════════════════════════════════
-// MAIN HANDLER — Netlify Functions v1 (ESM)
-// ═══════════════════════════════════════════
+// ═══════════════════════════════════════
+// MAIN HANDLER
+// ═══════════════════════════════════════
 
-export const handler = async (event, context) => {
-  // CORS preflight
+export const handler = async (event) => {
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 204, headers: CORS_HEADERS, body: "" };
   }
 
-  await ensureSchema();
-
   const method = event.httpMethod;
-
-  // ── Parse path ──
-  // event.path will be like:
-  //   "/.netlify/functions/api/auth/login"  (from redirect)
-  //   or "/api/auth/login" (in dev)
   const rawPath = event.path || "";
   const cleanPath = rawPath
     .replace(/^\/?\.netlify\/functions\/api\/?/, "")
     .replace(/^\/?(api)?\/?/, "")
     .replace(/\/+$/, "");
-
   const segments = cleanPath.split("/").filter(Boolean);
 
-  // ── Parse body safely ──
   let body = {};
   if (event.body) {
     try {
       body = JSON.parse(event.body);
     } catch {
-      // If body isn't JSON, leave empty
+      // not JSON
     }
   }
 
-  const user = verifyAuth(event.headers);
-
-  // Debug log (remove in production)
-  console.log(
-    `[API] ${method} /${segments.join("/")} ${user ? "(authenticated)" : "(public)"}`,
-  );
+  console.log(`[API] ${method} /${segments.join("/")}`);
 
   try {
-    // ═══ Auth Routes ═══
+    await ensureSchema();
+
+    const user = verifyAuth(event.headers);
+
+    // Auth
     if (segments[0] === "auth") {
       if (segments[1] === "login" && method === "POST") {
         const { username, password } = body;
-        if (!username || !password) {
+        if (!username || !password)
           return bad("Username and password required");
-        }
         const u = await get("SELECT * FROM admin_users WHERE username = ?", [
           username,
         ]);
@@ -235,43 +238,37 @@ export const handler = async (event, context) => {
         });
         return ok({ token, username: u.username });
       }
-
       if (segments[1] === "change-password" && method === "POST") {
         if (!user) return unauthorized();
         const { current, newPassword } = body;
-        if (!current || !newPassword) {
-          return bad("Current and new password required");
-        }
+        if (!current || !newPassword) return bad("Both passwords required");
         const u = await get("SELECT * FROM admin_users WHERE id = ?", [
           user.id,
         ]);
-        if (!u || !bcrypt.compareSync(current, u.password_hash)) {
-          return bad("Wrong current password");
-        }
+        if (!u || !bcrypt.compareSync(current, u.password_hash))
+          return bad("Wrong password");
         await run("UPDATE admin_users SET password_hash = ? WHERE id = ?", [
           bcrypt.hashSync(newPassword, 12),
           user.id,
         ]);
         return ok({ message: "Password changed" });
       }
-
-      return bad("Auth endpoint not found", 404);
+      return bad("Not found", 404);
     }
 
-    // ═══ Upload Route ═══
+    // Upload
     if (segments[0] === "upload" && method === "POST") {
       if (!user) return unauthorized();
       return await handleUpload(body);
     }
 
-    // ═══ Profile (single record) ═══
+    // Profile
     if (segments[0] === "profile") {
       if (method === "GET") {
         let profile = await get("SELECT * FROM profile WHERE id = 1");
         if (!profile) {
-          // Auto-create empty profile if missing
           await run(
-            "INSERT OR IGNORE INTO profile (id, name, title, about_text, avatar_url) VALUES (1, '', '', '', '')",
+            "INSERT OR IGNORE INTO profile (id, name, title, about_text, avatar_url) VALUES (1,'','','','')",
           );
           profile = await get("SELECT * FROM profile WHERE id = 1");
         }
@@ -280,7 +277,6 @@ export const handler = async (event, context) => {
       if (method === "PUT") {
         if (!user) return unauthorized();
         const { name, title, about_text, avatar_url } = body;
-        // Upsert profile
         const exists = await get("SELECT id FROM profile WHERE id = 1");
         if (exists) {
           await run(
@@ -289,16 +285,15 @@ export const handler = async (event, context) => {
           );
         } else {
           await run(
-            "INSERT INTO profile (id, name, title, about_text, avatar_url) VALUES (1, ?, ?, ?, ?)",
+            "INSERT INTO profile (id, name, title, about_text, avatar_url) VALUES (1,?,?,?,?)",
             [name || "", title || "", about_text || "", avatar_url || ""],
           );
         }
         return ok({ message: "Profile updated" });
       }
-      return bad("Method not allowed", 405);
     }
 
-    // ═══ Portfolio (all data combined — public) ═══
+    // Portfolio (combined)
     if (segments[0] === "portfolio" && method === "GET") {
       const [
         profile,
@@ -329,7 +324,6 @@ export const handler = async (event, context) => {
         query("SELECT * FROM companies ORDER BY sort_order"),
         query("SELECT * FROM roles ORDER BY sort_order"),
       ]);
-
       const withRoles = (section) =>
         companies
           .filter((c) => c.section === section)
@@ -337,7 +331,6 @@ export const handler = async (event, context) => {
             ...c,
             roles: roles.filter((r) => r.company_id === c.id),
           }));
-
       return ok({
         profile: profile || {},
         contacts,
@@ -355,18 +348,25 @@ export const handler = async (event, context) => {
       });
     }
 
-    // ═══ CRUD Routes ═══
+    // CRUD
     const table = segments[0];
     const id = segments[1] ? +segments[1] : null;
-
     if (table && TABLES[table]) {
       return await handleCrud(table, method, id, body, user);
     }
 
-    // ═══ Fallback ═══
-    return bad(`Endpoint not found: ${method} /${segments.join("/")}`, 404);
+    return bad(`Not found: ${method} /${segments.join("/")}`, 404);
   } catch (err) {
-    console.error("[API Error]", err);
-    return bad("Internal server error: " + err.message, 500);
+    console.error("[API] CRASH:", err.message, err.stack);
+    return {
+      statusCode: 500,
+      headers: CORS_HEADERS,
+      body: JSON.stringify({
+        error: "Internal server error",
+        message: err.message,
+        // Remove this in production:
+        stack: err.stack,
+      }),
+    };
   }
 };

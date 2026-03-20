@@ -1,16 +1,27 @@
 <div align="center">
 
-# <YM/> Portfolio CMS
+# &lt;YM/&gt; Portfolio CMS
 
 **A modern, dark-themed developer portfolio with a built-in CMS admin panel.**
 
-Built with vanilla **HTML/CSS/JS** • **Netlify Functions** backend • **Turso SQLite** database • **Cloudinary** image hosting
+Built with vanilla **HTML/CSS/JS** • **Netlify Functions** • **Turso SQLite** • **Cloudinary**
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/YOUR-BADGE-ID/deploy-status)](https://app.netlify.com/sites/YOUR-SITE/deploys)
-[![License: MIT](https://img.shields.io/badge/License-MIT-2ecc87.svg)](./LICENSE)
-![Node](https://img.shields.io/badge/Node-18+-339933?logo=node.js\&logoColor=white)
+<!-- “Button-style” links -->
+<a href="https://yohannesweb.netlify.app" target="_blank">
+  <img src="https://img.shields.io/badge/🚀%20Live%20Demo-Visit-blue?style=for-the-badge&logo=appveyor" alt="Live Demo">
+</a>
+<a href="https://yohannesweb.netlify.app/admin.html" target="_blank">
+  <img src="https://img.shields.io/badge/🛠️%20Admin%20Panel-Open-green?style=for-the-badge&logo=appveyor" alt="Admin Panel">
+</a>
+<a href="https://github.com/yohannesmesfin/portfolio/issues" target="_blank">
+  <img src="https://img.shields.io/badge/🐛%20Report%20Bug-Now-red?style=for-the-badge&logo=appveyor" alt="Report Bug">
+</a>
 
-[Live Demo](https://your-site.netlify.app) · [Admin Panel](https://your-site.netlify.app/admin.html) · [Report Bug](https://github.com/yohannesmesfin/portfolio/issues)
+<br>
+
+<!-- Netlify Deploy Status -->
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/3f49b4dd-1a82-405e-9b76-0b9a230856c1/deploy-status)](https://app.netlify.com/projects/yohannesweb/deploys)
 
 </div>
 
@@ -20,38 +31,38 @@ Built with vanilla **HTML/CSS/JS** • **Netlify Functions** backend • **Turso
 
 ### Portfolio Frontend
 
-* 🌗 **Dark/Light mode** with localStorage persistence
-* ⌨️ **Typing animation** with rotating texts
-* 🎯 **Interactive particle background** (theme-aware)
-* 📊 **Animated counters & skill bars** using IntersectionObserver
-* 🗂️ **5-page SPA** — About, Resume, Portfolio, Certificates, Contact
-* 🔍 **Portfolio filtering** by category
-* 🏆 **Certificate modal** with verification links
-* 💬 **Testimonials carousel** with detailed modals
-* 📱 **Responsive & mobile-first** design with bottom navbar
-* ♿ **Accessible** — ARIA, focus-visible, reduced motion support
-* 📄 **Dynamic PDF CV generator** from live DOM content
-* 🗺️ **Google Maps** integration with dark mode support
-* 📬 **Contact form** via Formspree + mailto fallback
+- 🌗 **Dark/Light mode** with localStorage persistence
+- ⌨️ **Typing animation** with rotating texts
+- 🎯 **Interactive particle background** (theme-aware)
+- 📊 **Animated counters & skill bars** using IntersectionObserver
+- 🗂️ **5-page SPA** — About, Resume, Portfolio, Certificates, Contact
+- 🔍 **Portfolio filtering** by category
+- 🏆 **Certificate modal** with verification links
+- 💬 **Testimonials carousel** with detailed modals
+- 📱 **Responsive & mobile-first** design with bottom navbar
+- ♿ **Accessible** — ARIA, focus-visible, reduced motion support
+- 📄 **Dynamic PDF CV generator** from live DOM content
+- 🗺️ **Google Maps** integration with dark mode support
+- 📬 **Contact form** via Formspree + mailto fallback
 
 ### CMS Admin Panel
 
-* 🔐 **JWT authentication** with bcrypt-hashed passwords
-* 📝 **Full CRUD** for 12+ content sections
-* 🏢 **Nested editing** — Companies → Roles (Experience/Education)
-* 🖼️ **Cloudinary image uploads** with previews and progress
-* 📱 **Mobile-responsive admin panel** with bottom tab navigation
-* 🔄 **Live updates** — instant portfolio refresh after edits
-* 🛡️ **Static HTML fallback** in case API is down
-* ⚡ **Config-driven** — add sections by editing one object
+- 🔐 **JWT authentication** with bcrypt-hashed passwords
+- 📝 **Full CRUD** for 12+ content sections
+- 🏢 **Nested editing** — Companies → Roles (Experience/Education)
+- 🖼️ **Cloudinary image uploads** with previews and progress
+- 📱 **Mobile-responsive admin panel** with bottom tab navigation
+- 🔄 **Live updates** — instant portfolio refresh after edits
+- 🛡️ **Static HTML fallback** in case API is down
+- ⚡ **Config-driven** — add sections by editing one object
 
 ### Infrastructure
 
-* 🌐 **Fully serverless** with Netlify Functions
-* 🗄️ **Turso SQLite** — edge database with global replication
-* ☁️ **Cloudinary CDN** — optimized worldwide image delivery
-* 🆓 **$0/month** — fully free-tier compatible
-* 🚀 **Auto-deploy** via GitHub → Netlify
+- 🌐 **Fully serverless** with Netlify Functions
+- 🗄️ **Turso SQLite** — edge database with global replication
+- ☁️ **Cloudinary CDN** — optimized worldwide image delivery
+- 🆓 **$0/month** — fully free-tier compatible
+- 🚀 **Auto-deploy** via GitHub → Netlify
 
 ---
 
@@ -104,10 +115,10 @@ portfolio/
 
 ### Prerequisites
 
-* Node.js 18+
-* Netlify CLI (`npm i -g netlify-cli`)
-* Turso CLI
-* Cloudinary account
+- Node.js 18+
+- Netlify CLI (`npm i -g netlify-cli`)
+- Turso CLI
+- Cloudinary account
 
 ### Setup Steps
 
@@ -131,7 +142,7 @@ turso db tokens create portfolio-cms
 
 3. **Cloudinary**
 
-* Copy **Cloud Name, API Key, API Secret** from your dashboard
+- Copy **Cloud Name, API Key, API Secret** from your dashboard
 
 4. **Environment Variables** (`.env`)
 
@@ -158,9 +169,9 @@ npm run dev
 npx netlify dev
 ```
 
-* Portfolio: `http://localhost:3000`
-* Admin Panel: `http://localhost:3000/admin.html`
-* Default login: `admin / admin123` (change immediately!)
+- Portfolio: `http://localhost:3000`
+- Admin Panel: `http://localhost:3000/admin.html`
+- Default login: `admin / admin123` (change immediately!)
 
 ---
 
@@ -177,8 +188,8 @@ npx netlify dev
 
 ### Authenticated Endpoints
 
-* Include `Authorization: Bearer <token>`
-* Examples: create/update/delete items, upload images, update profile
+- Include `Authorization: Bearer <token>`
+- Examples: create/update/delete items, upload images, update profile
 
 ### Available Tables
 
@@ -188,38 +199,38 @@ npx netlify dev
 
 ## 🎨 Customization
 
-* **Colors:** edit CSS custom properties in `style.css`
-* **Add Sections:** modify DB schema, API tables, admin SECTIONS array, frontend render functions
-* **CV Template:** edit `buildCVHTML()` in `script.js`
+- **Colors:** edit CSS custom properties in `style.css`
+- **Add Sections:** modify DB schema, API tables, admin SECTIONS array, frontend render functions
+- **CV Template:** edit `buildCVHTML()` in `script.js`
 
 ---
 
 ## 🗄️ Database Schema (Summary)
 
-* profile, contacts, social_links, typing_texts, stats, services, tech_stack
-* companies → roles (nested)
-* skills, projects, certificates, testimonials
-* admin_users (JWT auth)
+- profile, contacts, social_links, typing_texts, stats, services, tech_stack
+- companies → roles (nested)
+- skills, projects, certificates, testimonials
+- admin_users (JWT auth)
 
 ---
 
 ## 🛡️ Security & Best Practices
 
-* Passwords hashed with bcrypt (12 rounds)
-* JWT tokens expire after 24h
-* Mutation endpoints require auth
-* Image uploads validated & signed
-* SQL parameterized queries prevent injection
-* **Production:** change default password, set strong JWT_SECRET
+- Passwords hashed with bcrypt (12 rounds)
+- JWT tokens expire after 24h
+- Mutation endpoints require auth
+- Image uploads validated & signed
+- SQL parameterized queries prevent injection
+- **Production:** change default password, set strong JWT_SECRET
 
 ---
 
 ## 🤝 Contributing
 
-* Fork → feature branch → commit → PR
-* Follow existing vanilla JS code style
-* Test responsiveness & dark/light modes
-* Update seed data if adding tables
+- Fork → feature branch → commit → PR
+- Follow existing vanilla JS code style
+- Test responsiveness & dark/light modes
+- Update seed data if adding tables
 
 ---
 
@@ -245,7 +256,7 @@ GitHub: github.com/yohannesmesfin
 Email: [mesfiny711@gmail.com](mailto:mesfiny711@gmail.com)
 
 <div align="center">
-If this project helped you, please consider giving it a ⭐  
+If this project helped you, please consider giving it a ⭐
 
 Built with ❤️ in Addis Ababa, Ethiopia
 

@@ -4,14 +4,15 @@
 
 [functions]
   node_bundler = "esbuild"
+  # Include the libsql native modules
+  included_files = ["node_modules/@libsql/**"]
 
-# Route ALL /api/* requests to the single serverless function
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
   status = 200
+  force = true
 
-# SPA fallback
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -20,7 +21,6 @@
 [dev]
   publish = "public"
   port = 3000
-  targetPort = 8888
 
 [[headers]]
   for = "/api/*"
