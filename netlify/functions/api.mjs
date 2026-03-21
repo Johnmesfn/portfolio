@@ -263,12 +263,14 @@ export const handler = async (event) => {
     }
 
     // Profile
+    // Profile
     if (segments[0] === "profile") {
       if (method === "GET") {
         let profile = await get("SELECT * FROM profile WHERE id = 1");
         if (!profile) {
           await run(
-            "INSERT OR IGNORE INTO profile (id, name, title, about_text, avatar_url, availability) VALUES (1,'','','','','available')",
+            `INSERT OR IGNORE INTO profile (id, name, title, about_text, avatar_url, "availability")
+         VALUES (1, '', '', '', '', 'available')`,
           );
           profile = await get("SELECT * FROM profile WHERE id = 1");
         }
@@ -280,7 +282,7 @@ export const handler = async (event) => {
         const exists = await get("SELECT id FROM profile WHERE id = 1");
         if (exists) {
           await run(
-            "UPDATE profile SET name=?, title=?, about_text=?, avatar_url=?, availability=? WHERE id=1",
+            `UPDATE profile SET name=?, title=?, about_text=?, avatar_url=?, "availability"=? WHERE id=1`,
             [
               name || "",
               title || "",
@@ -291,7 +293,8 @@ export const handler = async (event) => {
           );
         } else {
           await run(
-            "INSERT INTO profile (id, name, title, about_text, avatar_url, availability) VALUES (1,?,?,?,?,?)",
+            `INSERT INTO profile (id, name, title, about_text, avatar_url, "availability")
+         VALUES (1, ?, ?, ?, ?, ?)`,
             [
               name || "",
               title || "",
