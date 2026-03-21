@@ -854,17 +854,36 @@ function mdHighlight(text) {
 
 function cmsRenderProfile(profile, typTexts) {
   if (!profile) return;
+
+  // Update name
   const nameEl = $(".sidebar .name");
   if (nameEl && profile.name) nameEl.textContent = profile.name;
+
+  // Update avatar
   const avatarImg = $(".avatar-box img");
   if (avatarImg && profile.avatar_url) avatarImg.src = profile.avatar_url;
+
+  // Update typing texts
   if (typTexts?.length) {
     typingTexts.length = 0;
     typTexts.forEach((t) => typingTexts.push(t.text));
-    // Reset typing animation to start with new texts
     tIdx = 0;
     cIdx = 0;
     deleting = false;
+  }
+
+  // Update availability status badge
+  const statusBadge = $(".status-badge");
+  if (statusBadge) {
+    const status = profile.availability || "available";
+    statusBadge.setAttribute("data-status", status);
+
+    const titles = {
+      available: "Available for hire",
+      busy: "Busy — limited availability",
+      unavailable: "Not available for hire",
+    };
+    statusBadge.setAttribute("title", titles[status] || titles.available);
   }
 }
 
