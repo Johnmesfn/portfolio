@@ -599,6 +599,81 @@ main {
   animation: pulse-status 2s infinite;
   display: block;
 }
+/* ─── Status Badge States ─── */
+.status-badge[data-status="available"] {
+  background: var(--accent-primary);
+  animation: pulse-status 2s infinite;
+}
+
+.status-badge[data-status="busy"] {
+  background: hsl(35, 90%, 55%);
+  animation: pulse-status-busy 2s infinite;
+}
+
+.status-badge[data-status="unavailable"] {
+  background: hsl(0, 65%, 55%);
+  animation: none;
+}
+
+@keyframes pulse-status-busy {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsla(35, 90%, 55%, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 7px hsla(35, 90%, 55%, 0);
+  }
+}
+
+/* Status tooltip */
+.status-badge::after {
+  content: attr(title);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  background: var(--eerie-black-1);
+  color: var(--white-2);
+  font-size: 10px;
+  font-family: var(--ff-mono);
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  border: 1px solid var(--jet);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.status-badge::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--eerie-black-1);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.avatar-box:hover .status-badge::after,
+.avatar-box:hover .status-badge::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-badge[data-status="busy"] {
+    animation: none;
+  }
+}
 @keyframes pulse-status {
   0%,
   100% {
