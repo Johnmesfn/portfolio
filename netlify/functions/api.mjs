@@ -268,7 +268,7 @@ export const handler = async (event) => {
         let profile = await get("SELECT * FROM profile WHERE id = 1");
         if (!profile) {
           await run(
-            "INSERT OR IGNORE INTO profile (id, name, title, about_text, avatar_url) VALUES (1,'','','','')",
+            "INSERT OR IGNORE INTO profile (id, name, title, about_text, avatar_url, availability) VALUES (1,'','','','','available')",
           );
           profile = await get("SELECT * FROM profile WHERE id = 1");
         }
@@ -276,17 +276,29 @@ export const handler = async (event) => {
       }
       if (method === "PUT") {
         if (!user) return unauthorized();
-        const { name, title, about_text, avatar_url } = body;
+        const { name, title, about_text, avatar_url, availability } = body;
         const exists = await get("SELECT id FROM profile WHERE id = 1");
         if (exists) {
           await run(
-            "UPDATE profile SET name=?, title=?, about_text=?, avatar_url=? WHERE id=1",
-            [name || "", title || "", about_text || "", avatar_url || ""],
+            "UPDATE profile SET name=?, title=?, about_text=?, avatar_url=?, availability=? WHERE id=1",
+            [
+              name || "",
+              title || "",
+              about_text || "",
+              avatar_url || "",
+              availability || "available",
+            ],
           );
         } else {
           await run(
-            "INSERT INTO profile (id, name, title, about_text, avatar_url) VALUES (1,?,?,?,?)",
-            [name || "", title || "", about_text || "", avatar_url || ""],
+            "INSERT INTO profile (id, name, title, about_text, avatar_url, availability) VALUES (1,?,?,?,?,?)",
+            [
+              name || "",
+              title || "",
+              about_text || "",
+              avatar_url || "",
+              availability || "available",
+            ],
           );
         }
         return ok({ message: "Profile updated" });
