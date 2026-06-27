@@ -327,7 +327,7 @@ textarea {
   align-items: center;
   color: var(--accent-primary);
   font-size: 20px;
-  z-index: 10;
+  z-index: 100;
   cursor: pointer;
   transition: var(--transition-1);
   box-shadow: var(--shadow-2);
@@ -586,8 +586,7 @@ article.active {
 -----------------------------------*/
 
 main {
-  margin: 15px 12px;
-  margin-bottom: 75px;
+  margin: 75px 12px 75px;
   min-width: 259px;
   max-width: 100%;
   overflow-x: hidden;
@@ -2305,6 +2304,9 @@ textarea.form-input::-webkit-resizer {
     grid-template-columns: repeat(4, 1fr);
   }
 }
+
+
+
 
 /*-----------------------------------
   450px – 579px

@@ -379,8 +379,7 @@ export const handler = async (event) => {
       body: JSON.stringify({
         error: "Internal server error",
         message: err.message,
-        // Remove this in production:
-        stack: err.stack,
+        ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
       }),
     };
   }

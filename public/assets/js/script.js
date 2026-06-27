@@ -7,6 +7,113 @@ const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 const enc = encodeURIComponent;
 
+/* ============================================
+   DATE CALCULATION ENGINE
+   Parses date range strings like:
+     "Feb 2026 — Present"
+     "Sep 2025 — Feb 2026 · 6 months"  (existing suffix stripped & recomputed)
+     "Mar 2024 — Sep 2025 · 1 year 7 months"
+   and returns a live-computed duration suffix.
+   ============================================ */
+const MONTH_NAMES = {
+  jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
+  jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11,
+};
+
+function parseMonth(str) {
+  return MONTH_NAMES[str.trim().toLowerCase().slice(0, 3)] ?? -1;
+}
+
+function parseMonthYear(token) {
+  // Matches "Feb 2026", "February 2026", etc.
+  const m = token.trim().match(/^(\w+)\s+(\d{4})$/);
+  if (!m) return null;
+  const month = parseMonth(m[1]);
+  if (month === -1) return null;
+  return new Date(parseInt(m[2], 10), month, 1);
+}
+
+function formatDuration(totalMonths) {
+  if (totalMonths < 1) return "< 1 month";
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+  const parts = [];
+  if (years > 0) parts.push(`${years} year${years > 1 ? "s" : ""}`);
+  if (months > 0) parts.push(`${months} month${months > 1 ? "s" : ""}`);
+  return parts.join(" ");
+}
+
+/**
+ * Parses "Start — End [· old suffix]" and returns the computed duration string.
+ * Returns null if the string doesn't match the expected format.
+ */
+function calcDuration(rawText) {
+  if (!rawText) return null;
+  // Strip any existing "· …" suffix so we can recompute cleanly
+  const cleaned = rawText.replace(/·.*$/, "").trim();
+  // Splits on em-dash (—), en-dash (–), or double hyphen
+  const parts = cleaned.split(/\s*[—–]\s*|\s*--\s*/);
+  if (parts.length < 2) return null;
+
+  const start = parseMonthYear(parts[0]);
+  if (!start) return null;
+
+  const endToken = parts[1].trim();
+  const isPresent = /^present$/i.test(endToken);
+  const end = isPresent ? new Date() : parseMonthYear(endToken);
+  if (!end) return null;
+
+  const totalMonths =
+    (end.getFullYear() - start.getFullYear()) * 12 +
+    (end.getMonth() - start.getMonth()) + 1;
+
+  if (totalMonths < 0) return null;
+
+  const endLabel = isPresent ? "Present" : endToken;
+  const duration = formatDuration(totalMonths);
+  return `${parts[0].trim()} — ${endLabel} · ${duration}`;
+}
+
+/**
+ * Scans the DOM for all role date and group-meta elements and
+ * replaces their text with live-computed durations where possible.
+ * Safe to call multiple times — only rewrites strings that contain
+ * recognisable date ranges.
+ */
+function refreshDurations() {
+  // Role date spans: "Feb 2026 — Present", "Sep 2025 — Feb 2026 · 6 months"
+  $$(".timeline-role-date").forEach((el) => {
+    const updated = calcDuration(el.textContent);
+    if (updated) el.textContent = updated;
+  });
+
+  // Group meta spans: "7 months · Addis Ababa, Ethiopia"
+  // These have a different format — only update if they contain a date range
+  $$(".timeline-group-meta").forEach((el) => {
+    const text = el.textContent.trim();
+    // Only process if it looks like a date range (contains "—" or "–")
+    if (!/[—–]/.test(text) && !/\w+\s+\d{4}/.test(text)) return;
+    // Try stripping a location suffix: "May 2025 — Present · Addis Ababa" → compute date part
+    const locationMatch = text.match(/^(.*?)\s*·\s*(.+)$/);
+    if (locationMatch) {
+      const datePart = locationMatch[1].trim();
+      const locationPart = locationMatch[2].trim();
+      const updated = calcDuration(datePart);
+      if (updated) {
+        // Extract just the duration from the computed string to append location
+        const durationMatch = updated.match(/·\s*(.+)$/);
+        if (durationMatch) {
+          el.textContent = `${durationMatch[1]} · ${locationPart}`;
+        }
+      }
+    } else {
+      const updated = calcDuration(text);
+      if (updated) el.textContent = updated;
+    }
+  });
+}
+
+
 function createObserver(callback, options = {}) {
   return new IntersectionObserver(
     (entries) =>
@@ -322,24 +429,10 @@ const mImg = $("[data-modal-img]");
 const mTitle = $("[data-modal-title]");
 const mText = $("[data-modal-text]");
 
-// Static binding (for initial HTML content)
-$$("[data-testimonials-item]").forEach((item) => {
-  item.addEventListener("click", function () {
-    const av = $("[data-testimonials-avatar]", this);
-    mImg.src = av.src;
-    mImg.alt = av.alt;
-    mTitle.innerHTML = $("[data-testimonials-title]", this).innerHTML;
-    mText.innerHTML = $("[data-testimonials-text]", this).innerHTML;
-    testimModal.open();
-  });
-});
-
-// Event delegation (for CMS-rendered content)
+// Single delegation handler — works for both static HTML and CMS-rendered content
 $(".testimonials-list")?.addEventListener("click", (e) => {
   const item = e.target.closest("[data-testimonials-item]");
   if (!item) return;
-  // Prevent double-fire from static bindings
-  if (e.target.closest("[data-testimonials-item]")._boundStatic) return;
   const av = $("[data-testimonials-avatar]", item);
   if (!av) return;
   mImg.src = av.src;
@@ -1226,6 +1319,9 @@ function reinitAfterCMSRender() {
     );
     skillFills.forEach((f) => so.observe(f));
   }
+
+  // Calculate dynamic dates for newly rendered timeline items
+  refreshDurations();
 }
 
 /* ─── Main CMS Data Loader ─── */
@@ -1268,3 +1364,6 @@ async function loadCMSData() {
 
 // Load CMS data on startup
 loadCMSData();
+
+// Run dynamic date calculations for static HTML fallback
+refreshDurations();
