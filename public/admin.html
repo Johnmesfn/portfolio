@@ -1,2065 +1,2451 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portfolio CMS — Admin</title>
-    <link
-      rel="shortcut icon"
-      href="./assets/images/logo.ico"
-      type="image/x-icon"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --bg-0: #010409;
-        --bg-1: #0d1117;
-        --bg-2: #161b22;
-        --bg-3: #21262d;
-        --bg-4: #292e36;
-        --border: #30363d;
-        --border-light: #3d444d;
-        --text-0: #f0f6fc;
-        --text-1: #e6edf3;
-        --text-2: #8b949e;
-        --text-3: #6e7681;
-        --accent: #2ecc87;
-        --accent-dim: #238a5c;
-        --accent-bg: hsla(155, 70%, 45%, 0.1);
-        --accent-border: hsla(155, 70%, 45%, 0.25);
-        --danger: #f85149;
-        --danger-bg: hsla(0, 90%, 60%, 0.1);
-        --danger-border: hsla(0, 90%, 60%, 0.25);
-        --warning: #d29922;
-        --radius: 8px;
-        --radius-lg: 12px;
-        --radius-xl: 16px;
-        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
-        --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
-        --shadow-glow: 0 0 20px hsla(155, 70%, 45%, 0.15);
-        --font: "Inter", -apple-system, sans-serif;
-        --mono: "JetBrains Mono", monospace;
-        --transition: 0.2s ease;
-      }
-      *,
-      *::before,
-      *::after {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: var(--font);
-        background: var(--bg-0);
-        color: var(--text-1);
-        min-height: 100vh;
-        line-height: 1.5;
-        -webkit-font-smoothing: antialiased;
-      }
-      a {
-        color: var(--accent);
-        text-decoration: none;
-      }
-      button {
-        font: inherit;
-        cursor: pointer;
-        border: none;
-        background: none;
-        color: inherit;
-      }
-      input,
-      textarea,
-      select {
-        font: inherit;
-        background: var(--bg-1);
-        color: var(--text-1);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 10px 14px;
-        width: 100%;
-        outline: none;
-        transition:
-          border-color var(--transition),
-          box-shadow var(--transition);
-      }
-      input:focus,
-      textarea:focus,
-      select:focus {
-        border-color: var(--accent);
-        box-shadow: 0 0 0 3px hsla(155, 70%, 45%, 0.12);
-      }
-      input::placeholder,
-      textarea::placeholder {
-        color: var(--text-3);
-      }
-      textarea {
-        min-height: 80px;
-        resize: vertical;
-      }
-      select {
-        cursor: pointer;
-        appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b949e' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 12px center;
-        padding-right: 36px;
-      }
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: var(--bg-1);
-      }
-      ::-webkit-scrollbar-thumb {
-        background: var(--bg-4);
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: var(--text-3);
-      }
 
-      .field {
-        margin-bottom: 16px;
-      }
-      .field label {
-        display: block;
-        font-size: 11px;
-        color: var(--text-2);
-        margin-bottom: 6px;
-        font-family: var(--mono);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        font-weight: 500;
-      }
-      .field-hint {
-        font-size: 11px;
-        color: var(--text-3);
-        margin-top: 4px;
-      }
-      .form-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio CMS — Admin</title>
+  <link rel="shortcut icon" href="./assets/images/logo.ico" type="image/x-icon" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg-0: #010409;
+      --bg-1: #0d1117;
+      --bg-2: #161b22;
+      --bg-3: #21262d;
+      --bg-4: #292e36;
+      --border: #30363d;
+      --border-light: #3d444d;
+      --text-0: #f0f6fc;
+      --text-1: #e6edf3;
+      --text-2: #8b949e;
+      --text-3: #6e7681;
+      --accent: #2ecc87;
+      --accent-dim: #238a5c;
+      --accent-bg: hsla(155, 70%, 45%, 0.1);
+      --accent-border: hsla(155, 70%, 45%, 0.25);
+      --danger: #f85149;
+      --danger-bg: hsla(0, 90%, 60%, 0.1);
+      --danger-border: hsla(0, 90%, 60%, 0.25);
+      --warning: #d29922;
+      --radius: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+      --shadow-glow: 0 0 20px hsla(155, 70%, 45%, 0.15);
+      --font: "Inter", -apple-system, sans-serif;
+      --mono: "JetBrains Mono", monospace;
+      --transition: 0.2s ease;
+    }
 
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        padding: 9px 16px;
-        border-radius: var(--radius);
-        font-size: 13px;
-        font-weight: 600;
-        transition: all var(--transition);
-        white-space: nowrap;
-        line-height: 1;
-      }
-      .btn-primary {
-        background: var(--accent);
-        color: var(--bg-0);
-      }
-      .btn-primary:hover {
-        background: var(--accent-dim);
-        box-shadow: var(--shadow-glow);
-        transform: translateY(-1px);
-      }
-      .btn-danger {
-        color: var(--danger);
-        border: 1px solid var(--danger-border);
-        background: var(--danger-bg);
-      }
-      .btn-danger:hover {
-        background: var(--danger);
-        color: #fff;
-        border-color: var(--danger);
-      }
-      .btn-ghost {
-        color: var(--text-2);
-        border: 1px solid var(--border);
-      }
-      .btn-ghost:hover {
-        border-color: var(--text-2);
-        color: var(--text-1);
-        background: var(--bg-3);
-      }
-      .btn-sm {
-        padding: 5px 10px;
-        font-size: 12px;
-      }
-      .btn-lg {
-        padding: 12px 24px;
-        font-size: 14px;
-      }
-      .btn-icon {
-        width: 32px;
-        height: 32px;
-        padding: 0;
-        border-radius: var(--radius);
-        font-size: 16px;
-      }
-      .btn-bar {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-      }
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-      /* Login */
-      #login-screen {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        background:
-          radial-gradient(
-            ellipse at 50% 0%,
-            hsla(155, 50%, 30%, 0.06),
-            transparent 60%
-          ),
-          var(--bg-0);
-        padding: 20px;
-      }
-      .login-card {
-        background: var(--bg-2);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-xl);
-        padding: 40px 32px;
-        width: 100%;
-        max-width: 400px;
-        box-shadow: var(--shadow-lg);
-      }
-      .login-logo {
-        font-family: var(--mono);
-        font-size: 28px;
-        font-weight: 700;
-        text-align: center;
-        margin-bottom: 4px;
-      }
-      .login-logo .bracket {
-        color: var(--accent);
-      }
-      .login-logo .slash {
-        color: var(--text-3);
-      }
-      .login-subtitle {
-        text-align: center;
-        font-size: 13px;
-        color: var(--text-2);
-        margin-bottom: 28px;
-      }
-      .login-error {
-        color: var(--danger);
-        font-size: 12px;
-        text-align: center;
-        margin-top: 12px;
-        min-height: 18px;
-        font-family: var(--mono);
-      }
+    body {
+      font-family: var(--font);
+      background: var(--bg-0);
+      color: var(--text-1);
+      min-height: 100vh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
 
-      /* Panel */
-      #admin-panel {
-        display: none;
-      }
-      .panel-header {
-        position: sticky;
-        top: 0;
-        z-index: 20;
-        background: hsla(215, 28%, 7%, 0.85);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--border);
-        padding: 0 24px;
-        height: 56px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .panel-logo {
-        font-family: var(--mono);
-        font-size: 15px;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .panel-logo .accent {
-        color: var(--accent);
-      }
-      .panel-logo .badge {
-        font-size: 10px;
-        background: var(--accent-bg);
-        color: var(--accent);
-        border: 1px solid var(--accent-border);
-        padding: 2px 8px;
-        border-radius: 20px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-      .panel-header-right {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-      .panel-user {
-        font-size: 12px;
-        color: var(--text-2);
-        font-family: var(--mono);
-      }
-      .panel-body {
-        display: flex;
-        min-height: calc(100vh - 56px);
-      }
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
 
-      /* Nav */
-      .admin-nav {
-        width: 240px;
-        background: var(--bg-1);
-        border-right: 1px solid var(--border);
-        padding: 12px 0;
-        flex-shrink: 0;
-        position: sticky;
-        top: 56px;
-        height: calc(100vh - 56px);
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-      }
-      .nav-group-label {
-        padding: 16px 20px 6px;
-        font-size: 10px;
-        font-family: var(--mono);
-        color: var(--text-3);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        font-weight: 600;
-      }
-      .nav-btn {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        width: 100%;
-        padding: 9px 20px;
-        font-size: 13px;
-        color: var(--text-2);
-        transition: all 0.15s;
-        border-left: 3px solid transparent;
-      }
-      .nav-btn:hover {
-        background: var(--bg-2);
-        color: var(--text-1);
-      }
-      .nav-btn.active {
-        color: var(--accent);
-        border-left-color: var(--accent);
-        background: var(--accent-bg);
-      }
-      .nav-btn ion-icon {
-        font-size: 17px;
-        flex-shrink: 0;
-      }
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: inherit;
+    }
 
-      /* Content */
-      .admin-content {
-        flex: 1;
-        padding: 28px 32px;
-        max-width: 960px;
-        min-width: 0;
-      }
-      .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 24px;
-        padding-bottom: 16px;
-        border-bottom: 1px solid var(--border);
-      }
-      .section-title {
-        font-size: 22px;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      .section-title ion-icon {
-        color: var(--accent);
-        font-size: 24px;
-      }
-      .section-count {
-        font-size: 11px;
-        background: var(--bg-3);
-        color: var(--text-2);
-        padding: 2px 8px;
-        border-radius: 10px;
-        font-family: var(--mono);
-      }
+    input,
+    textarea,
+    select {
+      font: inherit;
+      background: var(--bg-1);
+      color: var(--text-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      width: 100%;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
 
-      /* Items */
-      .item-list {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-      .item-card {
-        background: var(--bg-2);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 12px 16px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        transition: border-color var(--transition);
-      }
-      .item-card:hover {
-        border-color: var(--border-light);
-      }
-      .item-card-body {
-        flex: 1;
-        min-width: 0;
-      }
-      .item-card-title {
-        font-size: 14px;
-        font-weight: 600;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .item-card-sub {
-        font-size: 11px;
-        color: var(--text-3);
-        font-family: var(--mono);
-        margin-top: 2px;
-      }
-      .item-card-actions {
-        display: flex;
-        gap: 4px;
-        flex-shrink: 0;
-      }
-      .item-card-order {
-        font-size: 11px;
-        color: var(--text-3);
-        font-family: var(--mono);
-        background: var(--bg-3);
-        padding: 2px 6px;
-        border-radius: 4px;
-        margin-right: 4px;
-      }
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px hsla(155, 70%, 45%, 0.12);
+    }
 
-      /* Roles */
-      .roles-container {
-        margin-top: 10px;
-        margin-left: 16px;
-        padding-left: 16px;
-        border-left: 2px solid var(--border);
-      }
-      .roles-container .item-card {
-        background: var(--bg-1);
-        margin-top: 4px;
-      }
-      .roles-container .item-card:first-child {
-        margin-top: 0;
-      }
-      .add-role-btn {
-        margin-top: 8px;
-        font-size: 12px;
-        color: var(--accent);
-        padding: 4px 0;
-      }
-      .add-role-btn:hover {
-        text-decoration: underline;
-      }
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--text-3);
+    }
 
-      /* Empty */
-      .empty-state {
-        text-align: center;
-        padding: 48px 20px;
-        color: var(--text-3);
-      }
-      .empty-state ion-icon {
-        font-size: 40px;
-        margin-bottom: 12px;
-      }
-      .empty-state p {
-        font-size: 14px;
-        margin-bottom: 16px;
-      }
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
 
-      /* Modal */
-      .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(1, 4, 9, 0.75);
-        z-index: 50;
-        display: none;
-        justify-content: center;
-        align-items: flex-start;
-        padding: 48px 20px;
-        overflow-y: auto;
-      }
-      .modal-overlay.active {
-        display: flex;
-      }
-      .modal-box {
-        background: var(--bg-2);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-xl);
-        padding: 0;
-        width: 100%;
-        max-width: 560px;
-        box-shadow: var(--shadow-lg);
-        animation: modalIn 0.25s ease;
-      }
-      @keyframes modalIn {
-        from {
-          opacity: 0;
-          transform: translateY(-12px) scale(0.98);
-        }
-        to {
-          opacity: 1;
-          transform: none;
-        }
-      }
-      .modal-header {
-        padding: 20px 24px 16px;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .modal-header h2 {
-        font-size: 17px;
-        font-weight: 700;
-      }
-      .modal-body {
-        padding: 20px 24px;
-        max-height: 60vh;
-        overflow-y: auto;
-      }
-      .modal-footer {
-        padding: 16px 24px;
-        border-top: 1px solid var(--border);
-        display: flex;
-        justify-content: flex-end;
-        gap: 8px;
-      }
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b949e' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+    }
 
-      /* Upload */
-      .upload-area {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-      }
-      .upload-preview {
-        width: 64px;
-        height: 64px;
-        border-radius: var(--radius);
-        object-fit: cover;
-        border: 1px solid var(--border);
-        background: var(--bg-3);
-        flex-shrink: 0;
-      }
-      .upload-controls {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-      .upload-controls input[type="file"] {
-        font-size: 12px;
-        padding: 6px;
-        border: 1px dashed var(--border);
-        background: var(--bg-1);
-        border-radius: var(--radius);
-        cursor: pointer;
-      }
-      .upload-controls input[type="file"]:hover {
-        border-color: var(--accent);
-      }
-      .upload-status {
-        font-size: 11px;
-        color: var(--text-3);
-        font-family: var(--mono);
-      }
-      .upload-status.uploading {
-        color: var(--warning);
-      }
-      .upload-status.success {
-        color: var(--accent);
-      }
-      .upload-status.error {
-        color: var(--danger);
-      }
-      .profile-avatar {
-        width: 100px;
-        height: 100px;
-        border-radius: var(--radius-lg);
-        object-fit: cover;
-        border: 2px solid var(--border);
-      }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
 
-      /* Toast */
-      #toast-container {
-        position: fixed;
-        bottom: 24px;
-        right: 24px;
-        z-index: 100;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-      .toast {
-        padding: 10px 18px;
-        border-radius: var(--radius);
-        font-size: 13px;
-        font-weight: 500;
-        transform: translateX(120%);
+    ::-webkit-scrollbar-track {
+      background: var(--bg-1);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--bg-4);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-3);
+    }
+
+    /* ── Date Picker Styles ── */
+    .date-picker-wrapper {
+      position: relative;
+    }
+
+    .date-picker-trigger {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      width: 100%;
+      text-align: left;
+      color: var(--text-1);
+      font-size: 14px;
+    }
+
+    .date-picker-trigger:hover {
+      border-color: var(--accent);
+    }
+
+    .date-picker-trigger.open {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px hsla(155, 70%, 45%, 0.12);
+    }
+
+    .date-picker-trigger ion-icon {
+      color: var(--accent);
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .date-picker-trigger .trigger-text {
+      flex: 1;
+    }
+
+    .date-picker-trigger .trigger-text.placeholder {
+      color: var(--text-3);
+    }
+
+    /* Dropdown Calendar */
+    .date-picker-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      z-index: 200;
+      background: var(--bg-2);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 16px;
+      min-width: 300px;
+      display: none;
+      animation: dropIn 0.18s ease;
+    }
+
+    .date-picker-dropdown.open {
+      display: block;
+    }
+
+    @keyframes dropIn {
+      from {
         opacity: 0;
-        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        box-shadow: var(--shadow-md);
-        max-width: 340px;
+        transform: translateY(-6px);
       }
-      .toast.show {
-        transform: translateX(0);
+
+      to {
         opacity: 1;
+        transform: none;
       }
-      .toast-success {
-        background: var(--accent);
-        color: var(--bg-0);
-      }
-      .toast-error {
-        background: var(--danger);
-        color: #fff;
+    }
+
+    /* Calendar Nav */
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .cal-header button {
+      width: 30px;
+      height: 30px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-2);
+      font-size: 18px;
+      transition: background var(--transition), color var(--transition);
+    }
+
+    .cal-header button:hover {
+      background: var(--bg-3);
+      color: var(--text-1);
+    }
+
+    .cal-month-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-1);
+      font-family: var(--mono);
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: var(--radius);
+      transition: background var(--transition);
+    }
+
+    .cal-month-label:hover {
+      background: var(--bg-3);
+    }
+
+    /* Month Grid */
+    .cal-month-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .cal-month-btn {
+      padding: 8px 4px;
+      border-radius: var(--radius);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-2);
+      transition: all var(--transition);
+      text-align: center;
+    }
+
+    .cal-month-btn:hover {
+      background: var(--bg-3);
+      color: var(--text-1);
+    }
+
+    .cal-month-btn.selected {
+      background: var(--accent);
+      color: var(--bg-0);
+      font-weight: 700;
+    }
+
+    /* Year Grid */
+    .cal-year-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      max-height: 180px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+    }
+
+    .cal-year-btn {
+      padding: 6px 2px;
+      border-radius: var(--radius);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-2);
+      transition: all var(--transition);
+      text-align: center;
+      font-family: var(--mono);
+    }
+
+    .cal-year-btn:hover {
+      background: var(--bg-3);
+      color: var(--text-1);
+    }
+
+    .cal-year-btn.selected {
+      background: var(--accent);
+      color: var(--bg-0);
+      font-weight: 700;
+    }
+
+    /* Present Toggle */
+    .cal-present-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: var(--bg-3);
+      border-radius: var(--radius);
+      margin-bottom: 10px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: border-color var(--transition);
+    }
+
+    .cal-present-row:hover {
+      border-color: var(--accent);
+    }
+
+    .cal-present-row.active {
+      border-color: var(--accent);
+      background: var(--accent-bg);
+    }
+
+    .cal-present-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .cal-present-label ion-icon {
+      color: var(--accent);
+      font-size: 16px;
+    }
+
+    .cal-toggle {
+      width: 36px;
+      height: 20px;
+      border-radius: 10px;
+      background: var(--bg-4);
+      position: relative;
+      transition: background var(--transition);
+      flex-shrink: 0;
+    }
+
+    .cal-toggle.on {
+      background: var(--accent);
+    }
+
+    .cal-toggle::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #fff;
+      top: 3px;
+      left: 3px;
+      transition: transform var(--transition);
+    }
+
+    .cal-toggle.on::after {
+      transform: translateX(16px);
+    }
+
+    /* Footer Actions */
+    .cal-footer {
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Date Range Specific */
+    .date-range-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .date-range-label {
+      font-size: 11px;
+      color: var(--text-3);
+      font-family: var(--mono);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Issue Date / Expiry Specific */
+    .date-single-wrapper {
+      position: relative;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-2);
+      margin-bottom: 6px;
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 500;
+    }
+
+    .field-hint {
+      font-size: 11px;
+      color: var(--text-3);
+      margin-top: 4px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 16px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 600;
+      transition: all var(--transition);
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg-0);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dim);
+      box-shadow: var(--shadow-glow);
+      transform: translateY(-1px);
+    }
+
+    .btn-danger {
+      color: var(--danger);
+      border: 1px solid var(--danger-border);
+      background: var(--danger-bg);
+    }
+
+    .btn-danger:hover {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+    }
+
+    .btn-ghost {
+      color: var(--text-2);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--text-2);
+      color: var(--text-1);
+      background: var(--bg-3);
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    .btn-lg {
+      padding: 12px 24px;
+      font-size: 14px;
+    }
+
+    .btn-icon {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border-radius: var(--radius);
+      font-size: 16px;
+    }
+
+    .btn-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    /* Login */
+    #login-screen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 50% 0%, hsla(155, 50%, 30%, 0.06), transparent 60%), var(--bg-0);
+      padding: 20px;
+    }
+
+    .login-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 40px 32px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .login-logo {
+      font-family: var(--mono);
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .login-logo .bracket {
+      color: var(--accent);
+    }
+
+    .login-logo .slash {
+      color: var(--text-3);
+    }
+
+    .login-subtitle {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-2);
+      margin-bottom: 28px;
+    }
+
+    .login-error {
+      color: var(--danger);
+      font-size: 12px;
+      text-align: center;
+      margin-top: 12px;
+      min-height: 18px;
+      font-family: var(--mono);
+    }
+
+    /* Panel */
+    #admin-panel {
+      display: none;
+    }
+
+    .panel-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: hsla(215, 28%, 7%, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-logo {
+      font-family: var(--mono);
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-logo .accent {
+      color: var(--accent);
+    }
+
+    .panel-logo .badge {
+      font-size: 10px;
+      background: var(--accent-bg);
+      color: var(--accent);
+      border: 1px solid var(--accent-border);
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .panel-header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .panel-user {
+      font-size: 12px;
+      color: var(--text-2);
+      font-family: var(--mono);
+    }
+
+    .panel-body {
+      display: flex;
+      min-height: calc(100vh - 56px);
+    }
+
+    /* Nav */
+    .admin-nav {
+      width: 240px;
+      background: var(--bg-1);
+      border-right: 1px solid var(--border);
+      padding: 12px 0;
+      flex-shrink: 0;
+      position: sticky;
+      top: 56px;
+      height: calc(100vh - 56px);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nav-group-label {
+      padding: 16px 20px 6px;
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 9px 20px;
+      font-size: 13px;
+      color: var(--text-2);
+      transition: all 0.15s;
+      border-left: 3px solid transparent;
+    }
+
+    .nav-btn:hover {
+      background: var(--bg-2);
+      color: var(--text-1);
+    }
+
+    .nav-btn.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: var(--accent-bg);
+    }
+
+    .nav-btn ion-icon {
+      font-size: 17px;
+      flex-shrink: 0;
+    }
+
+    /* Content */
+    .admin-content {
+      flex: 1;
+      padding: 28px 32px;
+      max-width: 960px;
+      min-width: 0;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title ion-icon {
+      color: var(--accent);
+      font-size: 24px;
+    }
+
+    .section-count {
+      font-size: 11px;
+      background: var(--bg-3);
+      color: var(--text-2);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-family: var(--mono);
+    }
+
+    /* Items */
+    .item-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .item-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      transition: border-color var(--transition);
+    }
+
+    .item-card:hover {
+      border-color: var(--border-light);
+    }
+
+    .item-card-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-card-sub {
+      font-size: 11px;
+      color: var(--text-3);
+      font-family: var(--mono);
+      margin-top: 2px;
+    }
+
+    .item-card-actions {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .item-card-order {
+      font-size: 11px;
+      color: var(--text-3);
+      font-family: var(--mono);
+      background: var(--bg-3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-right: 4px;
+    }
+
+    /* Roles */
+    .roles-container {
+      margin-top: 10px;
+      margin-left: 16px;
+      padding-left: 16px;
+      border-left: 2px solid var(--border);
+    }
+
+    .roles-container .item-card {
+      background: var(--bg-1);
+      margin-top: 4px;
+    }
+
+    .roles-container .item-card:first-child {
+      margin-top: 0;
+    }
+
+    .add-role-btn {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--accent);
+      padding: 4px 0;
+    }
+
+    .add-role-btn:hover {
+      text-decoration: underline;
+    }
+
+    /* Empty */
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--text-3);
+    }
+
+    .empty-state ion-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(1, 4, 9, 0.75);
+      z-index: 50;
+      display: none;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 48px 20px;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 0;
+      width: 100%;
+      max-width: 560px;
+      box-shadow: var(--shadow-lg);
+      animation: modalIn 0.25s ease;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(-12px) scale(0.98);
       }
 
-      /* Confirm */
-      .confirm-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(1, 4, 9, 0.8);
-        z-index: 60;
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .modal-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .modal-body {
+      padding: 20px 24px;
+      max-height: 60vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    /* Upload */
+    .upload-area {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .upload-preview {
+      width: 64px;
+      height: 64px;
+      border-radius: var(--radius);
+      object-fit: cover;
+      border: 1px solid var(--border);
+      background: var(--bg-3);
+      flex-shrink: 0;
+    }
+
+    .upload-controls {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .upload-controls input[type="file"] {
+      font-size: 12px;
+      padding: 6px;
+      border: 1px dashed var(--border);
+      background: var(--bg-1);
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+
+    .upload-controls input[type="file"]:hover {
+      border-color: var(--accent);
+    }
+
+    .upload-status {
+      font-size: 11px;
+      color: var(--text-3);
+      font-family: var(--mono);
+    }
+
+    .upload-status.uploading {
+      color: var(--warning);
+    }
+
+    .upload-status.success {
+      color: var(--accent);
+    }
+
+    .upload-status.error {
+      color: var(--danger);
+    }
+
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: var(--radius-lg);
+      object-fit: cover;
+      border: 2px solid var(--border);
+    }
+
+    /* Toast */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast {
+      padding: 10px 18px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 500;
+      transform: translateX(120%);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-md);
+      max-width: 340px;
+    }
+
+    .toast.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .toast-success {
+      background: var(--accent);
+      color: var(--bg-0);
+    }
+
+    .toast-error {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    /* Confirm */
+    .confirm-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(1, 4, 9, 0.8);
+      z-index: 60;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .confirm-overlay.active {
+      display: flex;
+    }
+
+    .confirm-box {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .confirm-box h3 {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .confirm-box p {
+      font-size: 13px;
+      color: var(--text-2);
+      margin-bottom: 20px;
+    }
+
+    .confirm-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    /* Status Card */
+    .status-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .status-info h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-info p {
+      font-size: 11px;
+      color: var(--text-3);
+      font-family: var(--mono);
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .status-buttons {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .admin-nav {
         display: none;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
-      }
-      .confirm-overlay.active {
-        display: flex;
-      }
-      .confirm-box {
-        background: var(--bg-2);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg);
-        padding: 24px;
-        max-width: 400px;
-        width: 100%;
-        text-align: center;
-        box-shadow: var(--shadow-lg);
-      }
-      .confirm-box h3 {
-        font-size: 16px;
-        margin-bottom: 8px;
-      }
-      .confirm-box p {
-        font-size: 13px;
-        color: var(--text-2);
-        margin-bottom: 20px;
-      }
-      .confirm-actions {
-        display: flex;
-        gap: 8px;
-        justify-content: center;
       }
 
-      /* Status Card */
-      .status-card {
-        background: var(--bg-2);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-lg);
-        padding: 20px;
-        margin-bottom: 24px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 16px;
+      .admin-content {
+        padding: 20px 16px;
       }
-      .status-info h3 {
-        font-size: 14px;
-        font-weight: 600;
-        margin-bottom: 4px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+
+      .form-row {
+        grid-template-columns: 1fr;
       }
-      .status-info p {
-        font-size: 11px;
+
+      .date-range-wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .modal-overlay {
+        padding: 20px 12px;
+      }
+
+      .panel-header {
+        padding: 0 16px;
+      }
+
+      .mobile-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: hsla(215, 28%, 7%, 0.9);
+        backdrop-filter: blur(12px);
+        border-top: 1px solid var(--border);
+        z-index: 20;
+        overflow-x: auto;
+        padding: 6px;
+        gap: 2px;
+      }
+
+      .mobile-nav button {
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        padding: 8px 12px;
+        font-size: 9px;
         color: var(--text-3);
-        font-family: var(--mono);
-      }
-      .status-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        display: inline-block;
-      }
-      .status-buttons {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
+        border-radius: var(--radius);
+        min-width: 56px;
       }
 
-      /* Responsive */
-      @media (max-width: 768px) {
-        .admin-nav {
-          display: none;
-        }
-        .admin-content {
-          padding: 20px 16px;
-        }
-        .form-row {
-          grid-template-columns: 1fr;
-        }
-        .section-header {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 12px;
-        }
-        .modal-overlay {
-          padding: 20px 12px;
-        }
-        .panel-header {
-          padding: 0 16px;
-        }
-        .mobile-nav {
-          display: flex;
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          background: hsla(215, 28%, 7%, 0.9);
-          backdrop-filter: blur(12px);
-          border-top: 1px solid var(--border);
-          z-index: 20;
-          overflow-x: auto;
-          padding: 6px;
-          gap: 2px;
-        }
-        .mobile-nav button {
-          flex: 0 0 auto;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 2px;
-          padding: 8px 12px;
-          font-size: 9px;
-          color: var(--text-3);
-          border-radius: var(--radius);
-          min-width: 56px;
-        }
-        .mobile-nav button ion-icon {
-          font-size: 18px;
-        }
-        .mobile-nav button.active {
-          color: var(--accent);
-          background: var(--accent-bg);
-        }
-        .panel-body {
-          padding-bottom: 72px;
-        }
-        .status-card {
-          flex-direction: column;
-          align-items: flex-start;
-        }
+      .mobile-nav button ion-icon {
+        font-size: 18px;
       }
-      @media (min-width: 769px) {
-        .mobile-nav {
-          display: none;
-        }
+
+      .mobile-nav button.active {
+        color: var(--accent);
+        background: var(--accent-bg);
       }
-    </style>
-  </head>
-  <body>
-    <!-- LOGIN -->
-    <div id="login-screen">
-      <div class="login-card">
-        <div class="login-logo">
-          <span class="bracket">&lt;</span>YM<span class="slash">/</span
-          ><span class="bracket">&gt;</span>
+
+      .panel-body {
+        padding-bottom: 72px;
+      }
+
+      .status-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .date-picker-dropdown {
+        min-width: 260px;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOGIN -->
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-logo">
+        <span class="bracket">&lt;</span>YM<span class="slash">/</span><span class="bracket">&gt;</span>
+      </div>
+      <p class="login-subtitle">Portfolio Admin Panel</p>
+      <form id="login-form">
+        <div class="field">
+          <label for="login-user">Username</label>
+          <input id="login-user" type="text" placeholder="admin" autocomplete="username" required />
         </div>
-        <p class="login-subtitle">Portfolio Admin Panel</p>
-        <form id="login-form">
-          <div class="field">
-            <label for="login-user">Username</label>
-            <input
-              id="login-user"
-              type="text"
-              placeholder="admin"
-              autocomplete="username"
-              required
-            />
+        <div class="field">
+          <label for="login-pass">Password</label>
+          <input id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password" required />
+        </div>
+        <button class="btn btn-primary btn-lg" type="submit" style="width:100%;margin-top:8px">Sign In</button>
+      </form>
+      <div class="login-error" id="login-error"></div>
+    </div>
+  </div>
+
+  <!-- PANEL -->
+  <div id="admin-panel">
+    <header class="panel-header">
+      <div class="panel-logo">
+        <span>&lt;<span class="accent">YM</span>/&gt;</span>
+        <span class="badge">CMS</span>
+      </div>
+      <div class="panel-header-right">
+        <span class="panel-user" id="panel-username"></span>
+        <a href="/" class="btn btn-ghost btn-sm" target="_blank">View Site</a>
+        <button class="btn btn-ghost btn-sm" id="logout-btn">Logout</button>
+      </div>
+    </header>
+    <div class="panel-body">
+      <nav class="admin-nav" id="admin-nav"></nav>
+      <main class="admin-content" id="admin-content"></main>
+    </div>
+    <nav class="mobile-nav" id="mobile-nav"></nav>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-box" id="modal-box"></div>
+  </div>
+
+  <!-- CONFIRM -->
+  <div class="confirm-overlay" id="confirm-overlay">
+    <div class="confirm-box">
+      <h3 id="confirm-title">Are you sure?</h3>
+      <p id="confirm-text">This action cannot be undone.</p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" id="confirm-cancel">Cancel</button>
+        <button class="btn btn-danger" id="confirm-ok">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast-container"></div>
+
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <script>
+    // ═══════════════════════════════════════
+    // CORE UTILITIES
+    // ═══════════════════════════════════════
+    const $ = (sel, ctx = document) => ctx.querySelector(sel);
+    const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
+    const API = "/api";
+    let TOKEN = localStorage.getItem("admin_token");
+    let currentTab = "";
+    let currentUsername = "";
+
+    function esc(str) {
+      const d = document.createElement("div");
+      d.textContent = str == null ? "" : String(str);
+      return d.innerHTML;
+    }
+
+    async function api(endpoint, method = "GET", body = null) {
+      const opts = { method, headers: { Authorization: "Bearer " + TOKEN } };
+      if (body) {
+        opts.headers["Content-Type"] = "application/json";
+        opts.body = JSON.stringify(body);
+      }
+      const res = await fetch(API + endpoint, opts);
+      if (res.status === 401) { logout(); throw new Error("Session expired"); }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Request failed");
+      return data;
+    }
+
+    function toast(msg, type = "success") {
+      const el = document.createElement("div");
+      el.className = "toast toast-" + type;
+      el.innerHTML = '<ion-icon name="' + (type === "success" ? "checkmark-circle" : "alert-circle") + '"></ion-icon>' + esc(msg);
+      $("#toast-container").appendChild(el);
+      requestAnimationFrame(() => el.classList.add("show"));
+      setTimeout(() => { el.classList.remove("show"); setTimeout(() => el.remove(), 300); }, 3500);
+    }
+
+    function confirmDialog(title, text) {
+      return new Promise((resolve) => {
+        $("#confirm-title").textContent = title;
+        $("#confirm-text").textContent = text;
+        $("#confirm-overlay").classList.add("active");
+        const done = (v) => { $("#confirm-overlay").classList.remove("active"); resolve(v); };
+        $("#confirm-cancel").onclick = () => done(false);
+        $("#confirm-ok").onclick = () => done(true);
+      });
+    }
+
+    function openModal(html) {
+      $("#modal-box").innerHTML = html;
+      $("#modal-overlay").classList.add("active");
+    }
+    function closeModal() {
+      $("#modal-overlay").classList.remove("active");
+    }
+
+    $("#modal-overlay").addEventListener("click", (e) => {
+      if (e.target.id === "modal-overlay") closeModal();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeModal();
+        $("#confirm-overlay").classList.remove("active");
+        // Close any open date pickers
+        document.querySelectorAll(".date-picker-dropdown.open").forEach(d => d.classList.remove("open"));
+        document.querySelectorAll(".date-picker-trigger.open").forEach(d => d.classList.remove("open"));
+      }
+    });
+
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload = () => resolve(r.result);
+        r.onerror = reject;
+        r.readAsDataURL(file);
+      });
+    }
+
+    function bindImageUploads(ctx) {
+      $$("[data-upload]", ctx || $("#modal-box")).forEach((input) => {
+        const key = input.dataset.upload;
+        input.addEventListener("change", async () => {
+          const file = input.files[0];
+          if (!file) return;
+          if (file.size > 5 * 1024 * 1024) { toast("Image must be under 5MB", "error"); return; }
+          const status = $('[data-upload-status="' + key + '"]');
+          const preview = $('[data-preview="' + key + '"]');
+          const hidden = $('input[name="' + key + '"]');
+          if (status) { status.textContent = "Uploading..."; status.className = "upload-status uploading"; }
+          try {
+            const base64 = await fileToBase64(file);
+            const data = await api("/upload", "POST", { image: base64 });
+            if (hidden) hidden.value = data.url;
+            if (preview) preview.src = data.url;
+            if (status) { status.textContent = "✓ Uploaded"; status.className = "upload-status success"; }
+          } catch (err) {
+            if (status) { status.textContent = "✗ " + err.message; status.className = "upload-status error"; }
+          }
+        });
+      });
+    }
+
+    // ═══════════════════════════════════════
+    // DATE PICKER ENGINE
+    // ═══════════════════════════════════════
+    const MONTH_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const MONTH_FULL = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    /**
+     * Parses stored strings like:
+     *   "Feb 2026 — Present · 3 months"
+     *   "Sep 2025 — Feb 2026"
+     *   "January 2025"
+     *   "No Expiration"
+     * Returns { month: 0-11 | null, year: number | null, isPresent: bool }
+     */
+    function parseDateStr(str) {
+      if (!str) return { month: null, year: null, isPresent: false };
+      str = str.trim();
+      if (/^no\s*expir/i.test(str)) return { month: null, year: null, isPresent: false };
+
+      // Try "MonthName YYYY"
+      const m = str.match(/^(\w+)\s+(\d{4})/);
+      if (m) {
+        const idx = MONTH_FULL.findIndex(n => n.toLowerCase().startsWith(m[1].toLowerCase().slice(0, 3)));
+        if (idx >= 0) return { month: idx, year: parseInt(m[2], 10), isPresent: false };
+      }
+      return { month: null, year: null, isPresent: false };
+    }
+
+    /**
+     * Formats { month, year, isPresent } → "Feb 2026" or "Present"
+     */
+    function formatDateObj(obj) {
+      if (!obj) return "";
+      if (obj.isPresent) return "Present";
+      if (obj.month === null || obj.year === null) return "";
+      return MONTH_SHORT[obj.month] + " " + obj.year;
+    }
+
+    /**
+     * Creates a single month-year picker (no range, no Present toggle).
+     * Used for: issue_date, expiry (optional)
+     *
+     * @param {string} fieldName    - hidden input name
+     * @param {string} initialValue - existing string value
+     * @param {object} opts
+     *   opts.allowNone  {bool}   - show "No Expiration" option
+     *   opts.noneLabel  {string} - label for the none option
+     *   opts.placeholder {string}
+     */
+    function buildSingleDatePicker(fieldName, initialValue, opts = {}) {
+      const id = "dp_" + fieldName + "_" + Math.random().toString(36).slice(2, 7);
+      const parsed = parseDateStr(initialValue);
+      const displayText = initialValue || "";
+      const placeholder = opts.placeholder || "Select month & year";
+      const allowNone = !!opts.allowNone;
+      const noneLabel = opts.noneLabel || "No Expiration";
+
+      return `
+          <div class="date-single-wrapper" id="${id}_wrap">
+            <button type="button" class="date-picker-trigger" id="${id}_trigger">
+              <ion-icon name="calendar-outline"></ion-icon>
+              <span class="trigger-text ${displayText ? '' : 'placeholder'}" id="${id}_display">
+                ${esc(displayText || placeholder)}
+              </span>
+              <ion-icon name="chevron-down-outline" style="color:var(--text-3);font-size:14px"></ion-icon>
+            </button>
+            <input type="hidden" name="${fieldName}" id="${id}_hidden" value="${esc(initialValue || '')}" />
+            <div class="date-picker-dropdown" id="${id}_drop">
+              ${allowNone ? `
+              <div class="cal-present-row" id="${id}_none_row">
+                <span class="cal-present-label">
+                  <ion-icon name="infinite-outline"></ion-icon>${esc(noneLabel)}
+                </span>
+                <div class="cal-toggle" id="${id}_none_toggle"></div>
+              </div>` : ''}
+              <div id="${id}_picker_body">
+                <div class="cal-header">
+                  <button type="button" class="btn btn-ghost btn-icon" id="${id}_prev">‹</button>
+                  <span class="cal-month-label" id="${id}_year_label">2025</span>
+                  <button type="button" class="btn btn-ghost btn-icon" id="${id}_next">›</button>
+                </div>
+                <div class="cal-month-grid" id="${id}_month_grid"></div>
+              </div>
+              <div class="cal-footer">
+                <button type="button" class="btn btn-ghost btn-sm" id="${id}_clear">Clear</button>
+                <button type="button" class="btn btn-primary btn-sm" id="${id}_apply">Apply</button>
+              </div>
+            </div>
+          </div>`;
+    }
+
+    /**
+     * Creates a date-range picker with Start and End (supports "Present").
+     * Used for: date_range field in roles.
+     *
+     * @param {string} fieldName    - hidden input name
+     * @param {string} initialValue - existing string like "Feb 2026 — Present · 3 months"
+     */
+    function buildDateRangePicker(fieldName, initialValue) {
+      const id = "drp_" + fieldName + "_" + Math.random().toString(36).slice(2, 7);
+
+      // Parse existing range
+      let startObj = { month: null, year: null, isPresent: false };
+      let endObj = { month: null, year: null, isPresent: false };
+
+      if (initialValue) {
+        const cleaned = initialValue.replace(/·.*$/, "").trim();
+        const parts = cleaned.split(/\s*[—–]\s*|\s*--\s*|\s+-\s+/);
+        if (parts.length >= 2) {
+          startObj = parseDateStr(parts[0]);
+          const endTok = parts[1].trim();
+          if (/^present$/i.test(endTok)) endObj = { month: null, year: null, isPresent: true };
+          else endObj = parseDateStr(endTok);
+        }
+      }
+
+      const startDisplay = formatDateObj(startObj) || "Start date";
+      const endDisplay = endObj.isPresent ? "Present" : (formatDateObj(endObj) || "End date");
+
+      return `
+          <div class="date-range-wrapper" id="${id}_wrap">
+            <!-- START -->
+            <div>
+              <div class="date-range-label">Start</div>
+              <div class="date-single-wrapper" id="${id}_s_wrap">
+                <button type="button" class="date-picker-trigger" id="${id}_s_trigger">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                  <span class="trigger-text ${startObj.month !== null ? '' : 'placeholder'}" id="${id}_s_display">
+                    ${esc(startDisplay)}
+                  </span>
+                  <ion-icon name="chevron-down-outline" style="color:var(--text-3);font-size:14px"></ion-icon>
+                </button>
+                <div class="date-picker-dropdown" id="${id}_s_drop">
+                  <div class="cal-header">
+                    <button type="button" class="btn btn-ghost btn-icon" id="${id}_s_prev">‹</button>
+                    <span class="cal-month-label" id="${id}_s_year_label">2024</span>
+                    <button type="button" class="btn btn-ghost btn-icon" id="${id}_s_next">›</button>
+                  </div>
+                  <div class="cal-month-grid" id="${id}_s_month_grid"></div>
+                  <div class="cal-footer">
+                    <button type="button" class="btn btn-ghost btn-sm" id="${id}_s_clear">Clear</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="${id}_s_apply">Apply</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- END -->
+            <div>
+              <div class="date-range-label">End</div>
+              <div class="date-single-wrapper" id="${id}_e_wrap">
+                <button type="button" class="date-picker-trigger" id="${id}_e_trigger">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                  <span class="trigger-text ${endObj.isPresent || endObj.month !== null ? '' : 'placeholder'}" id="${id}_e_display">
+                    ${esc(endDisplay)}
+                  </span>
+                  <ion-icon name="chevron-down-outline" style="color:var(--text-3);font-size:14px"></ion-icon>
+                </button>
+                <div class="date-picker-dropdown" id="${id}_e_drop">
+                  <div class="cal-present-row ${endObj.isPresent ? 'active' : ''}" id="${id}_e_present_row">
+                    <span class="cal-present-label">
+                      <ion-icon name="radio-button-on-outline"></ion-icon>Currently working here
+                    </span>
+                    <div class="cal-toggle ${endObj.isPresent ? 'on' : ''}" id="${id}_e_toggle"></div>
+                  </div>
+                  <div id="${id}_e_picker_body" style="${endObj.isPresent ? 'opacity:0.4;pointer-events:none' : ''}">
+                    <div class="cal-header">
+                      <button type="button" class="btn btn-ghost btn-icon" id="${id}_e_prev">‹</button>
+                      <span class="cal-month-label" id="${id}_e_year_label">2025</span>
+                      <button type="button" class="btn btn-ghost btn-icon" id="${id}_e_next">›</button>
+                    </div>
+                    <div class="cal-month-grid" id="${id}_e_month_grid"></div>
+                  </div>
+                  <div class="cal-footer">
+                    <button type="button" class="btn btn-ghost btn-sm" id="${id}_e_clear">Clear</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="${id}_e_apply">Apply</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="field">
-            <label for="login-pass">Password</label>
-            <input
-              id="login-pass"
-              type="password"
-              placeholder="••••••••"
-              autocomplete="current-password"
-              required
-            />
-          </div>
-          <button
-            class="btn btn-primary btn-lg"
-            type="submit"
-            style="width: 100%; margin-top: 8px"
-          >
-            Sign In
-          </button>
-        </form>
-        <div class="login-error" id="login-error"></div>
-      </div>
-    </div>
+          <input type="hidden" name="${fieldName}" id="${id}_hidden" value="${esc(initialValue || '')}" />`;
+    }
 
-    <!-- PANEL -->
-    <div id="admin-panel">
-      <header class="panel-header">
-        <div class="panel-logo">
-          <span>&lt;<span class="accent">YM</span>/&gt;</span>
-          <span class="badge">CMS</span>
-        </div>
-        <div class="panel-header-right">
-          <span class="panel-user" id="panel-username"></span>
-          <a href="/" class="btn btn-ghost btn-sm" target="_blank">View Site</a>
-          <button class="btn btn-ghost btn-sm" id="logout-btn">Logout</button>
-        </div>
-      </header>
-      <div class="panel-body">
-        <nav class="admin-nav" id="admin-nav"></nav>
-        <main class="admin-content" id="admin-content"></main>
-      </div>
-      <nav class="mobile-nav" id="mobile-nav"></nav>
-    </div>
+    /**
+     * Binds all date picker interactions inside a container.
+     * Must be called AFTER the HTML is injected into the DOM.
+     */
+    function bindDatePickers(ctx) {
+      ctx = ctx || document;
 
-    <!-- MODAL -->
-    <div class="modal-overlay" id="modal-overlay">
-      <div class="modal-box" id="modal-box"></div>
-    </div>
-
-    <!-- CONFIRM -->
-    <div class="confirm-overlay" id="confirm-overlay">
-      <div class="confirm-box">
-        <h3 id="confirm-title">Are you sure?</h3>
-        <p id="confirm-text">This action cannot be undone.</p>
-        <div class="confirm-actions">
-          <button class="btn btn-ghost" id="confirm-cancel">Cancel</button>
-          <button class="btn btn-danger" id="confirm-ok">Delete</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Toast -->
-    <div id="toast-container"></div>
-
-    <!-- Ionicons -->
-    <script
-      type="module"
-      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
-    ></script>
-    <script
-      nomodule
-      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
-    ></script>
-
-    <script>
-      // ═══════════════════════════════════════
-      // CORE UTILITIES
-      // ═══════════════════════════════════════
-      const $ = (sel, ctx = document) => ctx.querySelector(sel);
-      const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
-      const API = "/api";
-      let TOKEN = localStorage.getItem("admin_token");
-      let currentTab = "";
-      let currentUsername = "";
-
-      function esc(str) {
-        const d = document.createElement("div");
-        d.textContent = str == null ? "" : String(str);
-        return d.innerHTML;
-      }
-
-      async function api(endpoint, method = "GET", body = null) {
-        const opts = { method, headers: { Authorization: "Bearer " + TOKEN } };
-        if (body) {
-          opts.headers["Content-Type"] = "application/json";
-          opts.body = JSON.stringify(body);
+      // ── Close dropdowns when clicking outside ──
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest(".date-single-wrapper")) {
+          ctx.querySelectorAll(".date-picker-dropdown.open").forEach(d => d.classList.remove("open"));
+          ctx.querySelectorAll(".date-picker-trigger.open").forEach(d => d.classList.remove("open"));
         }
-        const res = await fetch(API + endpoint, opts);
-        if (res.status === 401) {
-          logout();
-          throw new Error("Session expired");
+      }, { capture: true });
+
+      // ── Single pickers (issue_date, expiry) ──
+      ctx.querySelectorAll("[id$='_wrap']:not([id*='_s_wrap']):not([id*='_e_wrap']):not([id*='_wrap'] [id*='_wrap'])").forEach(wrap => {
+        const id = wrap.id.replace("_wrap", "");
+        initSinglePicker(id, wrap);
+      });
+
+      // ── Range pickers ──
+      ctx.querySelectorAll("[id$='_wrap']").forEach(wrap => {
+        const wid = wrap.id;
+        // Detect range wrapper by checking for _s_wrap and _e_wrap children
+        if (wrap.querySelector("[id$='_s_drop']")) {
+          const baseId = wid.replace("_wrap", "");
+          initRangePicker(baseId, wrap);
         }
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Request failed");
-        return data;
-      }
+      });
+    }
 
-      function toast(msg, type = "success") {
-        const el = document.createElement("div");
-        el.className = "toast toast-" + type;
-        el.innerHTML =
-          '<ion-icon name="' +
-          (type === "success" ? "checkmark-circle" : "alert-circle") +
-          '"></ion-icon>' +
-          esc(msg);
-        $("#toast-container").appendChild(el);
-        requestAnimationFrame(() => el.classList.add("show"));
-        setTimeout(() => {
-          el.classList.remove("show");
-          setTimeout(() => el.remove(), 300);
-        }, 3500);
-      }
+    function initSinglePicker(id, wrap) {
+      const trigger = document.getElementById(id + "_trigger");
+      const drop = document.getElementById(id + "_drop");
+      const hidden = document.getElementById(id + "_hidden");
+      const display = document.getElementById(id + "_display");
 
-      function confirmDialog(title, text) {
-        return new Promise((resolve) => {
-          $("#confirm-title").textContent = title;
-          $("#confirm-text").textContent = text;
-          $("#confirm-overlay").classList.add("active");
-          const done = (v) => {
-            $("#confirm-overlay").classList.remove("active");
-            resolve(v);
-          };
-          $("#confirm-cancel").onclick = () => done(false);
-          $("#confirm-ok").onclick = () => done(true);
+      if (!trigger || !drop || !hidden) return;
+
+      let selMonth = null;
+      let selYear = new Date().getFullYear();
+      let isNone = false;
+
+      // Parse existing value
+      const existing = parseDateStr(hidden.value);
+      if (existing.month !== null) { selMonth = existing.month; selYear = existing.year; }
+
+      const noneRow = document.getElementById(id + "_none_row");
+      const noneToggle = document.getElementById(id + "_none_toggle");
+      const pickerBody = document.getElementById(id + "_picker_body");
+
+      // None toggle
+      if (noneRow) {
+        isNone = /^no\s*expir/i.test(hidden.value || "");
+        if (isNone) {
+          noneRow.classList.add("active");
+          noneToggle.classList.add("on");
+          if (pickerBody) { pickerBody.style.opacity = "0.4"; pickerBody.style.pointerEvents = "none"; }
+        }
+        noneRow.addEventListener("click", () => {
+          isNone = !isNone;
+          noneRow.classList.toggle("active", isNone);
+          noneToggle.classList.toggle("on", isNone);
+          if (pickerBody) {
+            pickerBody.style.opacity = isNone ? "0.4" : "1";
+            pickerBody.style.pointerEvents = isNone ? "none" : "";
+          }
         });
       }
 
-      function openModal(html) {
-        $("#modal-box").innerHTML = html;
-        $("#modal-overlay").classList.add("active");
-      }
-
-      function closeModal() {
-        $("#modal-overlay").classList.remove("active");
-      }
-
-      $("#modal-overlay").addEventListener("click", (e) => {
-        if (e.target.id === "modal-overlay") closeModal();
-      });
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-          closeModal();
-          $("#confirm-overlay").classList.remove("active");
-        }
-      });
-
-      function fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-          const r = new FileReader();
-          r.onload = () => resolve(r.result);
-          r.onerror = reject;
-          r.readAsDataURL(file);
-        });
-      }
-
-      function bindImageUploads(ctx) {
-        $$("[data-upload]", ctx || $("#modal-box")).forEach((input) => {
-          const key = input.dataset.upload;
-          input.addEventListener("change", async () => {
-            const file = input.files[0];
-            if (!file) return;
-            if (file.size > 5 * 1024 * 1024) {
-              toast("Image must be under 5MB", "error");
-              return;
-            }
-            const status = $('[data-upload-status="' + key + '"]');
-            const preview = $('[data-preview="' + key + '"]');
-            const hidden = $('input[name="' + key + '"]');
-            if (status) {
-              status.textContent = "Uploading...";
-              status.className = "upload-status uploading";
-            }
-            try {
-              const base64 = await fileToBase64(file);
-              const data = await api("/upload", "POST", { image: base64 });
-              if (hidden) hidden.value = data.url;
-              if (preview) preview.src = data.url;
-              if (status) {
-                status.textContent = "✓ Uploaded";
-                status.className = "upload-status success";
-              }
-            } catch (err) {
-              if (status) {
-                status.textContent = "✗ " + err.message;
-                status.className = "upload-status error";
-              }
-            }
+      function renderGrid() {
+        const yearLabel = document.getElementById(id + "_year_label");
+        const monthGrid = document.getElementById(id + "_month_grid");
+        if (!yearLabel || !monthGrid) return;
+        yearLabel.textContent = selYear;
+        monthGrid.innerHTML = MONTH_SHORT.map((m, i) =>
+          `<button type="button" class="cal-month-btn ${selMonth === i ? 'selected' : ''}" data-m="${i}">${m}</button>`
+        ).join("");
+        monthGrid.querySelectorAll(".cal-month-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            selMonth = +btn.dataset.m;
+            renderGrid();
           });
         });
       }
 
-      // ═══════════════════════════════════════
-      // SECTION DEFINITIONS
-      // ═══════════════════════════════════════
-      const SECTIONS = [
-        { group: "Content" },
-        {
-          key: "profile",
-          title: "Profile",
-          icon: "person-outline",
-          custom: true,
-        },
-        {
-          key: "typing_texts",
-          title: "Typing Texts",
-          icon: "text-outline",
-          fields: [
-            {
-              key: "text",
-              label: "Text",
-              type: "text",
-              ph: "QA Automation Lead",
-            },
-            { key: "sort_order", label: "Order", type: "number" },
-          ],
-          display: (i) => esc(i.text),
-          subtitle: (i) => "Order: " + (i.sort_order || 0),
-        },
-        {
-          key: "stats",
-          title: "Impact Metrics",
-          icon: "speedometer-outline",
-          fields: [
-            {
-              key: "label",
-              label: "Label",
-              type: "text",
-              ph: "Testing Time Reduced",
-            },
-            { key: "value", label: "Value", type: "number", ph: "40" },
-            { key: "suffix", label: "Suffix", type: "text", ph: "%" },
-            {
-              key: "icon",
-              label: "Ion-icon Name",
-              type: "text",
-              ph: "speedometer-outline",
-            },
-            {
-              key: "reveal",
-              label: "Reveal Direction",
-              type: "select",
-              options: ["left", "right", "bottom"],
-            },
-            { key: "sort_order", label: "Order", type: "number" },
-          ],
-          display: (i) =>
-            esc(i.label) +
-            ": <strong>" +
-            i.value +
-            esc(i.suffix || "") +
-            "</strong>",
-          subtitle: (i) => "Icon: " + i.icon,
-        },
-        {
-          key: "services",
-          title: "Services",
-          icon: "construct-outline",
-          fields: [
-            { key: "title", label: "Title", type: "text" },
-            { key: "description", label: "Description", type: "textarea" },
-            {
-              key: "icon",
-              label: "Ion-icon Name",
-              type: "text",
-              ph: "code-slash-outline",
-            },
-            {
-              key: "reveal",
-              label: "Reveal",
-              type: "select",
-              options: ["left", "right"],
-            },
-            { key: "sort_order", label: "Order", type: "number" },
-          ],
-          display: (i) => esc(i.title),
-          subtitle: (i) => (i.description || "").substring(0, 60) + "...",
-        },
-        {
-          key: "tech_stack",
-          title: "Tech Stack",
-          icon: "hardware-chip-outline",
-          fields: [
-            { key: "name", label: "Name", type: "text", ph: "Python" },
-            {
-              key: "icon",
-              label: "Ion-icon Name",
-              type: "text",
-              ph: "logo-python",
-            },
-            { key: "sort_order", label: "Order", type: "number" },
-          ],
-          display: (i) => esc(i.name),
-          subtitle: (i) => "Icon: " + i.icon,
-        },
-        {
-          key: "testimonials",
-          title: "Testimonials",
-          icon: "chatbubbles-outline",
-          fields: [
-            { key: "name", label: "Person Name", type: "text" },
-            { key: "avatar_url", label: "Avatar Image", type: "image" },
-            { key: "text", label: "Testimonial Text", type: "textarea" },
-            { key: "sort_order", label: "Order", type: "number" },
-          ],
-          display: (i) => esc(i.name),
-          subtitle: (i) => (i.text || "").substring(0, 50) + "...",
-        },
-        { group: "Resume" },
-        {
-          key: "experience",
-          title: "Experience",
-          icon: "briefcase-outline",
-          custom: true,
-        },
-        {
-          key: "education",
-          title: "Education",
-          icon: "school-outline",
-          custom: true,
-        },
-        {
-          key: "skills",
-          title: "Skill Bars",
-          icon: "bar-chart-outline",
-          fields: [
-            { key: "name", label: "Skill Name", type: "text" },
-            {
-              key: "percentage",
-              label: "Percentage",
-              type: "number",
-              ph: "90",
-            },
-            { key: "sort_order", label: "Order", type: "number" },
-          ],
-          display: (i) =>
-            esc(i.name) + " — <strong>" + i.percentage + "%</strong>",
-          subtitle: () => "",
-        },
-        { group: "Portfolio" },
-        {
-          key: "projects",
-          title: "Projects",
-          icon: "images-outline",
-          fields: [
-            { key: "title", label: "Title", type: "text" },
-            {
-              key: "category",
-              label: "Category",
-              type: "text",
-              ph: "fintech / automation / telecom / web apps",
-            },
-            { key: "image_url", label: "Project Image", type: "image" },
-            {
-              key: "description",
-              label: "Category Label",
-              type: "text",
-              ph: "FinTech — Company",
-            },
-            { key: "link", label: "Link", type: "text", ph: "#" },
-            { key: "sort_order", label: "Order", type: "number" },
-          ],
-          display: (i) => esc(i.title),
-          subtitle: (i) => "[" + i.category + "] " + (i.description || ""),
-        },
-        {
-          key: "certificates",
-          title: "Certificates",
-          icon: "ribbon-outline",
-          fields: [
-            { key: "title", label: "Title", type: "text" },
-            { key: "issuer", label: "Issuer", type: "text" },
-            { key: "credential_id", label: "Credential ID", type: "text" },
-            {
-              key: "issue_date",
-              label: "Issue Date",
-              type: "text",
-              ph: "January 2025",
-            },
-            {
-              key: "expiry",
-              label: "Expiry",
-              type: "text",
-              ph: "No Expiration",
-            },
-            {
-              key: "verify_url",
-              label: "Verify URL",
-              type: "text",
-              ph: "https://...",
-            },
-            {
-              key: "status",
-              label: "Status",
-              type: "select",
-              options: ["Verified", "ALUMNI", "Pending"],
-            },
-            { key: "icon", label: "Icon", type: "text", ph: "ribbon-outline" },
-            { key: "sort_order", label: "Order", type: "number" },
-          ],
-          display: (i) => esc(i.title),
-          subtitle: (i) => i.issuer + " · " + i.status,
-        },
-        { group: "Sidebar" },
-        {
-          key: "contacts",
-          title: "Contacts",
-          icon: "call-outline",
-          fields: [
-            {
-              key: "type",
-              label: "Type",
-              type: "text",
-              ph: "Email / Phone / Location",
-            },
-            {
-              key: "value",
-              label: "Value",
-              type: "text",
-              ph: "mesfiny711@gmail.com",
-            },
-            {
-              key: "icon",
-              label: "Ion-icon Name",
-              type: "text",
-              ph: "mail-outline",
-            },
-            { key: "sort_order", label: "Order", type: "number" },
-          ],
-          display: (i) =>
-            "<strong>" + esc(i.type) + "</strong>: " + esc(i.value),
-          subtitle: (i) => "Icon: " + i.icon,
-        },
-        {
-          key: "social_links",
-          title: "Social Links",
-          icon: "share-social-outline",
-          fields: [
-            {
-              key: "platform",
-              label: "Platform",
-              type: "text",
-              ph: "LinkedIn",
-            },
-            {
-              key: "url",
-              label: "URL",
-              type: "text",
-              ph: "https://linkedin.com/in/...",
-            },
-            {
-              key: "icon",
-              label: "Ion-icon Name",
-              type: "text",
-              ph: "logo-linkedin",
-            },
-            { key: "sort_order", label: "Order", type: "number" },
-          ],
-          display: (i) => "<strong>" + esc(i.platform) + "</strong>",
-          subtitle: (i) => i.url,
-        },
-        { group: "System" },
-        {
-          key: "settings",
-          title: "Settings",
-          icon: "settings-outline",
-          custom: true,
-        },
+      // Prev / Next year
+      const prevBtn = document.getElementById(id + "_prev");
+      const nextBtn = document.getElementById(id + "_next");
+      if (prevBtn) prevBtn.addEventListener("click", () => { selYear--; renderGrid(); });
+      if (nextBtn) nextBtn.addEventListener("click", () => { selYear++; renderGrid(); });
+
+      // Clear
+      const clearBtn = document.getElementById(id + "_clear");
+      if (clearBtn) clearBtn.addEventListener("click", () => {
+        selMonth = null;
+        hidden.value = "";
+        display.textContent = trigger.dataset.placeholder || "Select month & year";
+        display.classList.add("placeholder");
+        isNone = false;
+        if (noneRow) { noneRow.classList.remove("active"); noneToggle && noneToggle.classList.remove("on"); }
+        drop.classList.remove("open");
+        trigger.classList.remove("open");
+        renderGrid();
+      });
+
+      // Apply
+      const applyBtn = document.getElementById(id + "_apply");
+      if (applyBtn) applyBtn.addEventListener("click", () => {
+        if (isNone) {
+          hidden.value = "No Expiration";
+          display.textContent = "No Expiration";
+          display.classList.remove("placeholder");
+        } else if (selMonth !== null) {
+          const val = MONTH_SHORT[selMonth] + " " + selYear;
+          hidden.value = val;
+          display.textContent = val;
+          display.classList.remove("placeholder");
+        }
+        drop.classList.remove("open");
+        trigger.classList.remove("open");
+      });
+
+      // Toggle open
+      trigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = drop.classList.contains("open");
+        // Close all others
+        document.querySelectorAll(".date-picker-dropdown.open").forEach(d => d.classList.remove("open"));
+        document.querySelectorAll(".date-picker-trigger.open").forEach(t => t.classList.remove("open"));
+        if (!isOpen) {
+          drop.classList.add("open");
+          trigger.classList.add("open");
+          renderGrid();
+        }
+      });
+
+      drop.addEventListener("click", e => e.stopPropagation());
+      renderGrid();
+    }
+
+    function initRangePicker(baseId, wrap) {
+      // ── START ──
+      initHalfRangePicker(baseId + "_s", wrap, false);
+      // ── END ──
+      initHalfRangePicker(baseId + "_e", wrap, true);
+
+      // Update hidden field whenever either half changes
+      function updateHidden() {
+        const sDisplay = document.getElementById(baseId + "_s_display");
+        const eDisplay = document.getElementById(baseId + "_e_display");
+        const hidden = document.getElementById(baseId + "_hidden");
+        if (!hidden) return;
+        const sVal = sDisplay ? sDisplay.textContent.trim() : "";
+        const eVal = eDisplay ? eDisplay.textContent.trim() : "";
+        if (sVal && sVal !== "Start date" && eVal && eVal !== "End date") {
+          hidden.value = sVal + " — " + eVal;
+        } else if (sVal && sVal !== "Start date") {
+          hidden.value = sVal;
+        } else {
+          hidden.value = "";
+        }
+      }
+
+      // Observe display text changes
+      [baseId + "_s_apply", baseId + "_s_clear",
+      baseId + "_e_apply", baseId + "_e_clear"].forEach(btnId => {
+        const btn = document.getElementById(btnId);
+        if (btn) btn.addEventListener("click", () => setTimeout(updateHidden, 50));
+      });
+    }
+
+    function initHalfRangePicker(id, wrap, hasPresent) {
+      const trigger = document.getElementById(id + "_trigger");
+      const drop = document.getElementById(id + "_drop");
+      const display = document.getElementById(id + "_display");
+
+      if (!trigger || !drop || !display) return;
+
+      let selMonth = null;
+      let selYear = new Date().getFullYear();
+      let isPresent = false;
+
+      // Parse initial
+      const initText = display.textContent.trim();
+      if (initText === "Present") { isPresent = true; }
+      else {
+        const p = parseDateStr(initText);
+        if (p.month !== null) { selMonth = p.month; selYear = p.year; }
+      }
+
+      const presentRow = hasPresent ? document.getElementById(id + "_present_row") : null;
+      const presentToggle = hasPresent ? document.getElementById(id + "_toggle") : null;
+      const pickerBody = hasPresent ? document.getElementById(id + "_picker_body") : null;
+
+      if (presentRow) {
+        presentRow.addEventListener("click", () => {
+          isPresent = !isPresent;
+          presentRow.classList.toggle("active", isPresent);
+          presentToggle && presentToggle.classList.toggle("on", isPresent);
+          if (pickerBody) {
+            pickerBody.style.opacity = isPresent ? "0.4" : "1";
+            pickerBody.style.pointerEvents = isPresent ? "none" : "";
+          }
+        });
+      }
+
+      function renderGrid() {
+        const yearLabel = document.getElementById(id + "_year_label");
+        const monthGrid = document.getElementById(id + "_month_grid");
+        if (!yearLabel || !monthGrid) return;
+        yearLabel.textContent = selYear;
+        monthGrid.innerHTML = MONTH_SHORT.map((m, i) =>
+          `<button type="button" class="cal-month-btn ${selMonth === i && !isPresent ? 'selected' : ''}" data-m="${i}">${m}</button>`
+        ).join("");
+        monthGrid.querySelectorAll(".cal-month-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            selMonth = +btn.dataset.m;
+            isPresent = false;
+            if (presentRow) presentRow.classList.remove("active");
+            if (presentToggle) presentToggle.classList.remove("on");
+            if (pickerBody) { pickerBody.style.opacity = "1"; pickerBody.style.pointerEvents = ""; }
+            renderGrid();
+          });
+        });
+      }
+
+      const prevBtn = document.getElementById(id + "_prev");
+      const nextBtn = document.getElementById(id + "_next");
+      if (prevBtn) prevBtn.addEventListener("click", () => { selYear--; renderGrid(); });
+      if (nextBtn) nextBtn.addEventListener("click", () => { selYear++; renderGrid(); });
+
+      const clearBtn = document.getElementById(id + "_clear");
+      if (clearBtn) clearBtn.addEventListener("click", () => {
+        selMonth = null;
+        isPresent = false;
+        display.textContent = id.endsWith("_s") ? "Start date" : "End date";
+        display.classList.add("placeholder");
+        if (presentRow) presentRow.classList.remove("active");
+        if (presentToggle) presentToggle.classList.remove("on");
+        if (pickerBody) { pickerBody.style.opacity = "1"; pickerBody.style.pointerEvents = ""; }
+        drop.classList.remove("open");
+        trigger.classList.remove("open");
+        renderGrid();
+      });
+
+      const applyBtn = document.getElementById(id + "_apply");
+      if (applyBtn) applyBtn.addEventListener("click", () => {
+        if (isPresent) {
+          display.textContent = "Present";
+          display.classList.remove("placeholder");
+        } else if (selMonth !== null) {
+          display.textContent = MONTH_SHORT[selMonth] + " " + selYear;
+          display.classList.remove("placeholder");
+        }
+        drop.classList.remove("open");
+        trigger.classList.remove("open");
+      });
+
+      trigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = drop.classList.contains("open");
+        document.querySelectorAll(".date-picker-dropdown.open").forEach(d => d.classList.remove("open"));
+        document.querySelectorAll(".date-picker-trigger.open").forEach(t => t.classList.remove("open"));
+        if (!isOpen) {
+          drop.classList.add("open");
+          trigger.classList.add("open");
+          renderGrid();
+        }
+      });
+
+      drop.addEventListener("click", e => e.stopPropagation());
+      renderGrid();
+    }
+
+    // ═══════════════════════════════════════
+    // SECTION DEFINITIONS
+    // ═══════════════════════════════════════
+    const SECTIONS = [
+      { group: "Content" },
+      { key: "profile", title: "Profile", icon: "person-outline", custom: true },
+      {
+        key: "typing_texts", title: "Typing Texts", icon: "text-outline",
+        fields: [
+          { key: "text", label: "Text", type: "text", ph: "QA Automation Lead" },
+          { key: "sort_order", label: "Order", type: "number" },
+        ],
+        display: (i) => esc(i.text),
+        subtitle: (i) => "Order: " + (i.sort_order || 0),
+      },
+      {
+        key: "stats", title: "Impact Metrics", icon: "speedometer-outline",
+        fields: [
+          { key: "label", label: "Label", type: "text", ph: "Testing Time Reduced" },
+          { key: "value", label: "Value", type: "number", ph: "40" },
+          { key: "suffix", label: "Suffix", type: "text", ph: "%" },
+          { key: "icon", label: "Ion-icon Name", type: "text", ph: "speedometer-outline" },
+          { key: "reveal", label: "Reveal Direction", type: "select", options: ["left", "right", "bottom"] },
+          { key: "sort_order", label: "Order", type: "number" },
+        ],
+        display: (i) => esc(i.label) + ": <strong>" + i.value + esc(i.suffix || "") + "</strong>",
+        subtitle: (i) => "Icon: " + i.icon,
+      },
+      {
+        key: "services", title: "Services", icon: "construct-outline",
+        fields: [
+          { key: "title", label: "Title", type: "text" },
+          { key: "description", label: "Description", type: "textarea" },
+          { key: "icon", label: "Ion-icon Name", type: "text", ph: "code-slash-outline" },
+          { key: "reveal", label: "Reveal", type: "select", options: ["left", "right"] },
+          { key: "sort_order", label: "Order", type: "number" },
+        ],
+        display: (i) => esc(i.title),
+        subtitle: (i) => (i.description || "").substring(0, 60) + "...",
+      },
+      {
+        key: "tech_stack", title: "Tech Stack", icon: "hardware-chip-outline",
+        fields: [
+          { key: "name", label: "Name", type: "text", ph: "Python" },
+          { key: "icon", label: "Ion-icon Name", type: "text", ph: "logo-python" },
+          { key: "sort_order", label: "Order", type: "number" },
+        ],
+        display: (i) => esc(i.name),
+        subtitle: (i) => "Icon: " + i.icon,
+      },
+      {
+        key: "testimonials", title: "Testimonials", icon: "chatbubbles-outline",
+        fields: [
+          { key: "name", label: "Person Name", type: "text" },
+          { key: "avatar_url", label: "Avatar Image", type: "image" },
+          { key: "text", label: "Testimonial Text", type: "textarea" },
+          { key: "sort_order", label: "Order", type: "number" },
+        ],
+        display: (i) => esc(i.name),
+        subtitle: (i) => (i.text || "").substring(0, 50) + "...",
+      },
+      { group: "Resume" },
+      { key: "experience", title: "Experience", icon: "briefcase-outline", custom: true },
+      { key: "education", title: "Education", icon: "school-outline", custom: true },
+      {
+        key: "skills", title: "Skill Bars", icon: "bar-chart-outline",
+        fields: [
+          { key: "name", label: "Skill Name", type: "text" },
+          { key: "percentage", label: "Percentage", type: "number", ph: "90" },
+          { key: "sort_order", label: "Order", type: "number" },
+        ],
+        display: (i) => esc(i.name) + " — <strong>" + i.percentage + "%</strong>",
+        subtitle: () => "",
+      },
+      { group: "Portfolio" },
+      {
+        key: "projects", title: "Projects", icon: "images-outline",
+        fields: [
+          { key: "title", label: "Title", type: "text" },
+          { key: "category", label: "Category", type: "text", ph: "fintech / automation / telecom / web apps" },
+          { key: "image_url", label: "Project Image", type: "image" },
+          { key: "description", label: "Category Label", type: "text", ph: "FinTech — Company" },
+          { key: "link", label: "Link", type: "text", ph: "#" },
+          { key: "sort_order", label: "Order", type: "number" },
+        ],
+        display: (i) => esc(i.title),
+        subtitle: (i) => "[" + i.category + "] " + (i.description || ""),
+      },
+      {
+        key: "certificates", title: "Certificates", icon: "ribbon-outline",
+        fields: [
+          { key: "title", label: "Title", type: "text" },
+          { key: "issuer", label: "Issuer", type: "text" },
+          { key: "credential_id", label: "Credential ID", type: "text" },
+          // ✅ These are now calendar pickers — handled specially in buildField
+          { key: "issue_date", label: "Issue Date", type: "monthyear" },
+          { key: "expiry", label: "Expiry Date", type: "monthyear_optional" },
+          { key: "verify_url", label: "Verify URL", type: "text", ph: "https://..." },
+          { key: "status", label: "Status", type: "select", options: ["Verified", "ALUMNI", "Pending"] },
+          { key: "icon", label: "Icon", type: "text", ph: "ribbon-outline" },
+          { key: "sort_order", label: "Order", type: "number" },
+        ],
+        display: (i) => esc(i.title),
+        subtitle: (i) => i.issuer + " · " + i.status,
+      },
+      { group: "Sidebar" },
+      {
+        key: "contacts", title: "Contacts", icon: "call-outline",
+        fields: [
+          { key: "type", label: "Type", type: "text", ph: "Email / Phone / Location" },
+          { key: "value", label: "Value", type: "text", ph: "mesfiny711@gmail.com" },
+          { key: "icon", label: "Ion-icon Name", type: "text", ph: "mail-outline" },
+          { key: "sort_order", label: "Order", type: "number" },
+        ],
+        display: (i) => "<strong>" + esc(i.type) + "</strong>: " + esc(i.value),
+        subtitle: (i) => "Icon: " + i.icon,
+      },
+      {
+        key: "social_links", title: "Social Links", icon: "share-social-outline",
+        fields: [
+          { key: "platform", label: "Platform", type: "text", ph: "LinkedIn" },
+          { key: "url", label: "URL", type: "text", ph: "https://linkedin.com/in/..." },
+          { key: "icon", label: "Ion-icon Name", type: "text", ph: "logo-linkedin" },
+          { key: "sort_order", label: "Order", type: "number" },
+        ],
+        display: (i) => "<strong>" + esc(i.platform) + "</strong>",
+        subtitle: (i) => i.url,
+      },
+      { group: "System" },
+      { key: "settings", title: "Settings", icon: "settings-outline", custom: true },
+    ];
+
+    const sectionMap = {};
+    SECTIONS.filter(s => s.key).forEach(s => sectionMap[s.key] = s);
+
+    // ═══════════════════════════════════════
+    // AUTH
+    // ═══════════════════════════════════════
+    $("#login-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const u = $("#login-user").value.trim();
+      const p = $("#login-pass").value;
+      const err = $("#login-error");
+      err.textContent = "";
+      try {
+        const data = await fetch(API + "/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: u, password: p }),
+        }).then(r => r.json());
+        if (data.token) {
+          TOKEN = data.token;
+          currentUsername = data.username;
+          localStorage.setItem("admin_token", TOKEN);
+          initPanel();
+        } else {
+          err.textContent = data.error || "Login failed";
+        }
+      } catch {
+        err.textContent = "Connection failed";
+      }
+    });
+
+    function logout() {
+      TOKEN = null;
+      localStorage.removeItem("admin_token");
+      $("#admin-panel").style.display = "none";
+      $("#login-screen").style.display = "flex";
+      $("#login-pass").value = "";
+    }
+
+    $("#logout-btn").addEventListener("click", logout);
+
+    // ═══════════════════════════════════════
+    // PANEL
+    // ═══════════════════════════════════════
+    function initPanel() {
+      $("#login-screen").style.display = "none";
+      $("#admin-panel").style.display = "block";
+      $("#panel-username").textContent = currentUsername || "admin";
+      buildNav();
+      switchTab("profile");
+    }
+
+    function buildNav() {
+      let navHTML = "";
+      let mobileHTML = "";
+      SECTIONS.forEach(s => {
+        if (s.group) { navHTML += '<div class="nav-group-label">' + s.group + "</div>"; return; }
+        navHTML += '<button class="nav-btn" data-tab="' + s.key + '"><ion-icon name="' + s.icon + '"></ion-icon>' + s.title + "</button>";
+        mobileHTML += '<button data-tab="' + s.key + '"><ion-icon name="' + s.icon + '"></ion-icon>' + s.title + "</button>";
+      });
+      $("#admin-nav").innerHTML = navHTML;
+      $("#mobile-nav").innerHTML = mobileHTML;
+      $$("[data-tab]").forEach(b => b.addEventListener("click", () => switchTab(b.dataset.tab)));
+    }
+
+    async function switchTab(key) {
+      currentTab = key;
+      $$("[data-tab]").forEach(b => b.classList.toggle("active", b.dataset.tab === key));
+      const el = $("#admin-content");
+      const sec = sectionMap[key];
+      if (!sec) return;
+      try {
+        if (sec.custom) {
+          if (key === "profile") await renderProfile(el);
+          else if (key === "experience") await renderCompanySection(el, "experience", "Experience");
+          else if (key === "education") await renderCompanySection(el, "education", "Education");
+          else if (key === "settings") renderSettings(el);
+        } else {
+          await renderCrudList(el, key);
+        }
+      } catch (err) {
+        el.innerHTML = '<div class="empty-state"><ion-icon name="alert-circle-outline"></ion-icon><p>Error: ' + esc(err.message) + '</p><button class="btn btn-ghost" onclick="switchTab(\'' + key + '\')">Retry</button></div>';
+      }
+    }
+
+    // ═══════════════════════════════════════
+    // FORM HELPERS
+    // ═══════════════════════════════════════
+    function buildField(f, item) {
+      const val = item != null && item[f.key] != null ? item[f.key] : "";
+      const ph = f.ph || "";
+
+      // ✅ Month-Year calendar picker (required)
+      if (f.type === "monthyear") {
+        return '<div class="field"><label>' + f.label + "</label>" +
+          buildSingleDatePicker(f.key, val, { placeholder: "Select month & year" }) +
+          "</div>";
+      }
+
+      // ✅ Month-Year calendar picker (optional — has "No Expiration")
+      if (f.type === "monthyear_optional") {
+        return '<div class="field"><label>' + f.label + "</label>" +
+          buildSingleDatePicker(f.key, val, {
+            allowNone: true,
+            noneLabel: "No Expiration",
+            placeholder: "Select expiry or no expiration",
+          }) +
+          "</div>";
+      }
+
+      // ✅ Date Range picker
+      if (f.type === "daterange") {
+        return '<div class="field"><label>' + f.label + "</label>" +
+          buildDateRangePicker(f.key, val) +
+          "</div>";
+      }
+
+      if (f.type === "textarea") {
+        return '<div class="field"><label>' + f.label + '</label><textarea name="' + f.key + '" placeholder="' + esc(ph) + '">' + esc(val) + "</textarea></div>";
+      }
+      if (f.type === "select") {
+        let opts = "";
+        (f.options || []).forEach(o => {
+          opts += '<option value="' + o + '"' + (String(val) === String(o) ? " selected" : "") + ">" + o + "</option>";
+        });
+        return '<div class="field"><label>' + f.label + '</label><select name="' + f.key + '">' + opts + "</select></div>";
+      }
+      if (f.type === "image") {
+        const placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%2321262d'/%3E%3C/svg%3E";
+        return '<div class="field"><label>' + f.label + "</label>" +
+          '<div class="upload-area">' +
+          '<img src="' + (esc(val) || placeholder) + '" class="upload-preview" data-preview="' + f.key + '" />' +
+          '<div class="upload-controls">' +
+          '<input type="file" accept="image/*" data-upload="' + f.key + '" />' +
+          '<input type="hidden" name="' + f.key + '" value="' + esc(val) + '" />' +
+          '<span class="upload-status" data-upload-status="' + f.key + '">' + (val ? "Current image" : "No image") + "</span>" +
+          "</div></div></div>";
+      }
+      return '<div class="field"><label>' + f.label + '</label><input type="' + f.type + '" name="' + f.key + '" value="' + esc(val) + '" placeholder="' + esc(ph) + '" /></div>';
+    }
+
+    function collectFormData(fields, ctx) {
+      const body = {};
+      fields.forEach(f => {
+        // Date pickers store in hidden inputs by name
+        const el = $('[name="' + f.key + '"]', ctx || $("#modal-box"));
+        if (!el) return;
+        if (f.type === "number") body[f.key] = +el.value || 0;
+        else body[f.key] = el.value || "";
+      });
+      return body;
+    }
+
+    // ═══════════════════════════════════════
+    // GENERIC CRUD
+    // ═══════════════════════════════════════
+    async function renderCrudList(el, key) {
+      const sec = sectionMap[key];
+      const items = await api("/" + key);
+      el.innerHTML =
+        '<div class="section-header"><h2 class="section-title"><ion-icon name="' + sec.icon + '"></ion-icon>' + sec.title +
+        '<span class="section-count">' + items.length + "</span></h2>" +
+        '<button class="btn btn-primary" id="crud-add"><ion-icon name="add-outline"></ion-icon> Add New</button></div>' +
+        '<div id="crud-items">' +
+        (items.length === 0
+          ? '<div class="empty-state"><ion-icon name="' + sec.icon + '"></ion-icon><p>No ' + sec.title.toLowerCase() + " yet</p></div>"
+          : '<div class="item-list">' +
+          items.map(item =>
+            '<div class="item-card" data-id="' + item.id + '">' +
+            '<div class="item-card-body"><div class="item-card-title">' + sec.display(item) +
+            '</div><div class="item-card-sub">' + esc(sec.subtitle ? sec.subtitle(item) : "#" + item.id) + "</div></div>" +
+            '<div class="item-card-actions"><span class="item-card-order">' + (item.sort_order != null ? item.sort_order : 0) + "</span>" +
+            '<button class="btn btn-ghost btn-sm btn-edit">Edit</button>' +
+            '<button class="btn btn-danger btn-sm btn-del">Delete</button></div></div>'
+          ).join("") + "</div>") +
+        "</div>";
+
+      $("#crud-add").onclick = () => openItemModal(key, null);
+      $("#crud-items").addEventListener("click", async (e) => {
+        const card = e.target.closest("[data-id]");
+        if (!card) return;
+        const item = items.find(i => i.id === +card.dataset.id);
+        if (e.target.closest(".btn-edit")) openItemModal(key, item);
+        else if (e.target.closest(".btn-del")) {
+          const ok = await confirmDialog("Delete?", "This item will be permanently removed.");
+          if (!ok) return;
+          await api("/" + key + "/" + item.id, "DELETE");
+          toast("Deleted");
+          switchTab(key);
+        }
+      });
+    }
+
+    function openItemModal(key, item) {
+      const sec = sectionMap[key];
+      const isEdit = !!item;
+      openModal(
+        '<div class="modal-header"><h2>' + (isEdit ? "Edit" : "Add") + " " + sec.title.replace(/s$/, "") + "</h2>" +
+        '<button class="btn btn-icon btn-ghost" onclick="closeModal()"><ion-icon name="close-outline"></ion-icon></button></div>' +
+        '<form id="item-form"><div class="modal-body">' +
+        sec.fields.map(f => buildField(f, item)).join("") +
+        '</div><div class="modal-footer"><button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>' +
+        '<button type="submit" class="btn btn-primary">' + (isEdit ? "Save" : "Create") + "</button></div></form>"
+      );
+      bindImageUploads();
+      // ✅ Bind date pickers after modal HTML is injected
+      bindDatePickers($("#modal-box"));
+
+      $("#item-form").onsubmit = async (e) => {
+        e.preventDefault();
+        const body = collectFormData(sec.fields);
+        try {
+          if (isEdit) await api("/" + key + "/" + item.id, "PUT", body);
+          else await api("/" + key, "POST", body);
+          closeModal();
+          toast(isEdit ? "Updated!" : "Created!");
+          switchTab(key);
+        } catch (err) {
+          toast(err.message, "error");
+        }
+      };
+    }
+
+    // ═══════════════════════════════════════
+    // PROFILE
+    // ═══════════════════════════════════════
+    async function renderProfile(el) {
+      const p = await api("/profile");
+      const currentStatus = p.availability || "available";
+      const statusOptions = [
+        { value: "available", label: "Available for Hire", color: "#2ecc87", icon: "checkmark-circle" },
+        { value: "busy", label: "Busy / Limited", color: "#e8a838", icon: "time" },
+        { value: "unavailable", label: "Not Available", color: "#f85149", icon: "close-circle" },
+      ];
+      const currentOpt = statusOptions.find(s => s.value === currentStatus) || statusOptions[0];
+
+      el.innerHTML =
+        '<div class="section-header"><h2 class="section-title"><ion-icon name="person-outline"></ion-icon> Profile &amp; About</h2></div>' +
+        '<div class="status-card">' +
+        '<div class="status-info"><h3><span class="status-dot" id="status-dot" style="background:' + currentOpt.color + ";box-shadow:0 0 8px " + currentOpt.color + '60"></span>' +
+        '<span id="status-label">' + currentOpt.label + "</span></h3>" +
+        "<p>Controls the badge on your portfolio avatar</p></div>" +
+        '<div class="status-buttons" id="status-buttons">' +
+        statusOptions.map(s =>
+          '<button class="btn ' + (s.value === currentStatus ? "btn-primary" : "btn-ghost") + ' btn-sm" data-availability="' + s.value + '"' +
+          (s.value === currentStatus ? ' style="background:' + s.color + ";border-color:" + s.color + '"' : "") +
+          '><ion-icon name="' + s.icon + '"></ion-icon> ' + s.label + "</button>"
+        ).join("") + "</div></div>" +
+        '<form id="profile-form">' +
+        '<div class="form-row">' +
+        '<div class="field"><label>Full Name</label><input name="name" value="' + esc(p.name) + '" placeholder="Your Name" /></div>' +
+        '<div class="field"><label>Primary Title</label><input name="title" value="' + esc(p.title) + '" placeholder="QA Automation Lead" /></div>' +
+        "</div>" +
+        '<div class="field"><label>Avatar Image</label>' +
+        '<div class="upload-area">' +
+        '<img src="' + esc(p.avatar_url) + '" class="profile-avatar upload-preview" data-preview="avatar_url" />' +
+        '<div class="upload-controls">' +
+        '<input type="file" accept="image/*" data-upload="avatar_url" />' +
+        '<input type="hidden" name="avatar_url" value="' + esc(p.avatar_url) + '" />' +
+        '<span class="upload-status" data-upload-status="avatar_url">Current avatar</span>' +
+        "</div></div></div>" +
+        '<div class="field"><label>About Text</label>' +
+        '<textarea name="about_text" style="min-height:200px" placeholder="Write about yourself...">' + esc(p.about_text) + "</textarea>" +
+        '<div class="field-hint">Use **text** for green highlights. Blank line = new paragraph.</div></div>' +
+        '<input type="hidden" name="availability" id="availability-input" value="' + currentStatus + '" />' +
+        '<button type="submit" class="btn btn-primary btn-lg"><ion-icon name="save-outline"></ion-icon> Save Profile</button>' +
+        "</form>";
+
+      const statusColors = { available: "#2ecc87", busy: "#e8a838", unavailable: "#f85149" };
+      $("#status-buttons").addEventListener("click", async (e) => {
+        const btn = e.target.closest("[data-availability]");
+        if (!btn) return;
+        const ns = btn.dataset.availability;
+        const opt = statusOptions.find(s => s.value === ns);
+        $("#availability-input").value = ns;
+        $$("#status-buttons .btn").forEach(b => {
+          if (b.dataset.availability === ns) {
+            b.className = "btn btn-primary btn-sm";
+            b.style.background = statusColors[ns];
+            b.style.borderColor = statusColors[ns];
+          } else {
+            b.className = "btn btn-ghost btn-sm";
+            b.style.background = "";
+            b.style.borderColor = "";
+          }
+        });
+        $("#status-dot").style.background = opt.color;
+        $("#status-dot").style.boxShadow = "0 0 8px " + opt.color + "60";
+        $("#status-label").textContent = opt.label;
+        try {
+          await api("/profile", "PUT", {
+            name: $('[name="name"]').value,
+            title: $('[name="title"]').value,
+            about_text: $('[name="about_text"]').value,
+            avatar_url: $('[name="avatar_url"]').value,
+            availability: ns,
+          });
+          toast("Status: " + opt.label);
+        } catch (err) { toast(err.message, "error"); }
+      });
+
+      bindImageUploads(el);
+
+      $("#profile-form").onsubmit = async (e) => {
+        e.preventDefault();
+        try {
+          await api("/profile", "PUT", {
+            name: $('[name="name"]').value,
+            title: $('[name="title"]').value,
+            about_text: $('[name="about_text"]').value,
+            avatar_url: $('[name="avatar_url"]').value,
+            availability: $("#availability-input").value,
+          });
+          toast("Profile saved!");
+        } catch (err) { toast(err.message, "error"); }
+      };
+    }
+
+    // ═══════════════════════════════════════
+    // EXPERIENCE / EDUCATION (Nested)
+    // ═══════════════════════════════════════
+    async function renderCompanySection(el, section, label) {
+      const allCompanies = await api("/companies");
+      const allRoles = await api("/roles");
+      const companies = allCompanies.filter(c => c.section === section);
+
+      const companyFields = [
+        { key: "name", label: section === "education" ? "School Name" : "Company Name", type: "text" },
+        { key: "meta", label: "Duration / Location", type: "text", ph: "7 months · Addis Ababa" },
+        { key: "icon", label: "Ion-icon Name", type: "text", ph: "business-outline" },
+        { key: "is_single", label: "Single Entry (dashed)", type: "select", options: ["0", "1"] },
+        { key: "sort_order", label: "Order", type: "number" },
       ];
 
-      const sectionMap = {};
-      SECTIONS.filter((s) => s.key).forEach((s) => (sectionMap[s.key] = s));
+      const roleFields = [
+        { key: "title", label: "Role / Degree Title", type: "text" },
+        // ✅ Date range now uses calendar picker
+        { key: "date_range", label: "Date Range", type: "daterange" },
+        { key: "description", label: "Description", type: "textarea" },
+        { key: "tags", label: "Tags (comma-separated)", type: "text", ph: "Python, CI/CD, Agile" },
+        { key: "sort_order", label: "Order", type: "number" },
+      ];
 
-      // ═══════════════════════════════════════
-      // AUTH
-      // ═══════════════════════════════════════
-      $("#login-form").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const u = $("#login-user").value.trim();
-        const p = $("#login-pass").value;
-        const err = $("#login-error");
-        err.textContent = "";
-        try {
-          const data = await fetch(API + "/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username: u, password: p }),
-          }).then((r) => r.json());
-          if (data.token) {
-            TOKEN = data.token;
-            currentUsername = data.username;
-            localStorage.setItem("admin_token", TOKEN);
-            initPanel();
-          } else {
-            err.textContent = data.error || "Login failed";
-          }
-        } catch {
-          err.textContent = "Connection failed";
+      el.innerHTML =
+        '<div class="section-header"><h2 class="section-title"><ion-icon name="' + (section === "education" ? "school" : "briefcase") + '-outline"></ion-icon> ' + label +
+        ' <span class="section-count">' + companies.length + "</span></h2>" +
+        '<button class="btn btn-primary" id="add-company"><ion-icon name="add-outline"></ion-icon> Add ' +
+        (section === "education" ? "School" : "Company") + "</button></div>" +
+        '<div id="companies-list">' +
+        (companies.length === 0
+          ? '<div class="empty-state"><ion-icon name="' + (section === "education" ? "school" : "briefcase") + '-outline"></ion-icon><p>No entries yet</p></div>'
+          : companies.map(c => {
+            const roles = allRoles.filter(r => r.company_id === c.id);
+            return (
+              '<div class="item-card" data-cid="' + c.id + '" style="flex-direction:column;align-items:stretch;margin-bottom:8px">' +
+              '<div style="display:flex;justify-content:space-between;align-items:center">' +
+              '<div class="item-card-body"><div class="item-card-title">' + esc(c.name) +
+              '</div><div class="item-card-sub">' + esc(c.meta) + "</div></div>" +
+              '<div class="item-card-actions"><span class="item-card-order">' + (c.sort_order || 0) + "</span>" +
+              '<button class="btn btn-ghost btn-sm btn-edit-co">Edit</button>' +
+              '<button class="btn btn-danger btn-sm btn-del-co">Delete</button></div></div>' +
+              '<div class="roles-container">' +
+              roles.map(r =>
+                '<div class="item-card" data-rid="' + r.id + '">' +
+                '<div class="item-card-body"><div class="item-card-title" style="font-size:13px">' + esc(r.title) +
+                '</div><div class="item-card-sub">' + esc(r.date_range) + "</div></div>" +
+                '<div class="item-card-actions"><span class="item-card-order">' + (r.sort_order || 0) + "</span>" +
+                '<button class="btn btn-ghost btn-sm btn-edit-role">Edit</button>' +
+                '<button class="btn btn-danger btn-sm btn-del-role">Delete</button></div></div>'
+              ).join("") +
+              '<button class="add-role-btn" data-for-company="' + c.id + '">+ Add Role</button>' +
+              "</div></div>"
+            );
+          }).join("")) +
+        "</div>";
+
+      // Add company
+      $("#add-company").onclick = () =>
+        openCustomForm("Add " + (section === "education" ? "School" : "Company"), companyFields, null, async (body) => {
+          body.section = section;
+          await api("/companies", "POST", body);
+          toast("Added!");
+          switchTab(section);
+        });
+
+      // Delegation
+      $("#companies-list").addEventListener("click", async (e) => {
+        if (e.target.closest(".btn-edit-co")) {
+          const cid = +e.target.closest("[data-cid]").dataset.cid;
+          const c = companies.find(x => x.id === cid);
+          openCustomForm("Edit " + esc(c.name), companyFields, c, async (body) => {
+            body.section = section;
+            await api("/companies/" + c.id, "PUT", body);
+            toast("Updated!");
+            switchTab(section);
+          });
+          return;
+        }
+        if (e.target.closest(".btn-del-co")) {
+          const cid = +e.target.closest("[data-cid]").dataset.cid;
+          const c = companies.find(x => x.id === cid);
+          const ok = await confirmDialog("Delete?", '"' + c.name + '" and all its roles will be removed.');
+          if (!ok) return;
+          await api("/companies/" + cid, "DELETE");
+          toast("Deleted");
+          switchTab(section);
+          return;
+        }
+        if (e.target.closest(".add-role-btn")) {
+          const cid = +e.target.closest("[data-for-company]").dataset.forCompany;
+          openCustomForm("Add Role", roleFields, null, async (body) => {
+            body.company_id = cid;
+            body.tags = JSON.stringify(
+              body.tags ? body.tags.split(",").map(t => t.trim()).filter(Boolean) : []
+            );
+            await api("/roles", "POST", body);
+            toast("Role added!");
+            switchTab(section);
+          });
+          return;
+        }
+        if (e.target.closest(".btn-edit-role")) {
+          const rid = +e.target.closest("[data-rid]").dataset.rid;
+          const r = allRoles.find(x => x.id === rid);
+          let tagsStr = "";
+          try { tagsStr = JSON.parse(r.tags || "[]").join(", "); } catch { }
+          openCustomForm("Edit Role", roleFields, { ...r, tags: tagsStr }, async (body) => {
+            body.company_id = r.company_id;
+            body.tags = JSON.stringify(
+              body.tags ? body.tags.split(",").map(t => t.trim()).filter(Boolean) : []
+            );
+            await api("/roles/" + r.id, "PUT", body);
+            toast("Updated!");
+            switchTab(section);
+          });
+          return;
+        }
+        if (e.target.closest(".btn-del-role")) {
+          const rid = +e.target.closest("[data-rid]").dataset.rid;
+          const ok = await confirmDialog("Delete role?", "This role will be permanently removed.");
+          if (!ok) return;
+          await api("/roles/" + rid, "DELETE");
+          toast("Deleted");
+          switchTab(section);
         }
       });
+    }
 
-      function logout() {
-        TOKEN = null;
-        localStorage.removeItem("admin_token");
-        $("#admin-panel").style.display = "none";
-        $("#login-screen").style.display = "flex";
-        $("#login-pass").value = "";
-      }
+    function openCustomForm(title, fields, item, onSubmit) {
+      const isEdit = !!item;
+      openModal(
+        '<div class="modal-header"><h2>' + title + "</h2>" +
+        '<button class="btn btn-icon btn-ghost" onclick="closeModal()"><ion-icon name="close-outline"></ion-icon></button></div>' +
+        '<form id="custom-form"><div class="modal-body">' +
+        fields.map(f => buildField(f, item)).join("") +
+        '</div><div class="modal-footer"><button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>' +
+        '<button type="submit" class="btn btn-primary">' + (isEdit ? "Save" : "Create") + "</button></div></form>"
+      );
+      bindImageUploads();
+      // ✅ Bind date pickers after modal content injected
+      bindDatePickers($("#modal-box"));
 
-      $("#logout-btn").addEventListener("click", logout);
-
-      // ═══════════════════════════════════════
-      // PANEL
-      // ═══════════════════════════════════════
-      function initPanel() {
-        $("#login-screen").style.display = "none";
-        $("#admin-panel").style.display = "block";
-        $("#panel-username").textContent = currentUsername || "admin";
-        buildNav();
-        switchTab("profile");
-      }
-
-      function buildNav() {
-        let navHTML = "";
-        let mobileHTML = "";
-        SECTIONS.forEach((s) => {
-          if (s.group) {
-            navHTML += '<div class="nav-group-label">' + s.group + "</div>";
-            return;
-          }
-          navHTML +=
-            '<button class="nav-btn" data-tab="' +
-            s.key +
-            '"><ion-icon name="' +
-            s.icon +
-            '"></ion-icon>' +
-            s.title +
-            "</button>";
-          mobileHTML +=
-            '<button data-tab="' +
-            s.key +
-            '"><ion-icon name="' +
-            s.icon +
-            '"></ion-icon>' +
-            s.title +
-            "</button>";
-        });
-        $("#admin-nav").innerHTML = navHTML;
-        $("#mobile-nav").innerHTML = mobileHTML;
-        $$("[data-tab]").forEach((b) =>
-          b.addEventListener("click", () => switchTab(b.dataset.tab)),
-        );
-      }
-
-      async function switchTab(key) {
-        currentTab = key;
-        $$("[data-tab]").forEach((b) =>
-          b.classList.toggle("active", b.dataset.tab === key),
-        );
-        const el = $("#admin-content");
-        const sec = sectionMap[key];
-        if (!sec) return;
+      $("#custom-form").onsubmit = async (e) => {
+        e.preventDefault();
+        const body = collectFormData(fields);
         try {
-          if (sec.custom) {
-            if (key === "profile") await renderProfile(el);
-            else if (key === "experience")
-              await renderCompanySection(el, "experience", "Experience");
-            else if (key === "education")
-              await renderCompanySection(el, "education", "Education");
-            else if (key === "settings") renderSettings(el);
-          } else {
-            await renderCrudList(el, key);
-          }
+          await onSubmit(body);
+          closeModal();
         } catch (err) {
-          el.innerHTML =
-            '<div class="empty-state"><ion-icon name="alert-circle-outline"></ion-icon><p>Error: ' +
-            esc(err.message) +
-            '</p><button class="btn btn-ghost" onclick="switchTab(\'' +
-            key +
-            "')\">Retry</button></div>";
+          toast(err.message, "error");
         }
+      };
+    }
+
+    // ═══════════════════════════════════════
+    // SETTINGS
+    // ═══════════════════════════════════════
+    function renderSettings(el) {
+      el.innerHTML =
+        '<div class="section-header"><h2 class="section-title"><ion-icon name="settings-outline"></ion-icon> Settings</h2></div>' +
+        '<div style="max-width:420px"><h3 style="font-size:16px;margin-bottom:16px">Change Password</h3>' +
+        '<form id="pw-form">' +
+        '<div class="field"><label>Current Password</label><input type="password" name="current" required autocomplete="current-password" /></div>' +
+        '<div class="field"><label>New Password</label><input type="password" name="newPassword" required minlength="6" autocomplete="new-password" /></div>' +
+        '<div class="field"><label>Confirm New Password</label><input type="password" name="confirmPassword" required minlength="6" autocomplete="new-password" /></div>' +
+        '<button type="submit" class="btn btn-primary"><ion-icon name="lock-closed-outline"></ion-icon> Update Password</button></form></div>' +
+        '<div style="margin-top:40px;padding-top:24px;border-top:1px solid var(--border)">' +
+        '<h3 style="font-size:16px;margin-bottom:12px;color:var(--text-2)">About</h3>' +
+        '<p style="font-size:13px;color:var(--text-3);line-height:1.7">Portfolio CMS v1.0<br>Netlify Functions + Turso + Cloudinary<br><a href="/" target="_blank">View portfolio →</a></p></div>';
+
+      $("#pw-form").onsubmit = async (e) => {
+        e.preventDefault();
+        const cur = $('[name="current"]').value;
+        const np = $('[name="newPassword"]').value;
+        const cp = $('[name="confirmPassword"]').value;
+        if (np !== cp) { toast("Passwords don't match", "error"); return; }
+        if (np.length < 6) { toast("Min 6 characters", "error"); return; }
+        try {
+          await api("/auth/change-password", "POST", { current: cur, newPassword: np });
+          toast("Password changed!");
+          e.target.reset();
+        } catch (err) { toast(err.message, "error"); }
+      };
+    }
+
+    // ═══════════════════════════════════════
+    // INIT
+    // ═══════════════════════════════════════
+    (async () => {
+      if (TOKEN) {
+        try {
+          await api("/profile");
+          currentUsername = "admin";
+          initPanel();
+          return;
+        } catch { /* token expired */ }
       }
+      logout();
+    })();
+  </script>
+</body>
 
-      // ═══════════════════════════════════════
-      // FORM HELPERS
-      // ═══════════════════════════════════════
-      function buildField(f, item) {
-        const val = item != null && item[f.key] != null ? item[f.key] : "";
-        const ph = f.ph || "";
-        if (f.type === "textarea") {
-          return (
-            '<div class="field"><label>' +
-            f.label +
-            '</label><textarea name="' +
-            f.key +
-            '" placeholder="' +
-            esc(ph) +
-            '">' +
-            esc(val) +
-            "</textarea></div>"
-          );
-        }
-        if (f.type === "select") {
-          let opts = "";
-          (f.options || []).forEach((o) => {
-            opts +=
-              '<option value="' +
-              o +
-              '"' +
-              (String(val) === String(o) ? " selected" : "") +
-              ">" +
-              o +
-              "</option>";
-          });
-          return (
-            '<div class="field"><label>' +
-            f.label +
-            '</label><select name="' +
-            f.key +
-            '">' +
-            opts +
-            "</select></div>"
-          );
-        }
-        if (f.type === "image") {
-          const placeholder =
-            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%2321262d'/%3E%3C/svg%3E";
-          return (
-            '<div class="field"><label>' +
-            f.label +
-            "</label>" +
-            '<div class="upload-area">' +
-            '<img src="' +
-            (esc(val) || placeholder) +
-            '" class="upload-preview" data-preview="' +
-            f.key +
-            '" />' +
-            '<div class="upload-controls">' +
-            '<input type="file" accept="image/*" data-upload="' +
-            f.key +
-            '" />' +
-            '<input type="hidden" name="' +
-            f.key +
-            '" value="' +
-            esc(val) +
-            '" />' +
-            '<span class="upload-status" data-upload-status="' +
-            f.key +
-            '">' +
-            (val ? "Current image" : "No image") +
-            "</span>" +
-            "</div></div></div>"
-          );
-        }
-        return (
-          '<div class="field"><label>' +
-          f.label +
-          '</label><input type="' +
-          f.type +
-          '" name="' +
-          f.key +
-          '" value="' +
-          esc(val) +
-          '" placeholder="' +
-          esc(ph) +
-          '" /></div>'
-        );
-      }
-
-      function collectFormData(fields, ctx) {
-        const body = {};
-        fields.forEach((f) => {
-          const el = $('[name="' + f.key + '"]', ctx || $("#modal-box"));
-          if (!el) return;
-          if (f.type === "number") body[f.key] = +el.value || 0;
-          else body[f.key] = el.value || "";
-        });
-        return body;
-      }
-
-      // ═══════════════════════════════════════
-      // GENERIC CRUD
-      // ═══════════════════════════════════════
-      async function renderCrudList(el, key) {
-        const sec = sectionMap[key];
-        const items = await api("/" + key);
-        el.innerHTML =
-          '<div class="section-header"><h2 class="section-title"><ion-icon name="' +
-          sec.icon +
-          '"></ion-icon>' +
-          sec.title +
-          '<span class="section-count">' +
-          items.length +
-          "</span></h2>" +
-          '<button class="btn btn-primary" id="crud-add"><ion-icon name="add-outline"></ion-icon> Add New</button></div>' +
-          '<div id="crud-items">' +
-          (items.length === 0
-            ? '<div class="empty-state"><ion-icon name="' +
-              sec.icon +
-              '"></ion-icon><p>No ' +
-              sec.title.toLowerCase() +
-              " yet</p></div>"
-            : '<div class="item-list">' +
-              items
-                .map(
-                  (item) =>
-                    '<div class="item-card" data-id="' +
-                    item.id +
-                    '">' +
-                    '<div class="item-card-body"><div class="item-card-title">' +
-                    sec.display(item) +
-                    '</div><div class="item-card-sub">' +
-                    esc(sec.subtitle ? sec.subtitle(item) : "#" + item.id) +
-                    "</div></div>" +
-                    '<div class="item-card-actions"><span class="item-card-order">' +
-                    (item.sort_order != null ? item.sort_order : 0) +
-                    "</span>" +
-                    '<button class="btn btn-ghost btn-sm btn-edit">Edit</button><button class="btn btn-danger btn-sm btn-del">Delete</button></div></div>',
-                )
-                .join("") +
-              "</div>") +
-          "</div>";
-
-        $("#crud-add").onclick = () => openItemModal(key, null);
-        $("#crud-items").addEventListener("click", async (e) => {
-          const card = e.target.closest("[data-id]");
-          if (!card) return;
-          const item = items.find((i) => i.id === +card.dataset.id);
-          if (e.target.closest(".btn-edit")) openItemModal(key, item);
-          else if (e.target.closest(".btn-del")) {
-            const ok = await confirmDialog(
-              "Delete?",
-              "This item will be permanently removed.",
-            );
-            if (!ok) return;
-            await api("/" + key + "/" + item.id, "DELETE");
-            toast("Deleted");
-            switchTab(key);
-          }
-        });
-      }
-
-      function openItemModal(key, item) {
-        const sec = sectionMap[key];
-        const isEdit = !!item;
-        openModal(
-          '<div class="modal-header"><h2>' +
-            (isEdit ? "Edit" : "Add") +
-            " " +
-            sec.title.replace(/s$/, "") +
-            "</h2>" +
-            '<button class="btn btn-icon btn-ghost" onclick="closeModal()"><ion-icon name="close-outline"></ion-icon></button></div>' +
-            '<form id="item-form"><div class="modal-body">' +
-            sec.fields.map((f) => buildField(f, item)).join("") +
-            '</div><div class="modal-footer"><button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>' +
-            '<button type="submit" class="btn btn-primary">' +
-            (isEdit ? "Save" : "Create") +
-            "</button></div></form>",
-        );
-        bindImageUploads();
-        $("#item-form").onsubmit = async (e) => {
-          e.preventDefault();
-          const body = collectFormData(sec.fields);
-          try {
-            if (isEdit) await api("/" + key + "/" + item.id, "PUT", body);
-            else await api("/" + key, "POST", body);
-            closeModal();
-            toast(isEdit ? "Updated!" : "Created!");
-            switchTab(key);
-          } catch (err) {
-            toast(err.message, "error");
-          }
-        };
-      }
-
-      // ═══════════════════════════════════════
-      // PROFILE (Custom — with Availability)
-      // ═══════════════════════════════════════
-      async function renderProfile(el) {
-        const p = await api("/profile");
-        const currentStatus = p.availability || "available";
-        const statusOptions = [
-          {
-            value: "available",
-            label: "Available for Hire",
-            color: "#2ecc87",
-            icon: "checkmark-circle",
-          },
-          {
-            value: "busy",
-            label: "Busy / Limited",
-            color: "#e8a838",
-            icon: "time",
-          },
-          {
-            value: "unavailable",
-            label: "Not Available",
-            color: "#f85149",
-            icon: "close-circle",
-          },
-        ];
-        const currentOpt =
-          statusOptions.find((s) => s.value === currentStatus) ||
-          statusOptions[0];
-
-        el.innerHTML =
-          '<div class="section-header"><h2 class="section-title"><ion-icon name="person-outline"></ion-icon> Profile &amp; About</h2></div>' +
-          // Availability Card
-          '<div class="status-card">' +
-          '<div class="status-info">' +
-          '<h3><span class="status-dot" id="status-dot" style="background:' +
-          currentOpt.color +
-          ";box-shadow:0 0 8px " +
-          currentOpt.color +
-          '60"></span>' +
-          '<span id="status-label">' +
-          currentOpt.label +
-          "</span></h3>" +
-          "<p>Controls the badge on your portfolio avatar</p></div>" +
-          '<div class="status-buttons" id="status-buttons">' +
-          statusOptions
-            .map(
-              (s) =>
-                '<button class="btn ' +
-                (s.value === currentStatus ? "btn-primary" : "btn-ghost") +
-                ' btn-sm" data-availability="' +
-                s.value +
-                '"' +
-                (s.value === currentStatus
-                  ? ' style="background:' +
-                    s.color +
-                    ";border-color:" +
-                    s.color +
-                    '"'
-                  : "") +
-                ">" +
-                '<ion-icon name="' +
-                s.icon +
-                '"></ion-icon> ' +
-                s.label +
-                "</button>",
-            )
-            .join("") +
-          "</div></div>" +
-          // Profile Form
-          '<form id="profile-form">' +
-          '<div class="form-row">' +
-          '<div class="field"><label>Full Name</label><input name="name" value="' +
-          esc(p.name) +
-          '" placeholder="Your Name" /></div>' +
-          '<div class="field"><label>Primary Title</label><input name="title" value="' +
-          esc(p.title) +
-          '" placeholder="QA Automation Lead" /></div>' +
-          "</div>" +
-          '<div class="field"><label>Avatar Image</label>' +
-          '<div class="upload-area">' +
-          '<img src="' +
-          esc(p.avatar_url) +
-          '" class="profile-avatar upload-preview" data-preview="avatar_url" />' +
-          '<div class="upload-controls">' +
-          '<input type="file" accept="image/*" data-upload="avatar_url" />' +
-          '<input type="hidden" name="avatar_url" value="' +
-          esc(p.avatar_url) +
-          '" />' +
-          '<span class="upload-status" data-upload-status="avatar_url">Current avatar</span>' +
-          "</div></div></div>" +
-          '<div class="field"><label>About Text</label>' +
-          '<textarea name="about_text" style="min-height:200px" placeholder="Write about yourself...">' +
-          esc(p.about_text) +
-          "</textarea>" +
-          '<div class="field-hint">Use **text** for green highlights. Blank line = new paragraph.</div></div>' +
-          '<input type="hidden" name="availability" id="availability-input" value="' +
-          currentStatus +
-          '" />' +
-          '<button type="submit" class="btn btn-primary btn-lg"><ion-icon name="save-outline"></ion-icon> Save Profile</button>' +
-          "</form>";
-
-        // Availability buttons
-        const statusColors = {
-          available: "#2ecc87",
-          busy: "#e8a838",
-          unavailable: "#f85149",
-        };
-        $("#status-buttons").addEventListener("click", async (e) => {
-          const btn = e.target.closest("[data-availability]");
-          if (!btn) return;
-          const ns = btn.dataset.availability;
-          const opt = statusOptions.find((s) => s.value === ns);
-          $("#availability-input").value = ns;
-          $$("#status-buttons .btn").forEach((b) => {
-            if (b.dataset.availability === ns) {
-              b.className = "btn btn-primary btn-sm";
-              b.style.background = statusColors[ns];
-              b.style.borderColor = statusColors[ns];
-            } else {
-              b.className = "btn btn-ghost btn-sm";
-              b.style.background = "";
-              b.style.borderColor = "";
-            }
-          });
-          $("#status-dot").style.background = opt.color;
-          $("#status-dot").style.boxShadow = "0 0 8px " + opt.color + "60";
-          $("#status-label").textContent = opt.label;
-          try {
-            await api("/profile", "PUT", {
-              name: $('[name="name"]').value,
-              title: $('[name="title"]').value,
-              about_text: $('[name="about_text"]').value,
-              avatar_url: $('[name="avatar_url"]').value,
-              availability: ns,
-            });
-            toast("Status: " + opt.label);
-          } catch (err) {
-            toast(err.message, "error");
-          }
-        });
-
-        bindImageUploads(el);
-
-        $("#profile-form").onsubmit = async (e) => {
-          e.preventDefault();
-          try {
-            await api("/profile", "PUT", {
-              name: $('[name="name"]').value,
-              title: $('[name="title"]').value,
-              about_text: $('[name="about_text"]').value,
-              avatar_url: $('[name="avatar_url"]').value,
-              availability: $("#availability-input").value,
-            });
-            toast("Profile saved!");
-          } catch (err) {
-            toast(err.message, "error");
-          }
-        };
-      }
-
-      // ═══════════════════════════════════════
-      // EXPERIENCE / EDUCATION (Nested)
-      // ═══════════════════════════════════════
-      async function renderCompanySection(el, section, label) {
-        const allCompanies = await api("/companies");
-        const allRoles = await api("/roles");
-        const companies = allCompanies.filter((c) => c.section === section);
-
-        const companyFields = [
-          {
-            key: "name",
-            label: section === "education" ? "School Name" : "Company Name",
-            type: "text",
-          },
-          {
-            key: "meta",
-            label: "Duration / Location",
-            type: "text",
-            ph: "7 months · Addis Ababa",
-          },
-          {
-            key: "icon",
-            label: "Ion-icon Name",
-            type: "text",
-            ph: "business-outline",
-          },
-          {
-            key: "is_single",
-            label: "Single Entry (dashed)",
-            type: "select",
-            options: ["0", "1"],
-          },
-          { key: "sort_order", label: "Order", type: "number" },
-        ];
-
-        const roleFields = [
-          { key: "title", label: "Role / Degree Title", type: "text" },
-          {
-            key: "date_range",
-            label: "Date Range",
-            type: "text",
-            ph: "Feb 2026 — Present",
-          },
-          { key: "description", label: "Description", type: "textarea" },
-          {
-            key: "tags",
-            label: "Tags (comma-separated)",
-            type: "text",
-            ph: "Python, CI/CD, Agile",
-          },
-          { key: "sort_order", label: "Order", type: "number" },
-        ];
-
-        el.innerHTML =
-          '<div class="section-header"><h2 class="section-title"><ion-icon name="' +
-          (section === "education" ? "school" : "briefcase") +
-          '-outline"></ion-icon> ' +
-          label +
-          ' <span class="section-count">' +
-          companies.length +
-          "</span></h2>" +
-          '<button class="btn btn-primary" id="add-company"><ion-icon name="add-outline"></ion-icon> Add ' +
-          (section === "education" ? "School" : "Company") +
-          "</button></div>" +
-          '<div id="companies-list">' +
-          (companies.length === 0
-            ? '<div class="empty-state"><ion-icon name="' +
-              (section === "education" ? "school" : "briefcase") +
-              '-outline"></ion-icon><p>No entries yet</p></div>'
-            : companies
-                .map((c) => {
-                  const roles = allRoles.filter((r) => r.company_id === c.id);
-                  return (
-                    '<div class="item-card" data-cid="' +
-                    c.id +
-                    '" style="flex-direction:column;align-items:stretch;margin-bottom:8px">' +
-                    '<div style="display:flex;justify-content:space-between;align-items:center">' +
-                    '<div class="item-card-body"><div class="item-card-title">' +
-                    esc(c.name) +
-                    '</div><div class="item-card-sub">' +
-                    esc(c.meta) +
-                    "</div></div>" +
-                    '<div class="item-card-actions"><span class="item-card-order">' +
-                    (c.sort_order || 0) +
-                    "</span>" +
-                    '<button class="btn btn-ghost btn-sm btn-edit-co">Edit</button><button class="btn btn-danger btn-sm btn-del-co">Delete</button></div></div>' +
-                    '<div class="roles-container">' +
-                    roles
-                      .map(
-                        (r) =>
-                          '<div class="item-card" data-rid="' +
-                          r.id +
-                          '">' +
-                          '<div class="item-card-body"><div class="item-card-title" style="font-size:13px">' +
-                          esc(r.title) +
-                          '</div><div class="item-card-sub">' +
-                          esc(r.date_range) +
-                          "</div></div>" +
-                          '<div class="item-card-actions"><span class="item-card-order">' +
-                          (r.sort_order || 0) +
-                          "</span>" +
-                          '<button class="btn btn-ghost btn-sm btn-edit-role">Edit</button><button class="btn btn-danger btn-sm btn-del-role">Delete</button></div></div>',
-                      )
-                      .join("") +
-                    '<button class="add-role-btn" data-for-company="' +
-                    c.id +
-                    '">+ Add Role</button>' +
-                    "</div></div>"
-                  );
-                })
-                .join("")) +
-          "</div>";
-
-        // Add company
-        $("#add-company").onclick = () =>
-          openCustomForm(
-            "Add " + (section === "education" ? "School" : "Company"),
-            companyFields,
-            null,
-            async (body) => {
-              body.section = section;
-              await api("/companies", "POST", body);
-              toast("Added!");
-              switchTab(section);
-            },
-          );
-
-        // Delegation
-        $("#companies-list").addEventListener("click", async (e) => {
-          // Edit company
-          if (e.target.closest(".btn-edit-co")) {
-            const cid = +e.target.closest("[data-cid]").dataset.cid;
-            const c = companies.find((x) => x.id === cid);
-            openCustomForm(
-              "Edit " + esc(c.name),
-              companyFields,
-              c,
-              async (body) => {
-                body.section = section;
-                await api("/companies/" + c.id, "PUT", body);
-                toast("Updated!");
-                switchTab(section);
-              },
-            );
-            return;
-          }
-          // Delete company
-          if (e.target.closest(".btn-del-co")) {
-            const cid = +e.target.closest("[data-cid]").dataset.cid;
-            const c = companies.find((x) => x.id === cid);
-            const ok = await confirmDialog(
-              "Delete?",
-              '"' + c.name + '" and all its roles will be removed.',
-            );
-            if (!ok) return;
-            await api("/companies/" + cid, "DELETE");
-            toast("Deleted");
-            switchTab(section);
-            return;
-          }
-          // Add role
-          if (e.target.closest(".add-role-btn")) {
-            const cid =
-              +e.target.closest("[data-for-company]").dataset.forCompany;
-            openCustomForm("Add Role", roleFields, null, async (body) => {
-              body.company_id = cid;
-              body.tags = JSON.stringify(
-                body.tags
-                  ? body.tags
-                      .split(",")
-                      .map((t) => t.trim())
-                      .filter(Boolean)
-                  : [],
-              );
-              await api("/roles", "POST", body);
-              toast("Role added!");
-              switchTab(section);
-            });
-            return;
-          }
-          // Edit role
-          if (e.target.closest(".btn-edit-role")) {
-            const rid = +e.target.closest("[data-rid]").dataset.rid;
-            const r = allRoles.find((x) => x.id === rid);
-            let tagsStr = "";
-            try {
-              tagsStr = JSON.parse(r.tags || "[]").join(", ");
-            } catch {}
-            openCustomForm(
-              "Edit Role",
-              roleFields,
-              { ...r, tags: tagsStr },
-              async (body) => {
-                body.company_id = r.company_id;
-                body.tags = JSON.stringify(
-                  body.tags
-                    ? body.tags
-                        .split(",")
-                        .map((t) => t.trim())
-                        .filter(Boolean)
-                    : [],
-                );
-                await api("/roles/" + r.id, "PUT", body);
-                toast("Updated!");
-                switchTab(section);
-              },
-            );
-            return;
-          }
-          // Delete role
-          if (e.target.closest(".btn-del-role")) {
-            const rid = +e.target.closest("[data-rid]").dataset.rid;
-            const ok = await confirmDialog(
-              "Delete role?",
-              "This role will be permanently removed.",
-            );
-            if (!ok) return;
-            await api("/roles/" + rid, "DELETE");
-            toast("Deleted");
-            switchTab(section);
-          }
-        });
-      }
-
-      function openCustomForm(title, fields, item, onSubmit) {
-        const isEdit = !!item;
-        openModal(
-          '<div class="modal-header"><h2>' +
-            title +
-            "</h2>" +
-            '<button class="btn btn-icon btn-ghost" onclick="closeModal()"><ion-icon name="close-outline"></ion-icon></button></div>' +
-            '<form id="custom-form"><div class="modal-body">' +
-            fields.map((f) => buildField(f, item)).join("") +
-            '</div><div class="modal-footer"><button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>' +
-            '<button type="submit" class="btn btn-primary">' +
-            (isEdit ? "Save" : "Create") +
-            "</button></div></form>",
-        );
-        bindImageUploads();
-        $("#custom-form").onsubmit = async (e) => {
-          e.preventDefault();
-          const body = collectFormData(fields);
-          try {
-            await onSubmit(body);
-            closeModal();
-          } catch (err) {
-            toast(err.message, "error");
-          }
-        };
-      }
-
-      // ═══════════════════════════════════════
-      // SETTINGS
-      // ═══════════════════════════════════════
-      function renderSettings(el) {
-        el.innerHTML =
-          '<div class="section-header"><h2 class="section-title"><ion-icon name="settings-outline"></ion-icon> Settings</h2></div>' +
-          '<div style="max-width:420px"><h3 style="font-size:16px;margin-bottom:16px">Change Password</h3>' +
-          '<form id="pw-form">' +
-          '<div class="field"><label>Current Password</label><input type="password" name="current" required autocomplete="current-password" /></div>' +
-          '<div class="field"><label>New Password</label><input type="password" name="newPassword" required minlength="6" autocomplete="new-password" /></div>' +
-          '<div class="field"><label>Confirm New Password</label><input type="password" name="confirmPassword" required minlength="6" autocomplete="new-password" /></div>' +
-          '<button type="submit" class="btn btn-primary"><ion-icon name="lock-closed-outline"></ion-icon> Update Password</button></form></div>' +
-          '<div style="margin-top:40px;padding-top:24px;border-top:1px solid var(--border)">' +
-          '<h3 style="font-size:16px;margin-bottom:12px;color:var(--text-2)">About</h3>' +
-          '<p style="font-size:13px;color:var(--text-3);line-height:1.7">Portfolio CMS v1.0<br>Netlify Functions + Turso + Cloudinary<br><a href="/" target="_blank">View portfolio →</a></p></div>';
-
-        $("#pw-form").onsubmit = async (e) => {
-          e.preventDefault();
-          const cur = $('[name="current"]').value;
-          const np = $('[name="newPassword"]').value;
-          const cp = $('[name="confirmPassword"]').value;
-          if (np !== cp) {
-            toast("Passwords don't match", "error");
-            return;
-          }
-          if (np.length < 6) {
-            toast("Min 6 characters", "error");
-            return;
-          }
-          try {
-            await api("/auth/change-password", "POST", {
-              current: cur,
-              newPassword: np,
-            });
-            toast("Password changed!");
-            e.target.reset();
-          } catch (err) {
-            toast(err.message, "error");
-          }
-        };
-      }
-
-      // ═══════════════════════════════════════
-      // INIT
-      // ═══════════════════════════════════════
-      (async () => {
-        if (TOKEN) {
-          try {
-            await api("/profile");
-            currentUsername = "admin";
-            initPanel();
-            return;
-          } catch {
-            /* token expired */
-          }
-        }
-        logout();
-      })();
-    </script>
-  </body>
 </html>
