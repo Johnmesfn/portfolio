@@ -11,9 +11,9 @@ const enc = encodeURIComponent;
    DATE CALCULATION ENGINE
    Parses date range strings like:
      "Feb 2026 — Present"
-     "Sep 2025 — Feb 2026 · 6 months"  (existing suffix stripped & recomputed)
+     "Sep 2025 — Feb 2026 · 6 months"
      "Mar 2024 — Sep 2025 · 1 year 7 months"
-   and returns a live-computed duration suffix.
+     "Apr 2026 - Present"  (single hyphen support)
    ============================================ */
 const MONTH_NAMES = {
   jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
@@ -25,7 +25,6 @@ function parseMonth(str) {
 }
 
 function parseMonthYear(token) {
-  // Matches "Feb 2026", "February 2026", etc.
   const m = token.trim().match(/^(\w+)\s+(\d{4})$/);
   if (!m) return null;
   const month = parseMonth(m[1]);
@@ -44,15 +43,27 @@ function formatDuration(totalMonths) {
 }
 
 /**
+ * Returns normalized "first of current month" Date to avoid
+ * timezone/time-of-day drift when computing durations.
+ */
+function getNowNormalized() {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), 1);
+}
+
+/**
  * Parses "Start — End [· old suffix]" and returns the computed duration string.
+ * Supports em-dash (—), en-dash (–), double hyphen (--), and spaced hyphen ( - ).
  * Returns null if the string doesn't match the expected format.
  */
 function calcDuration(rawText) {
   if (!rawText) return null;
+
   // Strip any existing "· …" suffix so we can recompute cleanly
   const cleaned = rawText.replace(/·.*$/, "").trim();
-  // Splits on em-dash (—), en-dash (–), or double hyphen
-  const parts = cleaned.split(/\s*[—–]\s*|\s*--\s*/);
+
+  // ✅ Handles —, –, --, and " - " (spaced single hyphen)
+  const parts = cleaned.split(/\s*[—–]\s*|\s*--\s*|\s+-\s+/);
   if (parts.length < 2) return null;
 
   const start = parseMonthYear(parts[0]);
@@ -60,12 +71,15 @@ function calcDuration(rawText) {
 
   const endToken = parts[1].trim();
   const isPresent = /^present$/i.test(endToken);
-  const end = isPresent ? new Date() : parseMonthYear(endToken);
+
+  // ✅ Normalize to 1st of month — avoids time-of-day / timezone drift
+  const end = isPresent ? getNowNormalized() : parseMonthYear(endToken);
   if (!end) return null;
 
+  // ✅ Removed the incorrect +1 that was overcounting by 1 month
   const totalMonths =
     (end.getFullYear() - start.getFullYear()) * 12 +
-    (end.getMonth() - start.getMonth()) + 1;
+    (end.getMonth() - start.getMonth());
 
   if (totalMonths < 0) return null;
 
@@ -75,32 +89,86 @@ function calcDuration(rawText) {
 }
 
 /**
+ * Computes the total duration across ALL roles within a company group.
+ * Finds the earliest start date and the latest end date (or Present).
+ */
+function computeGroupDuration(roles) {
+  if (!roles?.length) return "";
+
+  let earliest = null;
+  let latestIsPresent = false;
+  let latest = null;
+
+  roles.forEach((r) => {
+    if (!r.date_range) return;
+
+    // Strip existing suffix
+    const cleaned = r.date_range.replace(/·.*$/, "").trim();
+
+    // ✅ Same multi-format split as calcDuration
+    const parts = cleaned.split(/\s*[—–]\s*|\s*--\s*|\s+-\s+/);
+    if (parts.length < 2) return;
+
+    const start = parseMonthYear(parts[0]);
+    const endToken = parts[1].trim();
+    const isPresent = /^present$/i.test(endToken);
+    const end = isPresent ? getNowNormalized() : parseMonthYear(endToken);
+
+    if (start && (!earliest || start < earliest)) earliest = start;
+
+    if (isPresent) {
+      latestIsPresent = true;
+    } else if (end && (!latest || end > latest)) {
+      latest = end;
+    }
+  });
+
+  if (!earliest) return "";
+
+  const end = latestIsPresent ? getNowNormalized() : latest;
+  if (!end) return "";
+
+  // ✅ No +1 overcounting
+  const totalMonths =
+    (end.getFullYear() - earliest.getFullYear()) * 12 +
+    (end.getMonth() - earliest.getMonth());
+
+  if (totalMonths < 0) return "";
+  return formatDuration(totalMonths);
+}
+
+/**
  * Scans the DOM for all role date and group-meta elements and
  * replaces their text with live-computed durations where possible.
- * Safe to call multiple times — only rewrites strings that contain
- * recognisable date ranges.
  */
 function refreshDurations() {
-  // Role date spans: "Feb 2026 — Present", "Sep 2025 — Feb 2026 · 6 months"
+  // ✅ Role date spans
   $$(".timeline-role-date").forEach((el) => {
     const updated = calcDuration(el.textContent);
     if (updated) el.textContent = updated;
   });
 
-  // Group meta spans: "7 months · Addis Ababa, Ethiopia"
-  // These have a different format — only update if they contain a date range
+  // ✅ Group meta spans — only update the duration part, preserve location
   $$(".timeline-group-meta").forEach((el) => {
     const text = el.textContent.trim();
-    // Only process if it looks like a date range (contains "—" or "–")
-    if (!/[—–]/.test(text) && !/\w+\s+\d{4}/.test(text)) return;
-    // Try stripping a location suffix: "May 2025 — Present · Addis Ababa" → compute date part
+
+    // Check if it contains a date range marker
+    const hasDateRange = /[—–]/.test(text) || /\w+\s+\d{4}\s*[-—–]/.test(text);
+    if (!hasDateRange) {
+      // Format: "7 months · Addis Ababa, Ethiopia"
+      // Try to update only if it has "· location" pattern — leave as-is
+      // because it's already a pre-computed string from DB
+      return;
+    }
+
+    // Format: "Apr 2026 — Present · Addis Ababa, Ethiopia"
     const locationMatch = text.match(/^(.*?)\s*·\s*(.+)$/);
     if (locationMatch) {
       const datePart = locationMatch[1].trim();
       const locationPart = locationMatch[2].trim();
       const updated = calcDuration(datePart);
       if (updated) {
-        // Extract just the duration from the computed string to append location
+        // Extract only duration from computed string, keep location
         const durationMatch = updated.match(/·\s*(.+)$/);
         if (durationMatch) {
           el.textContent = `${durationMatch[1]} · ${locationPart}`;
@@ -113,7 +181,9 @@ function refreshDurations() {
   });
 }
 
-
+/* ============================================
+   INTERSECTION OBSERVER HELPER
+   ============================================ */
 function createObserver(callback, options = {}) {
   return new IntersectionObserver(
     (entries) =>
@@ -124,6 +194,9 @@ function createObserver(callback, options = {}) {
   );
 }
 
+/* ============================================
+   MODAL HELPER
+   ============================================ */
 function setupModal(containerSel, overlaySel, closeSel) {
   const container = $(containerSel);
   const ov = overlaySel ? $(overlaySel) : null;
@@ -275,7 +348,6 @@ document.addEventListener("visibilitychange", () => {
    TYPING ANIMATION
    ============================================ */
 const typingEl = $("[data-typing]");
-// Use `let` so CMS loader can update these
 let typingTexts = [
   "QA Automation Lead",
   "Python & Robot Framework",
@@ -354,7 +426,6 @@ function reObserveReveals() {
 /* ============================================
    COUNTERS & SKILL BARS
    ============================================ */
-// Use mutable arrays so CMS loader can update refs
 const counters = $$("[data-counter]");
 const skillFills = $$("[data-skill-fill]");
 let countersRan = false;
@@ -429,7 +500,6 @@ const mImg = $("[data-modal-img]");
 const mTitle = $("[data-modal-title]");
 const mText = $("[data-modal-text]");
 
-// Single delegation handler — works for both static HTML and CMS-rendered content
 $(".testimonials-list")?.addEventListener("click", (e) => {
   const item = e.target.closest("[data-testimonials-item]");
   if (!item) return;
@@ -483,19 +553,16 @@ function openCertFromCard(card) {
   certModal.open();
 }
 
-// Static binding
 $$("[data-cert-item]").forEach((card) => {
   card.addEventListener("click", () => openCertFromCard(card));
 });
 
-// Event delegation (for CMS-rendered content)
 $(".certificates-list")?.addEventListener("click", (e) => {
   const card = e.target.closest("[data-cert-item]");
   if (!card) return;
   openCertFromCard(card);
 });
 
-// Escape closes any modal
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     if (certModal.container.classList.contains("active")) certModal.close();
@@ -576,7 +643,6 @@ form.addEventListener("submit", async (e) => {
   const data = new FormData(form);
   const action = form.getAttribute("action");
 
-  // Mailto fallback if Formspree not configured
   if (!action || action.includes("YOUR_FORM_ID")) {
     const [name, email, msg] = ["fullname", "email", "message"].map((k) =>
       data.get(k),
@@ -592,7 +658,6 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
-  // Formspree submission
   formBtn.disabled = true;
   const btnSpan = $("span", formBtn);
   const orig = btnSpan.textContent;
@@ -617,7 +682,6 @@ form.addEventListener("submit", async (e) => {
 
 /* ============================================
    DYNAMIC CV GENERATOR
-   Extracts ALL data from the live DOM.
    ============================================ */
 const cvBtn = document.getElementById("download-cv-btn");
 
@@ -717,11 +781,11 @@ function buildCVHTML(d) {
         .map((r) => {
           const bullets = r.desc
             ? r.desc
-                .split(/\.\s+/)
-                .map((s) => s.replace(/\.$/, "").trim())
-                .filter((s) => s.length > 10)
-                .map((s) => `<li>${s}</li>`)
-                .join("")
+              .split(/\.\s+/)
+              .map((s) => s.replace(/\.$/, "").trim())
+              .filter((s) => s.length > 10)
+              .map((s) => `<li>${s}</li>`)
+              .join("")
             : "";
           return `
             <div style="${S.jobWrap}">
@@ -874,7 +938,6 @@ function navigateToPage(pageName) {
   );
   scrollTo(0, 0);
 
-  // Reset animations
   countersRan = false;
   skillsRan = false;
   skillFills.forEach((f) => (f.style.width = "0%"));
@@ -915,7 +978,6 @@ navLinks.forEach((link) => {
   });
 });
 
-// Single load handler: preloader + hash routing
 window.addEventListener("load", () => {
   setTimeout(() => preloader.classList.add("loaded"), 1800);
   setTimeout(() => {
@@ -936,11 +998,7 @@ window.addEventListener("hashchange", () => {
 
 /* ============================================
    CMS DATA LOADER
-   Fetches live data from /api/portfolio
-   and re-renders all sections.
-   Falls back to static HTML if API unavailable.
    ============================================ */
-
 function mdHighlight(text) {
   return text.replace(/\*\*(.*?)\*\*/g, '<span class="highlight">$1</span>');
 }
@@ -948,15 +1006,12 @@ function mdHighlight(text) {
 function cmsRenderProfile(profile, typTexts) {
   if (!profile) return;
 
-  // Update name
   const nameEl = $(".sidebar .name");
   if (nameEl && profile.name) nameEl.textContent = profile.name;
 
-  // Update avatar
   const avatarImg = $(".avatar-box img");
   if (avatarImg && profile.avatar_url) avatarImg.src = profile.avatar_url;
 
-  // Update typing texts
   if (typTexts?.length) {
     typingTexts.length = 0;
     typTexts.forEach((t) => typingTexts.push(t.text));
@@ -965,12 +1020,10 @@ function cmsRenderProfile(profile, typTexts) {
     deleting = false;
   }
 
-  // Update availability status badge
   const statusBadge = $(".status-badge");
   if (statusBadge) {
     const status = profile.availability || "available";
     statusBadge.setAttribute("data-status", status);
-
     const titles = {
       available: "Available for hire",
       busy: "Busy — limited availability",
@@ -1000,10 +1053,9 @@ function cmsRenderContacts(contacts) {
       <div class="icon-box"><ion-icon name="${c.icon}"></ion-icon></div>
       <div class="contact-info">
         <p class="contact-title">${c.type}</p>
-        ${
-          c.type === "Location"
-            ? `<address>${c.value}</address>`
-            : `<a href="${c.type === "Email" ? "mailto:" : "tel:"}${c.value.replace(/\s/g, "")}" class="contact-link">${c.value}</a>`
+        ${c.type === "Location"
+          ? `<address>${c.value}</address>`
+          : `<a href="${c.type === "Email" ? "mailto:" : "tel:"}${c.value.replace(/\s/g, "")}" class="contact-link">${c.value}</a>`
         }
       </div>
     </li>`,
@@ -1096,6 +1148,10 @@ function cmsRenderTestimonials(items) {
     .join("");
 }
 
+/**
+ * ✅ FIXED: cmsRenderTimeline now auto-computes group duration
+ * from roles' date_range values instead of relying on pre-stored meta strings.
+ */
 function cmsRenderTimeline(companies, timelineEl) {
   if (!timelineEl || !companies?.length) return;
   const tw = timelineEl.querySelector(".title-wrapper");
@@ -1104,6 +1160,29 @@ function cmsRenderTimeline(companies, timelineEl) {
 
   companies.forEach((c) => {
     const singleCls = c.is_single ? " timeline-group-single" : "";
+
+    // ✅ Extract location from existing meta (e.g. "7 months · Addis Ababa, Ethiopia")
+    let locationStr = "";
+    if (c.meta) {
+      const locMatch = c.meta.match(/·\s*(.+)$/);
+      if (locMatch) {
+        locationStr = locMatch[1].trim();
+      } else if (!/\d{4}/.test(c.meta)) {
+        // If meta has no year, it's probably just a location string
+        locationStr = c.meta.trim();
+      }
+    }
+
+    // ✅ Compute live group duration from roles
+    const liveDuration = computeGroupDuration(c.roles);
+
+    // ✅ Build meta display: "X months · Location" or just "X months"
+    const metaDisplay = liveDuration
+      ? locationStr
+        ? `${liveDuration} · ${locationStr}`
+        : liveDuration
+      : c.meta || "";
+
     const parseTags = (t) => {
       try {
         const arr = JSON.parse(t || "[]");
@@ -1114,6 +1193,7 @@ function cmsRenderTimeline(companies, timelineEl) {
         return "";
       }
     };
+
     timelineEl.insertAdjacentHTML(
       "beforeend",
       `
@@ -1124,24 +1204,26 @@ function cmsRenderTimeline(companies, timelineEl) {
           </div>
           <div class="timeline-group-info">
             <h4 class="h4 timeline-group-company">${c.name}</h4>
-            <span class="timeline-group-meta">${c.meta || ""}</span>
+            <span class="timeline-group-meta">${metaDisplay}</span>
           </div>
         </div>
         <div class="timeline-group-roles">
           ${c.roles
-            .map(
-              (r) => `
-            <div class="timeline-role">
-              <div class="timeline-role-dot"></div>
-              <div class="timeline-role-content">
-                <h5 class="timeline-role-title">${r.title}</h5>
-                <span class="timeline-role-date">${r.date_range || ""}</span>
-                ${r.description ? `<p class="timeline-text">${r.description}</p>` : ""}
-                ${parseTags(r.tags)}
-              </div>
-            </div>`,
-            )
-            .join("")}
+        .map((r) => {
+          // ✅ Compute live duration for each individual role date
+          const liveDate = calcDuration(r.date_range) || r.date_range || "";
+          return `
+              <div class="timeline-role">
+                <div class="timeline-role-dot"></div>
+                <div class="timeline-role-content">
+                  <h5 class="timeline-role-title">${r.title}</h5>
+                  <span class="timeline-role-date">${liveDate}</span>
+                  ${r.description ? `<p class="timeline-text">${r.description}</p>` : ""}
+                  ${parseTags(r.tags)}
+                </div>
+              </div>`;
+        })
+        .join("")}
         </div>
       </div>`,
     );
@@ -1172,7 +1254,6 @@ function cmsRenderProjects(projects) {
   const el = $(".project-list");
   if (!el || !projects?.length) return;
 
-  // Dynamically update filter categories
   const categories = [...new Set(projects.map((p) => p.category))];
   const filterList = $(".filter-list");
   const selectList = $(".select-list");
@@ -1250,7 +1331,6 @@ function cmsRenderCertificates(certs) {
 
 /* ─── Re-initialize all dynamic elements after CMS render ─── */
 function reinitAfterCMSRender() {
-  // Update mutable counter/skill arrays
   const newCounters = $$("[data-counter]");
   const newSkillFills = $$("[data-skill-fill]");
   const newFilterItems = $$("[data-filter-item]");
@@ -1266,14 +1346,11 @@ function reinitAfterCMSRender() {
   filterItems.length = 0;
   newFilterItems.forEach((i) => filterItems.push(i));
 
-  // Reset animation flags
   countersRan = false;
   skillsRan = false;
 
-  // Re-observe all reveal elements
   reObserveReveals();
 
-  // Re-bind filter buttons
   let newLastBtn = newFilterBtns[0];
   newFilterBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -1286,7 +1363,6 @@ function reinitAfterCMSRender() {
     });
   });
 
-  // Re-bind select items
   newSelectItems.forEach((item) => {
     item.addEventListener("click", () => {
       const val = item.textContent.toLowerCase();
@@ -1296,7 +1372,6 @@ function reinitAfterCMSRender() {
     });
   });
 
-  // Counter observer
   if (counters.length) {
     const co = createObserver(
       () => {
@@ -1308,7 +1383,6 @@ function reinitAfterCMSRender() {
     co.observe(counters[0]);
   }
 
-  // Skill bar observer
   if (skillFills.length) {
     const so = createObserver(
       () => {
@@ -1320,7 +1394,7 @@ function reinitAfterCMSRender() {
     skillFills.forEach((f) => so.observe(f));
   }
 
-  // Calculate dynamic dates for newly rendered timeline items
+  // ✅ Refresh durations after CMS render completes
   refreshDurations();
 }
 
@@ -1331,7 +1405,6 @@ async function loadCMSData() {
     if (!res.ok) throw new Error(`API ${res.status}`);
     const data = await res.json();
 
-    // Render all sections from CMS data
     cmsRenderProfile(data.profile, data.typing_texts);
     cmsRenderAbout(data.profile?.about_text);
     cmsRenderContacts(data.contacts);
@@ -1344,7 +1417,6 @@ async function loadCMSData() {
     cmsRenderProjects(data.projects);
     cmsRenderCertificates(data.certificates);
 
-    // Experience & Education timelines
     const resumeTimelines = $$('[data-page="resume"] .timeline');
     if (resumeTimelines[0] && data.experience?.length) {
       cmsRenderTimeline(data.experience, resumeTimelines[0]);
@@ -1353,17 +1425,18 @@ async function loadCMSData() {
       cmsRenderTimeline(data.education, resumeTimelines[1]);
     }
 
-    // Re-bind all interactive elements
     reinitAfterCMSRender();
 
     console.log("✅ CMS data loaded — " + new Date().toLocaleTimeString());
   } catch (err) {
     console.log("📄 Using static HTML (CMS: " + err.message + ")");
+    // ✅ Still run refreshDurations on static HTML fallback
+    refreshDurations();
   }
 }
 
 // Load CMS data on startup
 loadCMSData();
 
-// Run dynamic date calculations for static HTML fallback
+// ✅ Run on static HTML immediately as a baseline
 refreshDurations();
