@@ -10,9 +10,6 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
     rel="stylesheet" />
   <style>
-    /* ═══════════════════════════════════════
-         DESIGN TOKENS
-      ═══════════════════════════════════════ */
     :root {
       --bg-0: #010409;
       --bg-1: #0d1117;
@@ -45,9 +42,6 @@
       --t: .2s ease;
     }
 
-    /* ═══════════════════════════════════════
-         RESET & BASE
-      ═══════════════════════════════════════ */
     *,
     *::before,
     *::after {
@@ -89,7 +83,7 @@
       padding: 10px 14px;
       width: 100%;
       outline: none;
-      transition: border-color var(--t), box-shadow var(--t);
+      transition: border-color var(--t), box-shadow var(--t)
     }
 
     input:focus,
@@ -136,9 +130,7 @@
       background: var(--text-3)
     }
 
-    /* ═══════════════════════════════════════
-         LAYOUT UTILITIES
-      ═══════════════════════════════════════ */
+    /* ── Layout ── */
     .field {
       margin-bottom: 16px
     }
@@ -181,9 +173,7 @@
       gap: 10px
     }
 
-    /* ═══════════════════════════════════════
-         BUTTONS
-      ═══════════════════════════════════════ */
+    /* ── Buttons ── */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -250,9 +240,7 @@
       font-size: 16px
     }
 
-    /* ═══════════════════════════════════════
-         DATE PICKER — shared components
-      ═══════════════════════════════════════ */
+    /* ── Date Picker ── */
     .dp-wrap {
       position: relative
     }
@@ -270,7 +258,7 @@
       text-align: left;
       color: var(--text-1);
       font-size: 14px;
-      transition: border-color var(--t), box-shadow var(--t);
+      transition: border-color var(--t), box-shadow var(--t)
     }
 
     .dp-trigger:hover {
@@ -319,7 +307,7 @@
       padding: 14px;
       min-width: 280px;
       display: none;
-      animation: dropIn .18s ease;
+      animation: dropIn .18s ease
     }
 
     .dp-drop.open {
@@ -338,7 +326,6 @@
       }
     }
 
-    /* year nav */
     .dp-year-nav {
       display: flex;
       align-items: center;
@@ -370,7 +357,6 @@
       font-family: var(--mono)
     }
 
-    /* month grid */
     .dp-months {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -399,7 +385,6 @@
       font-weight: 700
     }
 
-    /* present / no-expiry toggle row */
     .dp-toggle-row {
       display: flex;
       align-items: center;
@@ -410,7 +395,7 @@
       margin-bottom: 10px;
       cursor: pointer;
       border: 1px solid transparent;
-      transition: border-color var(--t);
+      transition: border-color var(--t)
     }
 
     .dp-toggle-row:hover {
@@ -466,7 +451,6 @@
       transform: translateX(15px)
     }
 
-    /* footer */
     .dp-footer {
       display: flex;
       gap: 6px;
@@ -475,15 +459,12 @@
       border-top: 1px solid var(--border)
     }
 
-    /* disabled body overlay */
     .dp-body.disabled {
       opacity: .4;
       pointer-events: none
     }
 
-    /* ═══════════════════════════════════════
-         META FIELD  (Duration + Location)
-      ═══════════════════════════════════════ */
+    /* ── Meta field (Location only) ── */
     .meta-box {
       background: var(--bg-1);
       border: 1px solid var(--border);
@@ -491,7 +472,7 @@
       padding: 14px 16px;
       display: flex;
       flex-direction: column;
-      gap: 12px
+      gap: 10px
     }
 
     .meta-box:focus-within {
@@ -499,32 +480,23 @@
       box-shadow: 0 0 0 3px hsla(155, 70%, 45%, .08)
     }
 
-    .meta-preview {
+    .meta-info {
+      font-size: 11px;
+      color: var(--text-3);
+      font-family: var(--mono);
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 11px;
-      background: var(--accent-bg);
-      border: 1px solid var(--accent-border);
+      gap: 6px;
+      padding: 8px 10px;
+      background: var(--bg-3);
       border-radius: var(--r);
-      font-size: 12px;
-      font-family: var(--mono);
+      border: 1px solid var(--border)
+    }
+
+    .meta-info ion-icon {
       color: var(--accent);
-      min-height: 34px;
-    }
-
-    .meta-preview ion-icon {
-      font-size: 14px;
+      font-size: 13px;
       flex-shrink: 0
-    }
-
-    .meta-preview .pv-text {
-      flex: 1
-    }
-
-    .meta-preview .pv-text.empty {
-      color: var(--text-3);
-      font-style: italic
     }
 
     .loc-row {
@@ -539,9 +511,7 @@
       flex-shrink: 0
     }
 
-    /* ═══════════════════════════════════════
-         LOGIN
-      ═══════════════════════════════════════ */
+    /* ── Login ── */
     #login-screen {
       display: flex;
       justify-content: center;
@@ -593,9 +563,7 @@
       font-family: var(--mono)
     }
 
-    /* ═══════════════════════════════════════
-         PANEL SHELL
-      ═══════════════════════════════════════ */
+    /* ── Panel ── */
     #admin-panel {
       display: none
     }
@@ -612,7 +580,7 @@
       height: 56px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: center
     }
 
     .panel-logo {
@@ -657,9 +625,7 @@
       min-height: calc(100vh - 56px)
     }
 
-    /* ═══════════════════════════════════════
-         SIDEBAR NAV
-      ═══════════════════════════════════════ */
+    /* ── Nav ── */
     .admin-nav {
       width: 220px;
       background: var(--bg-1);
@@ -712,9 +678,7 @@
       flex-shrink: 0
     }
 
-    /* ═══════════════════════════════════════
-         MAIN CONTENT
-      ═══════════════════════════════════════ */
+    /* ── Content ── */
     .admin-content {
       flex: 1;
       padding: 28px 32px;
@@ -753,9 +717,7 @@
       font-family: var(--mono)
     }
 
-    /* ═══════════════════════════════════════
-         ITEM CARDS
-      ═══════════════════════════════════════ */
+    /* ── Item Cards ── */
     .item-list {
       display: flex;
       flex-direction: column;
@@ -814,7 +776,6 @@
       margin-right: 4px
     }
 
-    /* nested roles */
     .roles-wrap {
       margin-top: 10px;
       margin-left: 16px;
@@ -842,7 +803,6 @@
       text-decoration: underline
     }
 
-    /* empty */
     .empty {
       text-align: center;
       padding: 48px 20px;
@@ -859,9 +819,7 @@
       margin-bottom: 16px
     }
 
-    /* ═══════════════════════════════════════
-         MODAL
-      ═══════════════════════════════════════ */
+    /* ── Modal ── */
     .modal-ov {
       position: fixed;
       inset: 0;
@@ -928,9 +886,7 @@
       gap: 8px
     }
 
-    /* ═══════════════════════════════════════
-         IMAGE UPLOAD
-      ═══════════════════════════════════════ */
+    /* ── Upload ── */
     .upload-area {
       display: flex;
       align-items: center;
@@ -991,9 +947,7 @@
       color: var(--danger)
     }
 
-    /* ═══════════════════════════════════════
-         TOAST
-      ═══════════════════════════════════════ */
+    /* ── Toast ── */
     #toasts {
       position: fixed;
       bottom: 24px;
@@ -1034,9 +988,7 @@
       color: #fff
     }
 
-    /* ═══════════════════════════════════════
-         CONFIRM
-      ═══════════════════════════════════════ */
+    /* ── Confirm ── */
     .cfm-ov {
       position: fixed;
       inset: 0;
@@ -1080,9 +1032,7 @@
       justify-content: center
     }
 
-    /* ═══════════════════════════════════════
-         STATUS CARD
-      ═══════════════════════════════════════ */
+    /* ── Status card ── */
     .status-card {
       background: var(--bg-2);
       border: 1px solid var(--border);
@@ -1124,9 +1074,7 @@
       flex-wrap: wrap
     }
 
-    /* ═══════════════════════════════════════
-         RESPONSIVE
-      ═══════════════════════════════════════ */
+    /* ── Responsive ── */
     @media(max-width:768px) {
       .admin-nav {
         display: none
@@ -1216,7 +1164,7 @@
 
 <body>
 
-  <!-- ═══ LOGIN ═══ -->
+  <!-- LOGIN -->
   <div id="login-screen">
     <div class="login-card">
       <div class="login-logo"><span class="br">&lt;</span>YM<span class="sl">/</span><span class="br">&gt;</span></div>
@@ -1232,7 +1180,7 @@
     </div>
   </div>
 
-  <!-- ═══ PANEL ═══ -->
+  <!-- PANEL -->
   <div id="admin-panel">
     <header class="panel-header">
       <div class="panel-logo"><span>&lt;<span class="accent">YM</span>/&gt;</span><span class="cms-badge">CMS</span>
@@ -1250,12 +1198,12 @@
     <nav class="mobile-nav" id="mobile-nav"></nav>
   </div>
 
-  <!-- ═══ MODAL ═══ -->
+  <!-- MODAL -->
   <div class="modal-ov" id="modal-ov">
     <div class="modal-box" id="modal-box"></div>
   </div>
 
-  <!-- ═══ CONFIRM ═══ -->
+  <!-- CONFIRM -->
   <div class="cfm-ov" id="cfm-ov">
     <div class="cfm-box">
       <h3 id="cfm-title">Are you sure?</h3>
@@ -1267,7 +1215,6 @@
     </div>
   </div>
 
-  <!-- ═══ TOASTS ═══ -->
   <div id="toasts"></div>
 
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
@@ -1275,23 +1222,22 @@
 
   <script>
     "use strict";
-    /* ═══════════════════════════════════════════════════════════════
+
+    /* ═══════════════════════════════════════════════════════
        1. CORE UTILITIES
-    ═══════════════════════════════════════════════════════════════ */
+    ═══════════════════════════════════════════════════════ */
     const $ = (s, c = document) => c.querySelector(s);
     const $$ = (s, c = document) => [...c.querySelectorAll(s)];
     const API = "/api";
     let TOKEN = localStorage.getItem("admin_token");
     let currentTab = "", currentUser = "";
 
-    /* safe HTML escape */
-    const esc = (v) => {
+    const esc = v => {
       const d = document.createElement("div");
       d.textContent = v == null ? "" : String(v);
       return d.innerHTML;
     };
 
-    /* authenticated fetch */
     async function apiFetch(endpoint, method = "GET", body = null) {
       const opts = { method, headers: { Authorization: "Bearer " + TOKEN } };
       if (body) { opts.headers["Content-Type"] = "application/json"; opts.body = JSON.stringify(body); }
@@ -1302,7 +1248,6 @@
       return data;
     }
 
-    /* toast */
     function toast(msg, type = "ok") {
       const el = document.createElement("div");
       el.className = "toast " + type;
@@ -1312,8 +1257,7 @@
       setTimeout(() => { el.classList.remove("show"); setTimeout(() => el.remove(), 300); }, 3500);
     }
 
-    /* confirm dialog */
-    function confirm(title, text) {
+    function cfmDialog(title, text) {
       return new Promise(resolve => {
         $("#cfm-title").textContent = title;
         $("#cfm-text").textContent = text;
@@ -1324,7 +1268,6 @@
       });
     }
 
-    /* modal */
     const openModal = html => { $("#modal-box").innerHTML = html; $("#modal-ov").classList.add("open"); };
     const closeModal = () => { $("#modal-ov").classList.remove("open"); };
 
@@ -1336,19 +1279,20 @@
       closePickers();
     });
 
-    /* close all open pickers */
+    /* close every open picker dropdown */
     const closePickers = () => {
       $$(".dp-drop.open").forEach(d => d.classList.remove("open"));
       $$(".dp-trigger.open").forEach(t => t.classList.remove("open"));
     };
     document.addEventListener("click", e => {
-      if (!e.target.closest(".dp-wrap") && !e.target.closest(".meta-box")) closePickers();
+      if (!e.target.closest(".dp-wrap")) closePickers();
     }, true);
 
-    /* file → base64 */
-    const toBase64 = file => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
+    const toBase64 = file => new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file);
+    });
 
-    /* bind image upload inputs inside a container */
     function bindUploads(ctx = $("#modal-box")) {
       $$("[data-upload]", ctx).forEach(inp => {
         inp.addEventListener("change", async () => {
@@ -1369,71 +1313,50 @@
       });
     }
 
-    /* ═══════════════════════════════════════════════════════════════
-       2. DATE PICKER ENGINE  (single source of truth)
-       All pickers are created from one factory + one binder.
-    ═══════════════════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════
+       2. DATE PICKER ENGINE  — single factory, zero repetition
+    ═══════════════════════════════════════════════════════ */
     const MONTHS_S = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const MONTHS_F = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-    /* parse "Feb 2026", "January 2025", etc. → {m,y} or null */
+    /* "Feb 2026" → {m,y} | null */
     function parseMY(str = "") {
-      str = str.trim();
-      const match = str.match(/^(\w+)\s+(\d{4})/);
+      const match = str.trim().match(/^(\w+)\s+(\d{4})/);
       if (!match) return null;
       const mi = MONTHS_F.findIndex(n => n.toLowerCase().startsWith(match[1].toLowerCase().slice(0, 3)));
-      if (mi < 0) return null;
-      return { m: mi, y: parseInt(match[2], 10) };
+      return mi < 0 ? null : { m: mi, y: parseInt(match[2], 10) };
     }
 
     /* {m,y} → "Feb 2026" */
     const fmtMY = ({ m, y }) => MONTHS_S[m] + " " + y;
 
-    /* compute duration between two {m,y} objects (end may be null = present) */
-    function calcDur(start, end) {
-      if (!start) return "";
-      const now = new Date();
-      const e = end ?? { m: now.getMonth(), y: now.getFullYear() };
-      const tot = (e.y - start.y) * 12 + (e.m - start.m);
-      if (tot < 0) return "";
-      if (tot < 1) return "< 1 month";
-      const yr = Math.floor(tot / 12), mo = tot % 12, p = [];
-      if (yr) p.push(yr + " year" + (yr > 1 ? "s" : ""));
-      if (mo) p.push(mo + " month" + (mo > 1 ? "s" : ""));
-      return p.join(" ");
-    }
-
-    /* ── unique id generator ── */
     let _uid = 0;
     const uid = () => "dp" + (++_uid);
 
-    /* ─────────────────────────────────────────────
-       buildPicker(opts) → { html, bind(rootEl) }
+    /*
+      buildPicker(opts) → { html:string, bind(rootEl):void }
   
-       opts = {
-         name       : string          // hidden input name
-         value      : string          // current value
-         placeholder: string
-         hasPresent : bool            // show "Currently here" toggle
-         hasNone    : bool            // show "No Expiration" toggle
-         noneLabel  : string
-         onApply    : fn(val)         // called with final string when applied
-       }
-    ───────────────────────────────────────────── */
+      opts.name        string   — hidden <input> name
+      opts.value       string   — initial stored value
+      opts.placeholder string
+      opts.hasPresent  bool     — "Currently working here" toggle
+      opts.hasNone     bool     — "No Expiration" toggle
+      opts.noneLabel   string
+      opts.onChange    fn(val)  — called every time value changes
+    */
     function buildPicker(opts = {}) {
       const id = uid();
       const val = opts.value || "";
       const ph = opts.placeholder || "Select month & year";
-      const parsed = parseMY(val);
-      const isNoneNow = /^no\s*expir/i.test(val);
-      const isPresentNow = /^present$/i.test(val);
 
-      /* display text */
-      const dispTxt = isPresentNow ? "Present" : isNoneNow ? "No Expiration" : (parsed ? fmtMY(parsed) : "");
+      const isPresentNow = /^present$/i.test(val);
+      const isNoneNow = /^no\s*expir/i.test(val);
+      const parsed = (!isPresentNow && !isNoneNow) ? parseMY(val) : null;
+      const dispTxt = isPresentNow ? "Present" : isNoneNow ? (opts.noneLabel || "No Expiration") : (parsed ? fmtMY(parsed) : "");
 
       const html = `
       <div class="dp-wrap" id="${id}w">
-        <button type="button" class="dp-trigger${dispTxt ? "" : " "}" id="${id}t">
+        <button type="button" class="dp-trigger" id="${id}t">
           <ion-icon class="cal-icon" name="calendar-outline"></ion-icon>
           <span class="dp-text${dispTxt ? "" : " ph"}" id="${id}d">${esc(dispTxt || ph)}</span>
           <ion-icon class="chev" name="chevron-down-outline"></ion-icon>
@@ -1444,16 +1367,16 @@
           <div class="dp-toggle-row${isPresentNow ? " on" : ""}" id="${id}pr">
             <span class="dp-toggle-label"><ion-icon name="radio-button-on-outline"></ion-icon>Currently working here</span>
             <div class="toggle-pill${isPresentNow ? " on" : ""}" id="${id}pt"></div>
-          </div>`: ""}
+          </div>` : ""}
           ${opts.hasNone ? `
           <div class="dp-toggle-row${isNoneNow ? " on" : ""}" id="${id}nr">
             <span class="dp-toggle-label"><ion-icon name="infinite-outline"></ion-icon>${esc(opts.noneLabel || "No Expiration")}</span>
             <div class="toggle-pill${isNoneNow ? " on" : ""}" id="${id}nt"></div>
-          </div>`: ""}
+          </div>` : ""}
           <div class="dp-body${(isPresentNow || isNoneNow) ? " disabled" : ""}" id="${id}body">
             <div class="dp-year-nav">
               <button type="button" id="${id}py">‹</button>
-              <span class="dp-year-val" id="${id}yr">${parsed ? parsed.y : new Date().getFullYear()}</span>
+              <span class="dp-year-val" id="${id}yr">${parsed?.y ?? new Date().getFullYear()}</span>
               <button type="button" id="${id}ny">›</button>
             </div>
             <div class="dp-months" id="${id}mg"></div>
@@ -1465,10 +1388,9 @@
         </div>
       </div>`;
 
-      /* binder — call after HTML is in DOM */
       function bind(root = document) {
-        let selM = parsed ? parsed.m : null;
-        let selY = parsed ? parsed.y : new Date().getFullYear();
+        let selM = parsed?.m ?? null;
+        let selY = parsed?.y ?? new Date().getFullYear();
         let present = isPresentNow;
         let none = isNoneNow;
 
@@ -1484,7 +1406,8 @@
         const nrRow = root.getElementById(id + "nr");
         const nrPl = root.getElementById(id + "nt");
 
-        /* render month grid */
+        if (!T || !drop || !H) return;
+
         function renderMonths() {
           if (!yrEl || !mg) return;
           yrEl.textContent = selY;
@@ -1497,44 +1420,39 @@
           }));
         }
 
-        /* toggle the present/none rows visually */
         function syncToggles() {
           if (prRow) { prRow.classList.toggle("on", present); prPl.classList.toggle("on", present); }
           if (nrRow) { nrRow.classList.toggle("on", none); nrPl.classList.toggle("on", none); }
           if (body) body.classList.toggle("disabled", present || none);
         }
 
-        /* present row click */
-        prRow?.addEventListener("click", () => { present = !present; if (present) none = false; syncToggles(); renderMonths(); });
-        /* none row click */
-        nrRow?.addEventListener("click", () => { none = !none; if (none) present = false; syncToggles(); renderMonths(); });
-
-        /* year nav */
-        root.getElementById(id + "py")?.addEventListener("click", () => { selY--; renderMonths(); });
-        root.getElementById(id + "ny")?.addEventListener("click", () => { selY++; renderMonths(); });
-
-        /* clear */
-        root.getElementById(id + "cl")?.addEventListener("click", () => {
-          selM = null; present = false; none = false;
-          H.value = ""; D.textContent = ph; D.classList.add("ph");
-          syncToggles(); renderMonths(); closeThisDrop();
-          opts.onApply?.("");
-        });
-
-        /* apply */
-        root.getElementById(id + "ap")?.addEventListener("click", () => {
-          let val = "";
-          if (present) val = "Present";
-          else if (none) val = opts.noneLabel || "No Expiration";
-          else if (selM !== null) val = fmtMY({ m: selM, y: selY });
+        function commit(val) {
           H.value = val;
           D.textContent = val || ph;
           D.classList.toggle("ph", !val);
-          closeThisDrop();
-          opts.onApply?.(val);
+          opts.onChange?.(val);
+        }
+
+        prRow?.addEventListener("click", () => { present = !present; if (present) none = false; syncToggles(); renderMonths(); });
+        nrRow?.addEventListener("click", () => { none = !none; if (none) present = false; syncToggles(); renderMonths(); });
+
+        root.getElementById(id + "py")?.addEventListener("click", () => { selY--; renderMonths(); });
+        root.getElementById(id + "ny")?.addEventListener("click", () => { selY++; renderMonths(); });
+
+        root.getElementById(id + "cl")?.addEventListener("click", () => {
+          selM = null; present = false; none = false;
+          syncToggles(); renderMonths();
+          commit(""); closeThisDrop();
         });
 
-        /* open/close toggle */
+        root.getElementById(id + "ap")?.addEventListener("click", () => {
+          let v = "";
+          if (present) v = "Present";
+          else if (none) v = opts.noneLabel || "No Expiration";
+          else if (selM !== null) v = fmtMY({ m: selM, y: selY });
+          commit(v); closeThisDrop();
+        });
+
         function closeThisDrop() { drop.classList.remove("open"); T.classList.remove("open"); }
         T.addEventListener("click", e => {
           e.stopPropagation();
@@ -1543,39 +1461,36 @@
           if (!wasOpen) { drop.classList.add("open"); T.classList.add("open"); renderMonths(); }
         });
         drop.addEventListener("click", e => e.stopPropagation());
-
         renderMonths();
       }
 
       return { html, bind };
     }
 
-    /* ─────────────────────────────────────────────
-       buildRangePicker(name, value) → { html, bind }
-       Produces "Feb 2026 — Present" stored in one hidden input.
-    ───────────────────────────────────────────── */
+    /*
+      buildRangePicker(name, value) → { html, bind }
+      Stores "Feb 2026 — Present" or "Sep 2025 — Feb 2026" in one hidden input.
+    */
     function buildRangePicker(name, value = "") {
       const rid = uid();
+      let sVal = "", eVal = "";
 
-      /* parse existing range */
-      let sObj = null, eObj = null, eIsPresent = false;
       const cleaned = value.replace(/·.*$/, "").trim();
       const parts = cleaned.split(/\s*[—–]\s*|\s*--\s*|\s+-\s+/);
       if (parts.length >= 2) {
-        sObj = parseMY(parts[0]);
-        eIsPresent = /^present$/i.test(parts[1].trim());
-        if (!eIsPresent) eObj = parseMY(parts[1]);
+        const sO = parseMY(parts[0]);
+        sVal = sO ? fmtMY(sO) : "";
+        const eTok = parts[1].trim();
+        eVal = /^present$/i.test(eTok) ? "Present" : (parseMY(eTok) ? fmtMY(parseMY(eTok)) : "");
       }
 
-      const sVal = sObj ? fmtMY(sObj) : "";
-      const eVal = eIsPresent ? "Present" : (eObj ? fmtMY(eObj) : "");
-
-      /* build two sub-pickers */
-      const sP = buildPicker({ name: "__range_s_" + rid, value: sVal, placeholder: "Start date" });
-      const eP = buildPicker({ name: "__range_e_" + rid, value: eVal, placeholder: "End date", hasPresent: true });
+      /* build two pickers — they write into temp hidden inputs, then we combine */
+      const sKey = "__rs_" + rid, eKey = "__re_" + rid;
+      const sP = buildPicker({ name: sKey, value: sVal, placeholder: "Start date" });
+      const eP = buildPicker({ name: eKey, value: eVal, placeholder: "End date", hasPresent: true });
 
       const html = `
-      <div class="two-col" id="${rid}rw">
+      <div class="two-col">
         <div><div class="sub-label">Start</div>${sP.html}</div>
         <div><div class="sub-label">End</div>${eP.html}</div>
       </div>
@@ -1584,196 +1499,141 @@
       function bind(root = document) {
         const H = root.getElementById(rid + "rh");
 
-        function updateHidden() {
-          const sH = root.querySelector(`[name="__range_s_${rid}"]`);
-          const eH = root.querySelector(`[name="__range_e_${rid}"]`);
-          const sv = sH?.value || "", ev = eH?.value || "";
-          H.value = sv && ev ? sv + " — " + ev : sv || "";
+        function syncRange() {
+          const sv = root.querySelector(`[name="${sKey}"]`)?.value || "";
+          const ev = root.querySelector(`[name="${eKey}"]`)?.value || "";
+          H.value = sv && ev ? sv + " — " + ev : sv || ev || "";
         }
 
-        sP.bind(root); sP.opts = { onApply: updateHidden };
-        eP.bind(root); eP.opts = { onApply: updateHidden };
+        /* inject onChange into both pickers before binding */
+        sP.bind(root); eP.bind(root);
 
-        /* patch onApply after bind via hidden input observation */
-        const sApply = root.getElementById(sP.html.match(/id="(\w+)ap"/)?.[1] + "ap");
-        const eApply = root.getElementById(eP.html.match(/id="(\w+)ap"/)?.[1] + "ap");
-        const sClear = root.getElementById(sP.html.match(/id="(\w+)cl"/)?.[1] + "cl");
-        const eClear = root.getElementById(eP.html.match(/id="(\w+)cl"/)?.[1] + "cl");
-        [sApply, eApply, sClear, eClear].forEach(b => b?.addEventListener("click", () => setTimeout(updateHidden, 30)));
+        /* patch: listen to the hidden inputs via MutationObserver */
+        [sKey, eKey].forEach(k => {
+          const h = root.querySelector(`[name="${k}"]`);
+          if (!h) return;
+          new MutationObserver(syncRange).observe(h, { attributes: true, attributeFilter: ["value"] });
+        });
+
+        /* also catch Apply/Clear button clicks (reliable fallback) */
+        root.querySelectorAll(`[id$="ap"],[id$="cl"]`).forEach(b => {
+          b.addEventListener("click", () => requestAnimationFrame(syncRange));
+        });
       }
 
       return { html, bind };
     }
 
-    /* ─────────────────────────────────────────────
-       buildMetaField(name, value) → { html, bind }
-       Smart Duration+Location field.
-       Stores: "7 months · Addis Ababa, Ethiopia"
-    ───────────────────────────────────────────── */
+    /*
+      buildMetaField(name, value) → { html, bind }
+      ✅ Location-only input.
+      Duration is auto-computed on the portfolio frontend from role date_ranges.
+      Stores: "Addis Ababa, Ethiopia"  OR  "" (empty = no location)
+      The frontend JS will prepend the computed duration automatically.
+    */
     function buildMetaField(name, value = "") {
       const mid = uid();
 
-      /* parse existing */
-      let existLoc = "", existDur = "";
+      /* strip any duration prefix that may have been stored previously */
+      let location = value;
       const dotI = value.indexOf("·");
-      if (dotI !== -1) {
-        existDur = value.slice(0, dotI).trim();
-        existLoc = value.slice(dotI + 1).trim();
-      } else {
-        if (/\d+\s*(month|year)/i.test(value)) existDur = value.trim();
-        else existLoc = value.trim();
-      }
-
-      /* two sub-pickers for duration calculation */
-      const sP = buildPicker({ name: "__meta_s_" + mid, value: "", placeholder: "Start date" });
-      const eP = buildPicker({ name: "__meta_e_" + mid, value: "", placeholder: "End date", hasPresent: true });
+      if (dotI !== -1) location = value.slice(dotI + 1).trim();
+      /* if it looks like a pure duration with no location, clear it */
+      if (/^\d+\s*(month|year)/i.test(location)) location = "";
 
       const html = `
       <div class="meta-box" id="${mid}mb">
-        <div>
-          <div class="sub-label">Live Preview</div>
-          <div class="meta-preview">
-            <ion-icon name="time-outline"></ion-icon>
-            <span class="pv-text${value ? "" : " empty"}" id="${mid}pv">${esc(value || "Duration will appear here…")}</span>
-          </div>
+        <div class="meta-info">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          Duration is auto-calculated from role dates — just enter the location below.
         </div>
-        <div>
-          <div class="sub-label">📅 Date range (auto-calculates duration)</div>
-          <div class="two-col">
-            <div><div class="sub-label">Start</div>${sP.html}</div>
-            <div><div class="sub-label">End</div>${eP.html}</div>
-          </div>
-        </div>
-        <div>
-          <div class="sub-label">📍 Location (optional)</div>
-          <div class="loc-row">
-            <ion-icon name="location-outline"></ion-icon>
-            <input type="text" id="${mid}loc" placeholder="e.g. Addis Ababa, Ethiopia" value="${esc(existLoc)}" />
-          </div>
+        <div class="loc-row">
+          <ion-icon name="location-outline"></ion-icon>
+          <input
+            type="text"
+            id="${mid}loc"
+            placeholder="e.g. Addis Ababa, Ethiopia"
+            value="${esc(location)}"
+          />
         </div>
       </div>
-      <input type="hidden" name="${name}" id="${mid}h" value="${esc(value)}" />`;
+      <input type="hidden" name="${name}" id="${mid}h" value="${esc(location)}" />`;
 
       function bind(root = document) {
         const H = root.getElementById(mid + "h");
-        const pv = root.getElementById(mid + "pv");
         const loc = root.getElementById(mid + "loc");
-        const sH = () => root.querySelector(`[name="__meta_s_${mid}"]`);
-        const eH = () => root.querySelector(`[name="__meta_e_${mid}"]`);
-
-        function refresh() {
-          const sv = sH()?.value || "", ev = eH()?.value || "";
-          const sO = parseMY(sv);
-          const eO = /^present$/i.test(ev) ? null : parseMY(ev);
-          const ePresent = /^present$/i.test(ev);
-          const dur = calcDur(sO, ePresent ? null : eO);
-          const l = loc.value.trim();
-          const out = dur && l ? dur + " · " + l : dur || l || "";
-          H.value = out;
-          pv.textContent = out || "Duration will appear here…";
-          pv.className = "pv-text" + (out ? "" : " empty");
-        }
-
-        sP.bind(root); eP.bind(root);
-        loc.addEventListener("input", refresh);
-
-        /* patch apply/clear buttons */
-        const ids = [sP, eP].flatMap(p => {
-          const m = p.html.match(/id="(\w+)[at]/g) || [];
-          return m.map(x => x.replace(/id="/, "").replace(/[at]$/, ""));
-        });
-        ids.forEach(base => {
-          root.getElementById(base + "ap")?.addEventListener("click", () => setTimeout(refresh, 30));
-          root.getElementById(base + "cl")?.addEventListener("click", () => setTimeout(refresh, 30));
-        });
+        if (!H || !loc) return;
+        /* keep hidden input in sync with text input */
+        loc.addEventListener("input", () => { H.value = loc.value.trim(); });
       }
 
       return { html, bind };
     }
 
-    /* ─────────────────────────────────────────────
-       bindAllPickers(root)
-       Finds every picker/meta/range already in DOM and binds them.
-       Called once after modal HTML injection.
-    ───────────────────────────────────────────── */
-    function bindAllPickers(root = document) {
-      /* nothing to do — pickers are bound individually when built.
-         This is a no-op safety valve kept for external callers. */
-    }
-
-    /* ═══════════════════════════════════════════════════════════════
-       3. FORM FIELD BUILDER
-    ═══════════════════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════
+       3. FIELD BUILDER  — wraps every field type uniformly
+    ═══════════════════════════════════════════════════════ */
     const BLANK_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%2321262d'/%3E%3C/svg%3E";
 
-    /* returns { html, binders[] } */
     function buildField(f, item) {
       const val = item?.[f.key] ?? "";
       const ph = f.ph || "";
       const binders = [];
-
       let html = "";
 
       switch (f.type) {
         case "monthyear": {
           const p = buildPicker({ name: f.key, value: val, placeholder: "Select month & year" });
-          binders.push(p.bind.bind(p));
-          html = wrap(f.label, p.html);
+          binders.push(r => p.bind(r));
+          html = fieldWrap(f.label, p.html);
           break;
         }
         case "monthyear_optional": {
-          const p = buildPicker({ name: f.key, value: val, placeholder: "Select or choose no expiration", hasNone: true, noneLabel: "No Expiration" });
-          binders.push(p.bind.bind(p));
-          html = wrap(f.label, p.html);
+          const p = buildPicker({ name: f.key, value: val, placeholder: "Select expiry or choose no expiration", hasNone: true, noneLabel: "No Expiration" });
+          binders.push(r => p.bind(r));
+          html = fieldWrap(f.label, p.html);
           break;
         }
         case "daterange": {
           const p = buildRangePicker(f.key, val);
-          binders.push(p.bind.bind(p));
-          html = wrap(f.label, p.html);
+          binders.push(r => p.bind(r));
+          html = fieldWrap(f.label, p.html);
           break;
         }
         case "meta": {
           const p = buildMetaField(f.key, val);
-          binders.push(p.bind.bind(p));
-          html = wrap(f.label, p.html);
+          binders.push(r => p.bind(r));
+          html = fieldWrap(f.label, p.html);
           break;
         }
         case "textarea":
-          html = wrap(f.label, `<textarea name="${f.key}" placeholder="${esc(ph)}">${esc(val)}</textarea>`);
+          html = fieldWrap(f.label, `<textarea name="${f.key}" placeholder="${esc(ph)}">${esc(val)}</textarea>`);
           break;
         case "select": {
           const opts = (f.options || []).map(o => `<option value="${o}"${String(val) === String(o) ? " selected" : ""}>${o}</option>`).join("");
-          html = wrap(f.label, `<select name="${f.key}">${opts}</select>`);
+          html = fieldWrap(f.label, `<select name="${f.key}">${opts}</select>`);
           break;
         }
         case "image":
-          html = wrap(f.label,
-            `<div class="upload-area">
+          html = fieldWrap(f.label, `
+          <div class="upload-area">
             <img src="${esc(val) || BLANK_IMG}" class="upload-thumb" data-preview="${f.key}" />
             <div class="upload-ctrl">
               <input type="file" accept="image/*" data-upload="${f.key}" />
               <input type="hidden" name="${f.key}" value="${esc(val)}" />
               <span class="upload-st" data-ust="${f.key}">${val ? "Current image" : "No image"}</span>
             </div>
-          </div>`
-          );
-          break;
-        case "hint":
-          html = `<div class="field-hint" style="margin-bottom:14px">${f.text}</div>`;
+          </div>`);
           break;
         default:
-          html = wrap(f.label, `<input type="${f.type}" name="${f.key}" value="${esc(val)}" placeholder="${esc(ph)}" />`);
+          html = fieldWrap(f.label, `<input type="${f.type}" name="${f.key}" value="${esc(val)}" placeholder="${esc(ph)}" />`);
       }
 
       return { html, binders };
     }
 
-    function wrap(label, inner) {
-      return `<div class="field"><label>${label}</label>${inner}</div>`;
-    }
+    const fieldWrap = (label, inner) => `<div class="field"><label>${label}</label>${inner}</div>`;
 
-    /* build all fields, return combined html + bound function */
     function buildFields(fields, item) {
       const all = fields.map(f => buildField(f, item));
       const html = all.map(x => x.html).join("");
@@ -1781,7 +1641,6 @@
       return { html, bind };
     }
 
-    /* collect form values */
     function collectForm(fields, ctx = $("#modal-box")) {
       const body = {};
       fields.forEach(f => {
@@ -1792,9 +1651,9 @@
       return body;
     }
 
-    /* ═══════════════════════════════════════════════════════════════
-       4. SECTION DEFINITIONS  (single source of truth)
-    ═══════════════════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════
+       4. SECTION DEFINITIONS
+    ═══════════════════════════════════════════════════════ */
     const SECTIONS = [
       { group: "Content" },
       { key: "profile", title: "Profile", icon: "person-outline", custom: true },
@@ -1919,10 +1778,10 @@
 
     const secMap = Object.fromEntries(SECTIONS.filter(s => s.key).map(s => [s.key, s]));
 
-    /* company / role field definitions (used in both experience & education) */
+    /* company fields — meta is now location-only */
     const COMPANY_FIELDS = section => [
       { key: "name", label: section === "education" ? "School name" : "Company name", type: "text" },
-      { key: "meta", label: "Duration / Location", type: "meta" },
+      { key: "meta", label: "Location (optional)", type: "meta" },
       { key: "icon", label: "Ion-icon name", type: "text", ph: "business-outline" },
       { key: "is_single", label: "Single entry (dashed)", type: "select", options: ["0", "1"] },
       { key: "sort_order", label: "Order", type: "number" },
@@ -1936,9 +1795,9 @@
       { key: "sort_order", label: "Order", type: "number" },
     ];
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════════════════
        5. AUTH
-    ═══════════════════════════════════════════════════════════════ */
+    ═══════════════════════════════════════════════════════ */
     $("#login-form").addEventListener("submit", async e => {
       e.preventDefault();
       const u = $("#lu").value.trim(), p = $("#lp").value, err = $("#login-err");
@@ -1961,24 +1820,22 @@
     }
     $("#logout-btn").addEventListener("click", logout);
 
-    /* ═══════════════════════════════════════════════════════════════
-       6. PANEL INIT
-    ═══════════════════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════
+       6. PANEL INIT & NAV
+    ═══════════════════════════════════════════════════════ */
     function initPanel() {
       $("#login-screen").style.display = "none";
       $("#admin-panel").style.display = "block";
       $("#ph-user").textContent = currentUser || "admin";
-      buildNav();
-      switchTab("profile");
+      buildNav(); switchTab("profile");
     }
 
     function buildNav() {
       let nav = "", mob = "";
       SECTIONS.forEach(s => {
         if (s.group) { nav += `<div class="nav-group">${s.group}</div>`; return; }
-        const b = `<button data-tab="${s.key}"><ion-icon name="${s.icon}"></ion-icon>${s.title}</button>`;
-        nav += b.replace("button", "button class=\"nav-btn\"");
-        mob += b;
+        nav += `<button class="nav-btn" data-tab="${s.key}"><ion-icon name="${s.icon}"></ion-icon>${s.title}</button>`;
+        mob += `<button data-tab="${s.key}"><ion-icon name="${s.icon}"></ion-icon>${s.title}</button>`;
       });
       $("#admin-nav").innerHTML = nav;
       $("#mobile-nav").innerHTML = mob;
@@ -2004,9 +1861,9 @@
       }
     }
 
-    /* ═══════════════════════════════════════════════════════════════
-       7. GENERIC CRUD RENDERER
-    ═══════════════════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════
+       7. GENERIC CRUD
+    ═══════════════════════════════════════════════════════ */
     async function renderCrud(el, key) {
       const sec = secMap[key], items = await apiFetch("/" + key);
       el.innerHTML = `
@@ -2029,24 +1886,23 @@
               </div>
             </div>`).join("")}</div>`
         }</div>`;
-
       $("#crud-add").onclick = () => openItemModal(key, null, items);
       $("#crud-items").addEventListener("click", async e => {
         const card = e.target.closest("[data-id]"); if (!card) return;
         const item = items.find(i => i.id === +card.dataset.id);
         if (e.target.closest(".btn-edit")) openItemModal(key, item, items);
         else if (e.target.closest(".btn-del")) {
-          if (!await confirm("Delete?", "This item will be permanently removed.")) return;
+          if (!await cfmDialog("Delete?", "This item will be permanently removed.")) return;
           await apiFetch("/" + key + "/" + item.id, "DELETE");
           toast("Deleted"); switchTab(key);
         }
       });
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════════════════
        8. ITEM MODAL
-    ═══════════════════════════════════════════════════════════════ */
-    function openItemModal(key, item, _items) {
+    ═══════════════════════════════════════════════════════ */
+    function openItemModal(key, item) {
       const sec = secMap[key], isEdit = !!item;
       const { html, bind } = buildFields(sec.fields, item);
       openModal(`
@@ -2073,9 +1929,9 @@
       };
     }
 
-    /* ═══════════════════════════════════════════════════════════════
-       9. CUSTOM FORM (companies / roles)
-    ═══════════════════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════
+       9. CUSTOM FORM
+    ═══════════════════════════════════════════════════════ */
     function openCustomForm(title, fields, item, onSubmit) {
       const isEdit = !!item;
       const { html, bind } = buildFields(fields, item);
@@ -2100,9 +1956,9 @@
       };
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════════════════
        10. PROFILE
-    ═══════════════════════════════════════════════════════════════ */
+    ═══════════════════════════════════════════════════════ */
     async function renderProfile(el) {
       const p = await apiFetch("/profile");
       const cur = p.availability || "available";
@@ -2117,16 +1973,17 @@
       <div class="sec-header"><h2 class="sec-title"><ion-icon name="person-outline"></ion-icon> Profile &amp; About</h2></div>
       <div class="status-card">
         <div class="st-info">
-          <h3><span class="st-dot" id="st-dot" style="background:${curSt.c};box-shadow:0 0 8px ${curSt.c}60"></span>
-          <span id="st-label">${curSt.l}</span></h3>
+          <h3>
+            <span class="st-dot" id="st-dot" style="background:${curSt.c};box-shadow:0 0 8px ${curSt.c}60"></span>
+            <span id="st-label">${curSt.l}</span>
+          </h3>
           <p>Controls the availability badge on your portfolio avatar</p>
         </div>
         <div class="st-btns" id="st-btns">
           ${STATUS.map(s => `
             <button class="btn ${s.v === cur ? "btn-primary" : "btn-ghost"} btn-sm" data-av="${s.v}"
-              ${s.v === cur ? `style="background:${s.c};border-color:${s.c}"` : ""}>
-              <ion-icon name="${s.ic}"></ion-icon> ${s.l}
-            </button>`).join("")}
+              ${s.v === cur ? `style="background:${s.c};border-color:${s.c}"` : ""}
+            ><ion-icon name="${s.ic}"></ion-icon> ${s.l}</button>`).join("")}
         </div>
       </div>
       <form id="pf-form">
@@ -2154,7 +2011,6 @@
 
       bindUploads(el);
 
-      /* availability buttons */
       const colMap = { available: "#2ecc87", busy: "#e8a838", unavailable: "#f85149" };
       $("#st-btns").addEventListener("click", async e => {
         const btn = e.target.closest("[data-av]"); if (!btn) return;
@@ -2167,7 +2023,11 @@
         $("#st-dot").style.cssText = `background:${st.c};box-shadow:0 0 8px ${st.c}60`;
         $("#st-label").textContent = st.l;
         try {
-          await apiFetch("/profile", "PUT", { name: $('[name="name"]').value, title: $('[name="title"]').value, about_text: $('[name="about_text"]').value, avatar_url: $('[name="avatar_url"]').value, availability: nv });
+          await apiFetch("/profile", "PUT", {
+            name: $('[name="name"]').value, title: $('[name="title"]').value,
+            about_text: $('[name="about_text"]').value, avatar_url: $('[name="avatar_url"]').value,
+            availability: nv,
+          });
           toast("Status: " + st.l);
         } catch (err) { toast(err.message, "err"); }
       });
@@ -2175,15 +2035,19 @@
       $("#pf-form").onsubmit = async e => {
         e.preventDefault();
         try {
-          await apiFetch("/profile", "PUT", { name: $('[name="name"]').value, title: $('[name="title"]').value, about_text: $('[name="about_text"]').value, avatar_url: $('[name="avatar_url"]').value, availability: $("#av-inp").value });
+          await apiFetch("/profile", "PUT", {
+            name: $('[name="name"]').value, title: $('[name="title"]').value,
+            about_text: $('[name="about_text"]').value, avatar_url: $('[name="avatar_url"]').value,
+            availability: $("#av-inp").value,
+          });
           toast("Profile saved!");
         } catch (err) { toast(err.message, "err"); }
       };
     }
 
-    /* ═══════════════════════════════════════════════════════════════
-       11. EXPERIENCE / EDUCATION  (nested companies → roles)
-    ═══════════════════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════
+       11. EXPERIENCE / EDUCATION
+    ═══════════════════════════════════════════════════════ */
     async function renderTimeline(el, section, label) {
       const [allCo, allRoles] = await Promise.all([apiFetch("/companies"), apiFetch("/roles")]);
       const cos = allCo.filter(c => c.section === section);
@@ -2192,7 +2056,9 @@
       el.innerHTML = `
       <div class="sec-header">
         <h2 class="sec-title"><ion-icon name="${icon}-outline"></ion-icon> ${label} <span class="sec-count">${cos.length}</span></h2>
-        <button class="btn btn-primary" id="add-co"><ion-icon name="add-outline"></ion-icon> Add ${section === "education" ? "School" : "Company"}</button>
+        <button class="btn btn-primary" id="add-co">
+          <ion-icon name="add-outline"></ion-icon> Add ${section === "education" ? "School" : "Company"}
+        </button>
       </div>
       <div id="co-list">${cos.length === 0
           ? `<div class="empty"><ion-icon name="${icon}-outline"></ion-icon><p>No entries yet</p></div>`
@@ -2203,7 +2069,7 @@
                 <div style="display:flex;justify-content:space-between;align-items:center">
                   <div class="ic-body">
                     <div class="ic-title">${esc(c.name)}</div>
-                    <div class="ic-sub">${esc(c.meta)}</div>
+                    <div class="ic-sub">${esc(c.meta || "No location set")}</div>
                   </div>
                   <div class="ic-actions">
                     <span class="ic-order">${c.sort_order || 0}</span>
@@ -2230,14 +2096,12 @@
           }).join("")
         }</div>`;
 
-      /* add company */
       $("#add-co").onclick = () => openCustomForm(
         "Add " + (section === "education" ? "School" : "Company"),
         COMPANY_FIELDS(section), null,
         async body => { body.section = section; await apiFetch("/companies", "POST", body); toast("Added!"); switchTab(section); }
       );
 
-      /* delegated events */
       $("#co-list").addEventListener("click", async e => {
         /* edit company */
         if (e.target.closest(".btn-eco")) {
@@ -2251,7 +2115,7 @@
         if (e.target.closest(".btn-dco")) {
           const cid = +e.target.closest("[data-cid]").dataset.cid;
           const c = cos.find(x => x.id === cid);
-          if (!await confirm("Delete?", `"${c.name}" and all its roles will be removed.`)) return;
+          if (!await cfmDialog("Delete?", `"${c.name}" and all its roles will be removed.`)) return;
           await apiFetch("/companies/" + cid, "DELETE"); toast("Deleted"); switchTab(section); return;
         }
         /* add role */
@@ -2277,15 +2141,15 @@
         /* delete role */
         if (e.target.closest(".btn-dro")) {
           const rid = +e.target.closest("[data-rid]").dataset.rid;
-          if (!await confirm("Delete role?", "This role will be permanently removed.")) return;
+          if (!await cfmDialog("Delete role?", "This role will be permanently removed.")) return;
           await apiFetch("/roles/" + rid, "DELETE"); toast("Deleted"); switchTab(section);
         }
       });
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════════════════
        12. SETTINGS
-    ═══════════════════════════════════════════════════════════════ */
+    ═══════════════════════════════════════════════════════ */
     function renderSettings(el) {
       el.innerHTML = `
       <div class="sec-header"><h2 class="sec-title"><ion-icon name="settings-outline"></ion-icon> Settings</h2></div>
@@ -2299,7 +2163,7 @@
         </form>
         <div style="margin-top:36px;padding-top:20px;border-top:1px solid var(--border)">
           <p style="font-size:12px;color:var(--text-3);line-height:1.8">
-            Portfolio CMS v1.0<br>Netlify Functions · Turso · Cloudinary<br>
+            Portfolio CMS v1.0 · Netlify Functions · Turso · Cloudinary<br>
             <a href="/" target="_blank">View live portfolio →</a>
           </p>
         </div>
@@ -2310,18 +2174,20 @@
         const cur = $('[name="current"]').value, np = $('[name="np"]').value, cp = $('[name="cp"]').value;
         if (np !== cp) { toast("Passwords don't match", "err"); return; }
         if (np.length < 6) { toast("Min 6 characters", "err"); return; }
-        try { await apiFetch("/auth/change-password", "POST", { current: cur, newPassword: np }); toast("Password changed!"); e.target.reset(); }
-        catch (err) { toast(err.message, "err"); }
+        try {
+          await apiFetch("/auth/change-password", "POST", { current: cur, newPassword: np });
+          toast("Password changed!"); e.target.reset();
+        } catch (err) { toast(err.message, "err"); }
       };
     }
 
-    /* ═══════════════════════════════════════════════════════════════
+    /* ═══════════════════════════════════════════════════════
        13. BOOTSTRAP
-    ═══════════════════════════════════════════════════════════════ */
+    ═══════════════════════════════════════════════════════ */
     (async () => {
       if (TOKEN) {
         try { await apiFetch("/profile"); currentUser = "admin"; initPanel(); return; }
-        catch { /* expired */ }
+        catch { /* token expired */ }
       }
       logout();
     })();
