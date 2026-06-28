@@ -10,6 +10,9 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
     rel="stylesheet" />
   <style>
+    /* ═══════════════════════════════════════
+         DESIGN TOKENS
+      ═══════════════════════════════════════ */
     :root {
       --bg-0: #010409;
       --bg-1: #0d1117;
@@ -24,30 +27,33 @@
       --text-3: #6e7681;
       --accent: #2ecc87;
       --accent-dim: #238a5c;
-      --accent-bg: hsla(155, 70%, 45%, 0.1);
-      --accent-border: hsla(155, 70%, 45%, 0.25);
+      --accent-bg: hsla(155, 70%, 45%, .1);
+      --accent-border: hsla(155, 70%, 45%, .25);
       --danger: #f85149;
-      --danger-bg: hsla(0, 90%, 60%, 0.1);
-      --danger-border: hsla(0, 90%, 60%, 0.25);
+      --danger-bg: hsla(0, 90%, 60%, .1);
+      --danger-border: hsla(0, 90%, 60%, .25);
       --warning: #d29922;
-      --radius: 8px;
-      --radius-lg: 12px;
-      --radius-xl: 16px;
-      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
-      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
-      --shadow-glow: 0 0 20px hsla(155, 70%, 45%, 0.15);
+      --r: 8px;
+      --r-lg: 12px;
+      --r-xl: 16px;
+      --sh-sm: 0 1px 2px rgba(0, 0, 0, .3);
+      --sh-md: 0 4px 12px rgba(0, 0, 0, .3);
+      --sh-lg: 0 8px 24px rgba(0, 0, 0, .4);
+      --sh-glow: 0 0 20px hsla(155, 70%, 45%, .15);
       --font: "Inter", -apple-system, sans-serif;
       --mono: "JetBrains Mono", monospace;
-      --transition: 0.2s ease;
+      --t: .2s ease;
     }
 
+    /* ═══════════════════════════════════════
+         RESET & BASE
+      ═══════════════════════════════════════ */
     *,
     *::before,
     *::after {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
+      box-sizing: border-box
     }
 
     body {
@@ -56,12 +62,12 @@
       color: var(--text-1);
       min-height: 100vh;
       line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
+      -webkit-font-smoothing: antialiased
     }
 
     a {
       color: var(--accent);
-      text-decoration: none;
+      text-decoration: none
     }
 
     button {
@@ -69,7 +75,7 @@
       cursor: pointer;
       border: none;
       background: none;
-      color: inherit;
+      color: inherit
     }
 
     input,
@@ -79,28 +85,28 @@
       background: var(--bg-1);
       color: var(--text-1);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: var(--r);
       padding: 10px 14px;
       width: 100%;
       outline: none;
-      transition: border-color var(--transition), box-shadow var(--transition);
+      transition: border-color var(--t), box-shadow var(--t);
     }
 
     input:focus,
     textarea:focus,
     select:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px hsla(155, 70%, 45%, 0.12);
+      box-shadow: 0 0 0 3px hsla(155, 70%, 45%, .12)
     }
 
     input::placeholder,
     textarea::placeholder {
-      color: var(--text-3);
+      color: var(--text-3)
     }
 
     textarea {
       min-height: 80px;
-      resize: vertical;
+      resize: vertical
     }
 
     select {
@@ -109,450 +115,450 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b949e' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 12px center;
-      padding-right: 36px;
+      padding-right: 36px
     }
 
     ::-webkit-scrollbar {
       width: 8px;
-      height: 8px;
+      height: 8px
     }
 
     ::-webkit-scrollbar-track {
-      background: var(--bg-1);
+      background: var(--bg-1)
     }
 
     ::-webkit-scrollbar-thumb {
       background: var(--bg-4);
-      border-radius: 4px;
+      border-radius: 4px
     }
 
     ::-webkit-scrollbar-thumb:hover {
-      background: var(--text-3);
+      background: var(--text-3)
     }
 
-    /* ══════════════════════════════════════
-         DATE PICKER STYLES
-      ══════════════════════════════════════ */
-    .date-picker-wrapper {
-      position: relative;
-    }
-
-    .date-picker-trigger {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: var(--bg-1);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 10px 14px;
-      cursor: pointer;
-      width: 100%;
-      text-align: left;
-      color: var(--text-1);
-      font-size: 14px;
-      transition: border-color var(--transition), box-shadow var(--transition);
-    }
-
-    .date-picker-trigger:hover {
-      border-color: var(--accent);
-    }
-
-    .date-picker-trigger.open {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px hsla(155, 70%, 45%, 0.12);
-    }
-
-    .date-picker-trigger ion-icon {
-      color: var(--accent);
-      font-size: 16px;
-      flex-shrink: 0;
-    }
-
-    .date-picker-trigger .trigger-text {
-      flex: 1;
-    }
-
-    .date-picker-trigger .trigger-text.placeholder {
-      color: var(--text-3);
-    }
-
-    .date-picker-dropdown {
-      position: absolute;
-      top: calc(100% + 6px);
-      left: 0;
-      z-index: 200;
-      background: var(--bg-2);
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-lg);
-      padding: 16px;
-      min-width: 300px;
-      display: none;
-      animation: dropIn 0.18s ease;
-    }
-
-    .date-picker-dropdown.open {
-      display: block;
-    }
-
-    @keyframes dropIn {
-      from {
-        opacity: 0;
-        transform: translateY(-6px);
-      }
-
-      to {
-        opacity: 1;
-        transform: none;
-      }
-    }
-
-    .cal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .cal-header button {
-      width: 30px;
-      height: 30px;
-      border-radius: var(--radius);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-2);
-      font-size: 18px;
-      transition: background var(--transition), color var(--transition);
-    }
-
-    .cal-header button:hover {
-      background: var(--bg-3);
-      color: var(--text-1);
-    }
-
-    .cal-year-label {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text-1);
-      font-family: var(--mono);
-      padding: 4px 8px;
-      border-radius: var(--radius);
-    }
-
-    .cal-month-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-
-    .cal-month-btn {
-      padding: 8px 4px;
-      border-radius: var(--radius);
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-2);
-      transition: all var(--transition);
-      text-align: center;
-    }
-
-    .cal-month-btn:hover {
-      background: var(--bg-3);
-      color: var(--text-1);
-    }
-
-    .cal-month-btn.selected {
-      background: var(--accent);
-      color: var(--bg-0);
-      font-weight: 700;
-    }
-
-    .cal-present-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 12px;
-      background: var(--bg-3);
-      border-radius: var(--radius);
-      margin-bottom: 10px;
-      cursor: pointer;
-      border: 1px solid transparent;
-      transition: border-color var(--transition);
-    }
-
-    .cal-present-row:hover {
-      border-color: var(--accent);
-    }
-
-    .cal-present-row.active {
-      border-color: var(--accent);
-      background: var(--accent-bg);
-    }
-
-    .cal-present-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-1);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .cal-present-label ion-icon {
-      color: var(--accent);
-      font-size: 16px;
-    }
-
-    .cal-toggle {
-      width: 36px;
-      height: 20px;
-      border-radius: 10px;
-      background: var(--bg-4);
-      position: relative;
-      transition: background var(--transition);
-      flex-shrink: 0;
-    }
-
-    .cal-toggle.on {
-      background: var(--accent);
-    }
-
-    .cal-toggle::after {
-      content: "";
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: #fff;
-      top: 3px;
-      left: 3px;
-      transition: transform var(--transition);
-    }
-
-    .cal-toggle.on::after {
-      transform: translateX(16px);
-    }
-
-    .cal-footer {
-      display: flex;
-      gap: 6px;
-      justify-content: flex-end;
-      padding-top: 10px;
-      border-top: 1px solid var(--border);
-    }
-
-    .date-range-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      align-items: start;
-    }
-
-    .date-range-label {
-      font-size: 11px;
-      color: var(--text-3);
-      font-family: var(--mono);
-      margin-bottom: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .date-single-wrapper {
-      position: relative;
-    }
-
-    /* ══════════════════════════════════════
-         DURATION + LOCATION FIELD STYLES
-      ══════════════════════════════════════ */
-    .meta-field-box {
-      background: var(--bg-1);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 14px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .meta-field-box:focus-within {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px hsla(155, 70%, 45%, 0.08);
-    }
-
-    .meta-duration-preview {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      background: var(--accent-bg);
-      border: 1px solid var(--accent-border);
-      border-radius: var(--radius);
-      font-size: 12px;
-      font-family: var(--mono);
-      color: var(--accent);
-      min-height: 36px;
-    }
-
-    .meta-duration-preview ion-icon {
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-
-    .meta-duration-preview .preview-text {
-      flex: 1;
-    }
-
-    .meta-duration-preview .preview-text.empty {
-      color: var(--text-3);
-      font-style: italic;
-    }
-
-    .meta-date-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .meta-loc-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .meta-loc-row ion-icon {
-      color: var(--text-3);
-      font-size: 16px;
-      flex-shrink: 0;
-    }
-
-    .meta-loc-row input {
-      flex: 1;
-    }
-
-    .meta-section-label {
-      font-size: 10px;
-      font-family: var(--mono);
-      color: var(--text-3);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 4px;
-    }
-
-    /* ══════════════════════════════════════
-         GENERAL FORM STYLES
-      ══════════════════════════════════════ */
+    /* ═══════════════════════════════════════
+         LAYOUT UTILITIES
+      ═══════════════════════════════════════ */
     .field {
-      margin-bottom: 16px;
+      margin-bottom: 16px
     }
 
-    .field label {
+    .field>label {
       display: block;
       font-size: 11px;
       color: var(--text-2);
       margin-bottom: 6px;
       font-family: var(--mono);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 500;
+      letter-spacing: .5px;
+      font-weight: 500
     }
 
     .field-hint {
       font-size: 11px;
       color: var(--text-3);
-      margin-top: 4px;
+      margin-top: 4px
+    }
+
+    .sub-label {
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 4px
     }
 
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 16px
     }
 
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    /* ═══════════════════════════════════════
+         BUTTONS
+      ═══════════════════════════════════════ */
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 6px;
       padding: 9px 16px;
-      border-radius: var(--radius);
+      border-radius: var(--r);
       font-size: 13px;
       font-weight: 600;
-      transition: all var(--transition);
+      transition: all var(--t);
       white-space: nowrap;
-      line-height: 1;
+      line-height: 1
     }
 
     .btn-primary {
       background: var(--accent);
-      color: var(--bg-0);
+      color: var(--bg-0)
     }
 
     .btn-primary:hover {
       background: var(--accent-dim);
-      box-shadow: var(--shadow-glow);
-      transform: translateY(-1px);
+      box-shadow: var(--sh-glow);
+      transform: translateY(-1px)
     }
 
     .btn-danger {
       color: var(--danger);
       border: 1px solid var(--danger-border);
-      background: var(--danger-bg);
+      background: var(--danger-bg)
     }
 
     .btn-danger:hover {
       background: var(--danger);
       color: #fff;
-      border-color: var(--danger);
+      border-color: var(--danger)
     }
 
     .btn-ghost {
       color: var(--text-2);
-      border: 1px solid var(--border);
+      border: 1px solid var(--border)
     }
 
     .btn-ghost:hover {
       border-color: var(--text-2);
       color: var(--text-1);
-      background: var(--bg-3);
+      background: var(--bg-3)
     }
 
     .btn-sm {
       padding: 5px 10px;
-      font-size: 12px;
+      font-size: 12px
     }
 
     .btn-lg {
       padding: 12px 24px;
-      font-size: 14px;
+      font-size: 14px
     }
 
     .btn-icon {
       width: 32px;
       height: 32px;
       padding: 0;
-      border-radius: var(--radius);
-      font-size: 16px;
+      border-radius: var(--r);
+      font-size: 16px
     }
 
-    /* Login */
+    /* ═══════════════════════════════════════
+         DATE PICKER — shared components
+      ═══════════════════════════════════════ */
+    .dp-wrap {
+      position: relative
+    }
+
+    .dp-trigger {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 10px 14px;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      color: var(--text-1);
+      font-size: 14px;
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+
+    .dp-trigger:hover {
+      border-color: var(--accent)
+    }
+
+    .dp-trigger.open {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px hsla(155, 70%, 45%, .12)
+    }
+
+    .dp-trigger .cal-icon {
+      color: var(--accent);
+      font-size: 16px;
+      flex-shrink: 0
+    }
+
+    .dp-trigger .dp-text {
+      flex: 1;
+      font-size: 13px
+    }
+
+    .dp-trigger .dp-text.ph {
+      color: var(--text-3)
+    }
+
+    .dp-trigger .chev {
+      color: var(--text-3);
+      font-size: 13px;
+      transition: transform var(--t)
+    }
+
+    .dp-trigger.open .chev {
+      transform: rotate(180deg)
+    }
+
+    .dp-drop {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      z-index: 300;
+      background: var(--bg-2);
+      border: 1px solid var(--border-light);
+      border-radius: var(--r-lg);
+      box-shadow: var(--sh-lg);
+      padding: 14px;
+      min-width: 280px;
+      display: none;
+      animation: dropIn .18s ease;
+    }
+
+    .dp-drop.open {
+      display: block
+    }
+
+    @keyframes dropIn {
+      from {
+        opacity: 0;
+        transform: translateY(-6px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    /* year nav */
+    .dp-year-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px
+    }
+
+    .dp-year-nav button {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--r);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-2);
+      font-size: 17px;
+      transition: background var(--t), color var(--t)
+    }
+
+    .dp-year-nav button:hover {
+      background: var(--bg-3);
+      color: var(--text-1)
+    }
+
+    .dp-year-val {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-1);
+      font-family: var(--mono)
+    }
+
+    /* month grid */
+    .dp-months {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      margin-bottom: 10px
+    }
+
+    .dp-month {
+      padding: 7px 4px;
+      border-radius: var(--r);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-2);
+      transition: all var(--t);
+      text-align: center
+    }
+
+    .dp-month:hover {
+      background: var(--bg-3);
+      color: var(--text-1)
+    }
+
+    .dp-month.sel {
+      background: var(--accent);
+      color: var(--bg-0);
+      font-weight: 700
+    }
+
+    /* present / no-expiry toggle row */
+    .dp-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 11px;
+      background: var(--bg-3);
+      border-radius: var(--r);
+      margin-bottom: 10px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: border-color var(--t);
+    }
+
+    .dp-toggle-row:hover {
+      border-color: var(--accent)
+    }
+
+    .dp-toggle-row.on {
+      border-color: var(--accent);
+      background: var(--accent-bg)
+    }
+
+    .dp-toggle-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-1);
+      display: flex;
+      align-items: center;
+      gap: 7px
+    }
+
+    .dp-toggle-label ion-icon {
+      color: var(--accent);
+      font-size: 15px
+    }
+
+    .toggle-pill {
+      width: 34px;
+      height: 19px;
+      border-radius: 10px;
+      background: var(--bg-4);
+      position: relative;
+      transition: background var(--t);
+      flex-shrink: 0
+    }
+
+    .toggle-pill.on {
+      background: var(--accent)
+    }
+
+    .toggle-pill::after {
+      content: "";
+      position: absolute;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #fff;
+      top: 3px;
+      left: 3px;
+      transition: transform var(--t)
+    }
+
+    .toggle-pill.on::after {
+      transform: translateX(15px)
+    }
+
+    /* footer */
+    .dp-footer {
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+      padding-top: 9px;
+      border-top: 1px solid var(--border)
+    }
+
+    /* disabled body overlay */
+    .dp-body.disabled {
+      opacity: .4;
+      pointer-events: none
+    }
+
+    /* ═══════════════════════════════════════
+         META FIELD  (Duration + Location)
+      ═══════════════════════════════════════ */
+    .meta-box {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px
+    }
+
+    .meta-box:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px hsla(155, 70%, 45%, .08)
+    }
+
+    .meta-preview {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 11px;
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      border-radius: var(--r);
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--accent);
+      min-height: 34px;
+    }
+
+    .meta-preview ion-icon {
+      font-size: 14px;
+      flex-shrink: 0
+    }
+
+    .meta-preview .pv-text {
+      flex: 1
+    }
+
+    .meta-preview .pv-text.empty {
+      color: var(--text-3);
+      font-style: italic
+    }
+
+    .loc-row {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .loc-row ion-icon {
+      color: var(--text-3);
+      font-size: 15px;
+      flex-shrink: 0
+    }
+
+    /* ═══════════════════════════════════════
+         LOGIN
+      ═══════════════════════════════════════ */
     #login-screen {
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      background: radial-gradient(ellipse at 50% 0%, hsla(155, 50%, 30%, 0.06), transparent 60%), var(--bg-0);
-      padding: 20px;
+      background: radial-gradient(ellipse at 50% 0%, hsla(155, 50%, 30%, .06), transparent 60%), var(--bg-0);
+      padding: 20px
     }
 
     .login-card {
       background: var(--bg-2);
       border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
+      border-radius: var(--r-xl);
       padding: 40px 32px;
       width: 100%;
       max-width: 400px;
-      box-shadow: var(--shadow-lg);
+      box-shadow: var(--sh-lg)
     }
 
     .login-logo {
@@ -560,43 +566,45 @@
       font-size: 28px;
       font-weight: 700;
       text-align: center;
-      margin-bottom: 4px;
+      margin-bottom: 4px
     }
 
-    .login-logo .bracket {
-      color: var(--accent);
+    .login-logo .br {
+      color: var(--accent)
     }
 
-    .login-logo .slash {
-      color: var(--text-3);
+    .login-logo .sl {
+      color: var(--text-3)
     }
 
-    .login-subtitle {
+    .login-sub {
       text-align: center;
       font-size: 13px;
       color: var(--text-2);
-      margin-bottom: 28px;
+      margin-bottom: 28px
     }
 
-    .login-error {
+    .login-err {
       color: var(--danger);
       font-size: 12px;
       text-align: center;
       margin-top: 12px;
       min-height: 18px;
-      font-family: var(--mono);
+      font-family: var(--mono)
     }
 
-    /* Panel */
+    /* ═══════════════════════════════════════
+         PANEL SHELL
+      ═══════════════════════════════════════ */
     #admin-panel {
-      display: none;
+      display: none
     }
 
     .panel-header {
       position: sticky;
       top: 0;
       z-index: 20;
-      background: hsla(215, 28%, 7%, 0.85);
+      background: hsla(215, 28%, 7%, .88);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
@@ -613,14 +621,14 @@
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 8px
     }
 
     .panel-logo .accent {
-      color: var(--accent);
+      color: var(--accent)
     }
 
-    .panel-logo .badge {
+    .panel-logo .cms-badge {
       font-size: 10px;
       background: var(--accent-bg);
       color: var(--accent);
@@ -629,497 +637,522 @@
       border-radius: 20px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: .5px
     }
 
-    .panel-header-right {
+    .ph-right {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 12px
     }
 
-    .panel-user {
+    .ph-user {
       font-size: 12px;
       color: var(--text-2);
-      font-family: var(--mono);
+      font-family: var(--mono)
     }
 
     .panel-body {
       display: flex;
-      min-height: calc(100vh - 56px);
+      min-height: calc(100vh - 56px)
     }
 
+    /* ═══════════════════════════════════════
+         SIDEBAR NAV
+      ═══════════════════════════════════════ */
     .admin-nav {
-      width: 240px;
+      width: 220px;
       background: var(--bg-1);
       border-right: 1px solid var(--border);
-      padding: 12px 0;
+      padding: 10px 0;
       flex-shrink: 0;
       position: sticky;
       top: 56px;
       height: calc(100vh - 56px);
       overflow-y: auto;
       display: flex;
-      flex-direction: column;
+      flex-direction: column
     }
 
-    .nav-group-label {
-      padding: 16px 20px 6px;
+    .nav-group {
+      padding: 14px 18px 5px;
       font-size: 10px;
       font-family: var(--mono);
       color: var(--text-3);
       text-transform: uppercase;
       letter-spacing: 1px;
-      font-weight: 600;
+      font-weight: 600
     }
 
     .nav-btn {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       width: 100%;
-      padding: 9px 20px;
+      padding: 9px 18px;
       font-size: 13px;
       color: var(--text-2);
-      transition: all 0.15s;
-      border-left: 3px solid transparent;
+      transition: all .15s;
+      border-left: 3px solid transparent
     }
 
     .nav-btn:hover {
       background: var(--bg-2);
-      color: var(--text-1);
+      color: var(--text-1)
     }
 
     .nav-btn.active {
       color: var(--accent);
       border-left-color: var(--accent);
-      background: var(--accent-bg);
+      background: var(--accent-bg)
     }
 
     .nav-btn ion-icon {
-      font-size: 17px;
-      flex-shrink: 0;
+      font-size: 16px;
+      flex-shrink: 0
     }
 
+    /* ═══════════════════════════════════════
+         MAIN CONTENT
+      ═══════════════════════════════════════ */
     .admin-content {
       flex: 1;
       padding: 28px 32px;
       max-width: 960px;
-      min-width: 0;
+      min-width: 0
     }
 
-    .section-header {
+    .sec-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 24px;
       padding-bottom: 16px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border)
     }
 
-    .section-title {
-      font-size: 22px;
+    .sec-title {
+      font-size: 21px;
       font-weight: 700;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 10px
     }
 
-    .section-title ion-icon {
+    .sec-title ion-icon {
       color: var(--accent);
-      font-size: 24px;
+      font-size: 22px
     }
 
-    .section-count {
+    .sec-count {
       font-size: 11px;
       background: var(--bg-3);
       color: var(--text-2);
       padding: 2px 8px;
       border-radius: 10px;
-      font-family: var(--mono);
+      font-family: var(--mono)
     }
 
+    /* ═══════════════════════════════════════
+         ITEM CARDS
+      ═══════════════════════════════════════ */
     .item-list {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 6px
     }
 
     .item-card {
       background: var(--bg-2);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border-radius: var(--r);
       padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      transition: border-color var(--transition);
+      transition: border-color var(--t)
     }
 
     .item-card:hover {
-      border-color: var(--border-light);
+      border-color: var(--border-light)
     }
 
-    .item-card-body {
+    .ic-body {
       flex: 1;
-      min-width: 0;
+      min-width: 0
     }
 
-    .item-card-title {
+    .ic-title {
       font-size: 14px;
       font-weight: 600;
       white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
+      text-overflow: ellipsis
     }
 
-    .item-card-sub {
+    .ic-sub {
       font-size: 11px;
       color: var(--text-3);
       font-family: var(--mono);
-      margin-top: 2px;
+      margin-top: 2px
     }
 
-    .item-card-actions {
+    .ic-actions {
       display: flex;
       gap: 4px;
-      flex-shrink: 0;
+      flex-shrink: 0
     }
 
-    .item-card-order {
+    .ic-order {
       font-size: 11px;
       color: var(--text-3);
       font-family: var(--mono);
       background: var(--bg-3);
       padding: 2px 6px;
       border-radius: 4px;
-      margin-right: 4px;
+      margin-right: 4px
     }
 
-    .roles-container {
+    /* nested roles */
+    .roles-wrap {
       margin-top: 10px;
       margin-left: 16px;
       padding-left: 16px;
-      border-left: 2px solid var(--border);
+      border-left: 2px solid var(--border)
     }
 
-    .roles-container .item-card {
+    .roles-wrap .item-card {
       background: var(--bg-1);
-      margin-top: 4px;
+      margin-top: 4px
     }
 
-    .roles-container .item-card:first-child {
-      margin-top: 0;
+    .roles-wrap .item-card:first-child {
+      margin-top: 0
     }
 
     .add-role-btn {
       margin-top: 8px;
       font-size: 12px;
       color: var(--accent);
-      padding: 4px 0;
+      padding: 4px 0
     }
 
     .add-role-btn:hover {
-      text-decoration: underline;
+      text-decoration: underline
     }
 
-    .empty-state {
+    /* empty */
+    .empty {
       text-align: center;
       padding: 48px 20px;
-      color: var(--text-3);
+      color: var(--text-3)
     }
 
-    .empty-state ion-icon {
+    .empty ion-icon {
       font-size: 40px;
-      margin-bottom: 12px;
+      margin-bottom: 12px
     }
 
-    .empty-state p {
+    .empty p {
       font-size: 14px;
-      margin-bottom: 16px;
+      margin-bottom: 16px
     }
 
-    .modal-overlay {
+    /* ═══════════════════════════════════════
+         MODAL
+      ═══════════════════════════════════════ */
+    .modal-ov {
       position: fixed;
       inset: 0;
-      background: rgba(1, 4, 9, 0.75);
+      background: rgba(1, 4, 9, .75);
       z-index: 50;
       display: none;
       justify-content: center;
       align-items: flex-start;
       padding: 48px 20px;
-      overflow-y: auto;
+      overflow-y: auto
     }
 
-    .modal-overlay.active {
-      display: flex;
+    .modal-ov.open {
+      display: flex
     }
 
     .modal-box {
       background: var(--bg-2);
       border: 1px solid var(--border);
-      border-radius: var(--radius-xl);
-      padding: 0;
+      border-radius: var(--r-xl);
       width: 100%;
       max-width: 580px;
-      box-shadow: var(--shadow-lg);
-      animation: modalIn 0.25s ease;
+      box-shadow: var(--sh-lg);
+      animation: mIn .25s ease
     }
 
-    @keyframes modalIn {
+    @keyframes mIn {
       from {
         opacity: 0;
-        transform: translateY(-12px) scale(0.98);
+        transform: translateY(-12px) scale(.98)
       }
 
       to {
         opacity: 1;
-        transform: none;
+        transform: none
       }
     }
 
-    .modal-header {
-      padding: 20px 24px 16px;
+    .modal-head {
+      padding: 18px 22px 14px;
       border-bottom: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: center
     }
 
-    .modal-header h2 {
-      font-size: 17px;
-      font-weight: 700;
+    .modal-head h2 {
+      font-size: 16px;
+      font-weight: 700
     }
 
     .modal-body {
-      padding: 20px 24px;
-      max-height: 65vh;
+      padding: 18px 22px;
+      max-height: 62vh;
       overflow-y: auto;
-      overflow-x: hidden;
+      overflow-x: hidden
     }
 
-    .modal-footer {
-      padding: 16px 24px;
+    .modal-foot {
+      padding: 14px 22px;
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: flex-end;
-      gap: 8px;
+      gap: 8px
     }
 
+    /* ═══════════════════════════════════════
+         IMAGE UPLOAD
+      ═══════════════════════════════════════ */
     .upload-area {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 14px
     }
 
-    .upload-preview {
+    .upload-thumb {
       width: 64px;
       height: 64px;
-      border-radius: var(--radius);
+      border-radius: var(--r);
       object-fit: cover;
       border: 1px solid var(--border);
       background: var(--bg-3);
-      flex-shrink: 0;
+      flex-shrink: 0
     }
 
-    .upload-controls {
+    .upload-thumb.lg {
+      width: 96px;
+      height: 96px;
+      border-radius: var(--r-lg)
+    }
+
+    .upload-ctrl {
       flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 6px
     }
 
-    .upload-controls input[type="file"] {
+    .upload-ctrl input[type=file] {
       font-size: 12px;
       padding: 6px;
       border: 1px dashed var(--border);
       background: var(--bg-1);
-      border-radius: var(--radius);
-      cursor: pointer;
+      border-radius: var(--r);
+      cursor: pointer
     }
 
-    .upload-controls input[type="file"]:hover {
-      border-color: var(--accent);
+    .upload-ctrl input[type=file]:hover {
+      border-color: var(--accent)
     }
 
-    .upload-status {
+    .upload-st {
       font-size: 11px;
       color: var(--text-3);
-      font-family: var(--mono);
+      font-family: var(--mono)
     }
 
-    .upload-status.uploading {
-      color: var(--warning);
+    .upload-st.busy {
+      color: var(--warning)
     }
 
-    .upload-status.success {
-      color: var(--accent);
+    .upload-st.ok {
+      color: var(--accent)
     }
 
-    .upload-status.error {
-      color: var(--danger);
+    .upload-st.err {
+      color: var(--danger)
     }
 
-    .profile-avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: var(--radius-lg);
-      object-fit: cover;
-      border: 2px solid var(--border);
-    }
-
-    #toast-container {
+    /* ═══════════════════════════════════════
+         TOAST
+      ═══════════════════════════════════════ */
+    #toasts {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      z-index: 100;
+      z-index: 999;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 8px
     }
 
     .toast {
-      padding: 10px 18px;
-      border-radius: var(--radius);
+      padding: 10px 16px;
+      border-radius: var(--r);
       font-size: 13px;
       font-weight: 500;
       transform: translateX(120%);
       opacity: 0;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: all .3s cubic-bezier(.34, 1.56, .64, 1);
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: var(--shadow-md);
-      max-width: 340px;
+      box-shadow: var(--sh-md);
+      max-width: 320px
     }
 
     .toast.show {
-      transform: translateX(0);
-      opacity: 1;
+      transform: none;
+      opacity: 1
     }
 
-    .toast-success {
+    .toast.ok {
       background: var(--accent);
-      color: var(--bg-0);
+      color: var(--bg-0)
     }
 
-    .toast-error {
+    .toast.err {
       background: var(--danger);
-      color: #fff;
+      color: #fff
     }
 
-    .confirm-overlay {
+    /* ═══════════════════════════════════════
+         CONFIRM
+      ═══════════════════════════════════════ */
+    .cfm-ov {
       position: fixed;
       inset: 0;
-      background: rgba(1, 4, 9, 0.8);
+      background: rgba(1, 4, 9, .8);
       z-index: 60;
       display: none;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 20px
     }
 
-    .confirm-overlay.active {
-      display: flex;
+    .cfm-ov.open {
+      display: flex
     }
 
-    .confirm-box {
+    .cfm-box {
       background: var(--bg-2);
       border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
+      border-radius: var(--r-lg);
       padding: 24px;
-      max-width: 400px;
+      max-width: 380px;
       width: 100%;
       text-align: center;
-      box-shadow: var(--shadow-lg);
+      box-shadow: var(--sh-lg)
     }
 
-    .confirm-box h3 {
+    .cfm-box h3 {
       font-size: 16px;
-      margin-bottom: 8px;
+      margin-bottom: 8px
     }
 
-    .confirm-box p {
+    .cfm-box p {
       font-size: 13px;
       color: var(--text-2);
-      margin-bottom: 20px;
+      margin-bottom: 20px
     }
 
-    .confirm-actions {
+    .cfm-acts {
       display: flex;
       gap: 8px;
-      justify-content: center;
+      justify-content: center
     }
 
+    /* ═══════════════════════════════════════
+         STATUS CARD
+      ═══════════════════════════════════════ */
     .status-card {
       background: var(--bg-2);
       border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 20px;
+      border-radius: var(--r-lg);
+      padding: 18px 20px;
       margin-bottom: 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 14px
     }
 
-    .status-info h3 {
+    .st-info h3 {
       font-size: 14px;
       font-weight: 600;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 8px
     }
 
-    .status-info p {
+    .st-info p {
       font-size: 11px;
       color: var(--text-3);
-      font-family: var(--mono);
+      font-family: var(--mono)
     }
 
-    .status-dot {
-      width: 10px;
-      height: 10px;
+    .st-dot {
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
-      display: inline-block;
+      display: inline-block
     }
 
-    .status-buttons {
+    .st-btns {
       display: flex;
       gap: 6px;
-      flex-wrap: wrap;
+      flex-wrap: wrap
     }
 
-    @media (max-width: 768px) {
+    /* ═══════════════════════════════════════
+         RESPONSIVE
+      ═══════════════════════════════════════ */
+    @media(max-width:768px) {
       .admin-nav {
-        display: none;
+        display: none
       }
 
       .admin-content {
-        padding: 20px 16px;
+        padding: 18px 14px
       }
 
       .form-row,
-      .date-range-wrapper,
-      .meta-date-row {
-        grid-template-columns: 1fr;
+      .two-col {
+        grid-template-columns: 1fr
       }
 
-      .section-header {
+      .sec-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 12px;
+        gap: 10px
       }
 
-      .modal-overlay {
-        padding: 20px 12px;
+      .modal-ov {
+        padding: 16px 10px
       }
 
       .panel-header {
-        padding: 0 16px;
+        padding: 0 14px
       }
 
       .mobile-nav {
@@ -1128,13 +1161,13 @@
         bottom: 0;
         left: 0;
         right: 0;
-        background: hsla(215, 28%, 7%, 0.9);
+        background: hsla(215, 28%, 7%, .92);
         backdrop-filter: blur(12px);
         border-top: 1px solid var(--border);
         z-index: 20;
         overflow-x: auto;
-        padding: 6px;
-        gap: 2px;
+        padding: 5px;
+        gap: 2px
       }
 
       .mobile-nav button {
@@ -1143,39 +1176,39 @@
         flex-direction: column;
         align-items: center;
         gap: 2px;
-        padding: 8px 12px;
+        padding: 7px 10px;
         font-size: 9px;
         color: var(--text-3);
-        border-radius: var(--radius);
-        min-width: 56px;
+        border-radius: var(--r);
+        min-width: 52px
       }
 
       .mobile-nav button ion-icon {
-        font-size: 18px;
+        font-size: 17px
       }
 
       .mobile-nav button.active {
         color: var(--accent);
-        background: var(--accent-bg);
+        background: var(--accent-bg)
       }
 
       .panel-body {
-        padding-bottom: 72px;
+        padding-bottom: 68px
       }
 
       .status-card {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: flex-start
       }
 
-      .date-picker-dropdown {
-        min-width: 260px;
+      .dp-drop {
+        min-width: 250px
       }
     }
 
-    @media (min-width: 769px) {
+    @media(min-width:769px) {
       .mobile-nav {
-        display: none;
+        display: none
       }
     }
   </style>
@@ -1183,37 +1216,29 @@
 
 <body>
 
-  <!-- LOGIN -->
+  <!-- ═══ LOGIN ═══ -->
   <div id="login-screen">
     <div class="login-card">
-      <div class="login-logo">
-        <span class="bracket">&lt;</span>YM<span class="slash">/</span><span class="bracket">&gt;</span>
-      </div>
-      <p class="login-subtitle">Portfolio Admin Panel</p>
+      <div class="login-logo"><span class="br">&lt;</span>YM<span class="sl">/</span><span class="br">&gt;</span></div>
+      <p class="login-sub">Portfolio Admin Panel</p>
       <form id="login-form">
-        <div class="field">
-          <label for="login-user">Username</label>
-          <input id="login-user" type="text" placeholder="admin" autocomplete="username" required />
-        </div>
-        <div class="field">
-          <label for="login-pass">Password</label>
-          <input id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password" required />
-        </div>
+        <div class="field"><label for="lu">Username</label><input id="lu" type="text" placeholder="admin"
+            autocomplete="username" required /></div>
+        <div class="field"><label for="lp">Password</label><input id="lp" type="password" placeholder="••••••••"
+            autocomplete="current-password" required /></div>
         <button class="btn btn-primary btn-lg" type="submit" style="width:100%;margin-top:8px">Sign In</button>
       </form>
-      <div class="login-error" id="login-error"></div>
+      <div class="login-err" id="login-err"></div>
     </div>
   </div>
 
-  <!-- PANEL -->
+  <!-- ═══ PANEL ═══ -->
   <div id="admin-panel">
     <header class="panel-header">
-      <div class="panel-logo">
-        <span>&lt;<span class="accent">YM</span>/&gt;</span>
-        <span class="badge">CMS</span>
+      <div class="panel-logo"><span>&lt;<span class="accent">YM</span>/&gt;</span><span class="cms-badge">CMS</span>
       </div>
-      <div class="panel-header-right">
-        <span class="panel-user" id="panel-username"></span>
+      <div class="ph-right">
+        <span class="ph-user" id="ph-user"></span>
         <a href="/" class="btn btn-ghost btn-sm" target="_blank">View Site</a>
         <button class="btn btn-ghost btn-sm" id="logout-btn">Logout</button>
       </div>
@@ -1225,46 +1250,49 @@
     <nav class="mobile-nav" id="mobile-nav"></nav>
   </div>
 
-  <!-- MODAL -->
-  <div class="modal-overlay" id="modal-overlay">
+  <!-- ═══ MODAL ═══ -->
+  <div class="modal-ov" id="modal-ov">
     <div class="modal-box" id="modal-box"></div>
   </div>
 
-  <!-- CONFIRM -->
-  <div class="confirm-overlay" id="confirm-overlay">
-    <div class="confirm-box">
-      <h3 id="confirm-title">Are you sure?</h3>
-      <p id="confirm-text">This action cannot be undone.</p>
-      <div class="confirm-actions">
-        <button class="btn btn-ghost" id="confirm-cancel">Cancel</button>
-        <button class="btn btn-danger" id="confirm-ok">Delete</button>
+  <!-- ═══ CONFIRM ═══ -->
+  <div class="cfm-ov" id="cfm-ov">
+    <div class="cfm-box">
+      <h3 id="cfm-title">Are you sure?</h3>
+      <p id="cfm-text">This action cannot be undone.</p>
+      <div class="cfm-acts">
+        <button class="btn btn-ghost" id="cfm-cancel">Cancel</button>
+        <button class="btn btn-danger" id="cfm-ok">Delete</button>
       </div>
     </div>
   </div>
 
-  <div id="toast-container"></div>
+  <!-- ═══ TOASTS ═══ -->
+  <div id="toasts"></div>
 
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
   <script>
-    // ═══════════════════════════════════════
-    // CORE UTILITIES
-    // ═══════════════════════════════════════
-    const $ = (sel, ctx = document) => ctx.querySelector(sel);
-    const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
+    "use strict";
+    /* ═══════════════════════════════════════════════════════════════
+       1. CORE UTILITIES
+    ═══════════════════════════════════════════════════════════════ */
+    const $ = (s, c = document) => c.querySelector(s);
+    const $$ = (s, c = document) => [...c.querySelectorAll(s)];
     const API = "/api";
     let TOKEN = localStorage.getItem("admin_token");
-    let currentTab = "";
-    let currentUsername = "";
+    let currentTab = "", currentUser = "";
 
-    function esc(str) {
+    /* safe HTML escape */
+    const esc = (v) => {
       const d = document.createElement("div");
-      d.textContent = str == null ? "" : String(str);
+      d.textContent = v == null ? "" : String(v);
       return d.innerHTML;
-    }
+    };
 
-    async function api(endpoint, method = "GET", body = null) {
+    /* authenticated fetch */
+    async function apiFetch(endpoint, method = "GET", body = null) {
       const opts = { method, headers: { Authorization: "Bearer " + TOKEN } };
       if (body) { opts.headers["Content-Type"] = "application/json"; opts.body = JSON.stringify(body); }
       const res = await fetch(API + endpoint, opts);
@@ -1274,751 +1302,499 @@
       return data;
     }
 
-    function toast(msg, type = "success") {
+    /* toast */
+    function toast(msg, type = "ok") {
       const el = document.createElement("div");
-      el.className = "toast toast-" + type;
-      el.innerHTML = '<ion-icon name="' + (type === "success" ? "checkmark-circle" : "alert-circle") + '"></ion-icon>' + esc(msg);
-      $("#toast-container").appendChild(el);
+      el.className = "toast " + type;
+      el.innerHTML = `<ion-icon name="${type === "ok" ? "checkmark-circle" : "alert-circle"}"></ion-icon>${esc(msg)}`;
+      $("#toasts").appendChild(el);
       requestAnimationFrame(() => el.classList.add("show"));
       setTimeout(() => { el.classList.remove("show"); setTimeout(() => el.remove(), 300); }, 3500);
     }
 
-    function confirmDialog(title, text) {
-      return new Promise((resolve) => {
-        $("#confirm-title").textContent = title;
-        $("#confirm-text").textContent = text;
-        $("#confirm-overlay").classList.add("active");
-        const done = (v) => { $("#confirm-overlay").classList.remove("active"); resolve(v); };
-        $("#confirm-cancel").onclick = () => done(false);
-        $("#confirm-ok").onclick = () => done(true);
+    /* confirm dialog */
+    function confirm(title, text) {
+      return new Promise(resolve => {
+        $("#cfm-title").textContent = title;
+        $("#cfm-text").textContent = text;
+        $("#cfm-ov").classList.add("open");
+        const done = v => { $("#cfm-ov").classList.remove("open"); resolve(v); };
+        $("#cfm-cancel").onclick = () => done(false);
+        $("#cfm-ok").onclick = () => done(true);
       });
     }
 
-    function openModal(html) { $("#modal-box").innerHTML = html; $("#modal-overlay").classList.add("active"); }
-    function closeModal() { $("#modal-overlay").classList.remove("active"); }
+    /* modal */
+    const openModal = html => { $("#modal-box").innerHTML = html; $("#modal-ov").classList.add("open"); };
+    const closeModal = () => { $("#modal-ov").classList.remove("open"); };
 
-    $("#modal-overlay").addEventListener("click", (e) => { if (e.target.id === "modal-overlay") closeModal(); });
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        closeModal();
-        $("#confirm-overlay").classList.remove("active");
-        document.querySelectorAll(".date-picker-dropdown.open").forEach(d => d.classList.remove("open"));
-        document.querySelectorAll(".date-picker-trigger.open").forEach(d => d.classList.remove("open"));
-      }
+    $("#modal-ov").addEventListener("click", e => { if (e.target.id === "modal-ov") closeModal(); });
+    document.addEventListener("keydown", e => {
+      if (e.key !== "Escape") return;
+      closeModal();
+      $("#cfm-ov").classList.remove("open");
+      closePickers();
     });
 
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const r = new FileReader();
-        r.onload = () => resolve(r.result);
-        r.onerror = reject;
-        r.readAsDataURL(file);
-      });
-    }
+    /* close all open pickers */
+    const closePickers = () => {
+      $$(".dp-drop.open").forEach(d => d.classList.remove("open"));
+      $$(".dp-trigger.open").forEach(t => t.classList.remove("open"));
+    };
+    document.addEventListener("click", e => {
+      if (!e.target.closest(".dp-wrap") && !e.target.closest(".meta-box")) closePickers();
+    }, true);
 
-    function bindImageUploads(ctx) {
-      $$("[data-upload]", ctx || $("#modal-box")).forEach((input) => {
-        const key = input.dataset.upload;
-        input.addEventListener("change", async () => {
-          const file = input.files[0];
+    /* file → base64 */
+    const toBase64 = file => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
+
+    /* bind image upload inputs inside a container */
+    function bindUploads(ctx = $("#modal-box")) {
+      $$("[data-upload]", ctx).forEach(inp => {
+        inp.addEventListener("change", async () => {
+          const key = inp.dataset.upload, file = inp.files[0];
           if (!file) return;
-          if (file.size > 5 * 1024 * 1024) { toast("Image must be under 5MB", "error"); return; }
-          const status = $('[data-upload-status="' + key + '"]');
-          const preview = $('[data-preview="' + key + '"]');
-          const hidden = $('input[name="' + key + '"]');
-          if (status) { status.textContent = "Uploading..."; status.className = "upload-status uploading"; }
+          if (file.size > 5 * 1024 * 1024) { toast("Image must be < 5 MB", "err"); return; }
+          const st = $(`[data-ust="${key}"]`, ctx), pr = $(`[data-preview="${key}"]`, ctx), hid = $(`[name="${key}"]`, ctx);
+          if (st) { st.textContent = "Uploading…"; st.className = "upload-st busy"; }
           try {
-            const base64 = await fileToBase64(file);
-            const data = await api("/upload", "POST", { image: base64 });
-            if (hidden) hidden.value = data.url;
-            if (preview) preview.src = data.url;
-            if (status) { status.textContent = "✓ Uploaded"; status.className = "upload-status success"; }
+            const d = await apiFetch("/upload", "POST", { image: await toBase64(file) });
+            if (hid) hid.value = d.url;
+            if (pr) pr.src = d.url;
+            if (st) { st.textContent = "✓ Uploaded"; st.className = "upload-st ok"; }
           } catch (err) {
-            if (status) { status.textContent = "✗ " + err.message; status.className = "upload-status error"; }
+            if (st) { st.textContent = "✗ " + err.message; st.className = "upload-st err"; }
           }
         });
       });
     }
 
-    // ═══════════════════════════════════════
-    // DATE PICKER ENGINE
-    // ═══════════════════════════════════════
-    const MONTH_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const MONTH_FULL = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    /* ═══════════════════════════════════════════════════════════════
+       2. DATE PICKER ENGINE  (single source of truth)
+       All pickers are created from one factory + one binder.
+    ═══════════════════════════════════════════════════════════════ */
+    const MONTHS_S = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const MONTHS_F = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-    function parseDateStr(str) {
-      if (!str) return { month: null, year: null, isPresent: false };
+    /* parse "Feb 2026", "January 2025", etc. → {m,y} or null */
+    function parseMY(str = "") {
       str = str.trim();
-      if (/^no\s*expir/i.test(str)) return { month: null, year: null, isPresent: false };
-      const m = str.match(/^(\w+)\s+(\d{4})/);
-      if (m) {
-        const idx = MONTH_FULL.findIndex(n => n.toLowerCase().startsWith(m[1].toLowerCase().slice(0, 3)));
-        if (idx >= 0) return { month: idx, year: parseInt(m[2], 10), isPresent: false };
-      }
-      return { month: null, year: null, isPresent: false };
+      const match = str.match(/^(\w+)\s+(\d{4})/);
+      if (!match) return null;
+      const mi = MONTHS_F.findIndex(n => n.toLowerCase().startsWith(match[1].toLowerCase().slice(0, 3)));
+      if (mi < 0) return null;
+      return { m: mi, y: parseInt(match[2], 10) };
     }
 
-    function formatDateObj(obj) {
-      if (!obj) return "";
-      if (obj.isPresent) return "Present";
-      if (obj.month === null || obj.year === null) return "";
-      return MONTH_SHORT[obj.month] + " " + obj.year;
-    }
+    /* {m,y} → "Feb 2026" */
+    const fmtMY = ({ m, y }) => MONTHS_S[m] + " " + y;
 
-    // ── Duration Computation (mirrors frontend calcDuration) ──
-    function computeDurationStr(startObj, endObj) {
-      if (!startObj || startObj.month === null) return "";
+    /* compute duration between two {m,y} objects (end may be null = present) */
+    function calcDur(start, end) {
+      if (!start) return "";
       const now = new Date();
-      const start = new Date(startObj.year, startObj.month, 1);
-      const end = endObj && endObj.isPresent
-        ? new Date(now.getFullYear(), now.getMonth(), 1)
-        : endObj && endObj.month !== null
-          ? new Date(endObj.year, endObj.month, 1)
-          : null;
-      if (!end) return "";
-      const totalMonths = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
-      if (totalMonths < 0) return "";
-      if (totalMonths < 1) return "< 1 month";
-      const years = Math.floor(totalMonths / 12);
-      const months = totalMonths % 12;
-      const parts = [];
-      if (years > 0) parts.push(years + " year" + (years > 1 ? "s" : ""));
-      if (months > 0) parts.push(months + " month" + (months > 1 ? "s" : ""));
-      return parts.join(" ");
+      const e = end ?? { m: now.getMonth(), y: now.getFullYear() };
+      const tot = (e.y - start.y) * 12 + (e.m - start.m);
+      if (tot < 0) return "";
+      if (tot < 1) return "< 1 month";
+      const yr = Math.floor(tot / 12), mo = tot % 12, p = [];
+      if (yr) p.push(yr + " year" + (yr > 1 ? "s" : ""));
+      if (mo) p.push(mo + " month" + (mo > 1 ? "s" : ""));
+      return p.join(" ");
     }
 
-    // ─────────────────────────────────────────────────────────
-    // buildSingleDatePicker — single month/year calendar
-    // ─────────────────────────────────────────────────────────
-    function buildSingleDatePicker(fieldName, initialValue, opts = {}) {
-      const id = "dp_" + fieldName + "_" + Math.random().toString(36).slice(2, 7);
-      const parsed = parseDateStr(initialValue);
-      const displayText = initialValue || "";
-      const placeholder = opts.placeholder || "Select month & year";
-      const allowNone = !!opts.allowNone;
-      const noneLabel = opts.noneLabel || "No Expiration";
+    /* ── unique id generator ── */
+    let _uid = 0;
+    const uid = () => "dp" + (++_uid);
 
-      return `
-          <div class="date-single-wrapper" id="${id}_wrap">
-            <button type="button" class="date-picker-trigger" id="${id}_trigger">
-              <ion-icon name="calendar-outline"></ion-icon>
-              <span class="trigger-text ${displayText ? "" : "placeholder"}" id="${id}_display">
-                ${esc(displayText || placeholder)}
-              </span>
-              <ion-icon name="chevron-down-outline" style="color:var(--text-3);font-size:14px"></ion-icon>
-            </button>
-            <input type="hidden" name="${fieldName}" id="${id}_hidden" value="${esc(initialValue || "")}" />
-            <div class="date-picker-dropdown" id="${id}_drop">
-              ${allowNone ? `
-              <div class="cal-present-row" id="${id}_none_row">
-                <span class="cal-present-label">
-                  <ion-icon name="infinite-outline"></ion-icon>${esc(noneLabel)}
-                </span>
-                <div class="cal-toggle" id="${id}_none_toggle"></div>
-              </div>` : ""}
-              <div id="${id}_picker_body">
-                <div class="cal-header">
-                  <button type="button" class="btn btn-ghost btn-icon" id="${id}_prev">‹</button>
-                  <span class="cal-year-label" id="${id}_year_label">2025</span>
-                  <button type="button" class="btn btn-ghost btn-icon" id="${id}_next">›</button>
-                </div>
-                <div class="cal-month-grid" id="${id}_month_grid"></div>
-              </div>
-              <div class="cal-footer">
-                <button type="button" class="btn btn-ghost btn-sm" id="${id}_clear">Clear</button>
-                <button type="button" class="btn btn-primary btn-sm" id="${id}_apply">Apply</button>
-              </div>
+    /* ─────────────────────────────────────────────
+       buildPicker(opts) → { html, bind(rootEl) }
+  
+       opts = {
+         name       : string          // hidden input name
+         value      : string          // current value
+         placeholder: string
+         hasPresent : bool            // show "Currently here" toggle
+         hasNone    : bool            // show "No Expiration" toggle
+         noneLabel  : string
+         onApply    : fn(val)         // called with final string when applied
+       }
+    ───────────────────────────────────────────── */
+    function buildPicker(opts = {}) {
+      const id = uid();
+      const val = opts.value || "";
+      const ph = opts.placeholder || "Select month & year";
+      const parsed = parseMY(val);
+      const isNoneNow = /^no\s*expir/i.test(val);
+      const isPresentNow = /^present$/i.test(val);
+
+      /* display text */
+      const dispTxt = isPresentNow ? "Present" : isNoneNow ? "No Expiration" : (parsed ? fmtMY(parsed) : "");
+
+      const html = `
+      <div class="dp-wrap" id="${id}w">
+        <button type="button" class="dp-trigger${dispTxt ? "" : " "}" id="${id}t">
+          <ion-icon class="cal-icon" name="calendar-outline"></ion-icon>
+          <span class="dp-text${dispTxt ? "" : " ph"}" id="${id}d">${esc(dispTxt || ph)}</span>
+          <ion-icon class="chev" name="chevron-down-outline"></ion-icon>
+        </button>
+        <input type="hidden" name="${opts.name}" id="${id}h" value="${esc(val)}" />
+        <div class="dp-drop" id="${id}drop">
+          ${opts.hasPresent ? `
+          <div class="dp-toggle-row${isPresentNow ? " on" : ""}" id="${id}pr">
+            <span class="dp-toggle-label"><ion-icon name="radio-button-on-outline"></ion-icon>Currently working here</span>
+            <div class="toggle-pill${isPresentNow ? " on" : ""}" id="${id}pt"></div>
+          </div>`: ""}
+          ${opts.hasNone ? `
+          <div class="dp-toggle-row${isNoneNow ? " on" : ""}" id="${id}nr">
+            <span class="dp-toggle-label"><ion-icon name="infinite-outline"></ion-icon>${esc(opts.noneLabel || "No Expiration")}</span>
+            <div class="toggle-pill${isNoneNow ? " on" : ""}" id="${id}nt"></div>
+          </div>`: ""}
+          <div class="dp-body${(isPresentNow || isNoneNow) ? " disabled" : ""}" id="${id}body">
+            <div class="dp-year-nav">
+              <button type="button" id="${id}py">‹</button>
+              <span class="dp-year-val" id="${id}yr">${parsed ? parsed.y : new Date().getFullYear()}</span>
+              <button type="button" id="${id}ny">›</button>
             </div>
-          </div>`;
-    }
-
-    // ─────────────────────────────────────────────────────────
-    // buildDateRangePicker — start + end with Present toggle
-    // ─────────────────────────────────────────────────────────
-    function buildDateRangePicker(fieldName, initialValue) {
-      const id = "drp_" + fieldName + "_" + Math.random().toString(36).slice(2, 7);
-      let startObj = { month: null, year: null, isPresent: false };
-      let endObj = { month: null, year: null, isPresent: false };
-
-      if (initialValue) {
-        const cleaned = initialValue.replace(/·.*$/, "").trim();
-        const parts = cleaned.split(/\s*[—–]\s*|\s*--\s*|\s+-\s+/);
-        if (parts.length >= 2) {
-          startObj = parseDateStr(parts[0]);
-          const endTok = parts[1].trim();
-          if (/^present$/i.test(endTok)) endObj = { month: null, year: null, isPresent: true };
-          else endObj = parseDateStr(endTok);
-        }
-      }
-
-      const startDisplay = formatDateObj(startObj) || "Start date";
-      const endDisplay = endObj.isPresent ? "Present" : (formatDateObj(endObj) || "End date");
-
-      return `
-          <div class="date-range-wrapper" id="${id}_wrap">
-            <div>
-              <div class="date-range-label">Start</div>
-              <div class="date-single-wrapper" id="${id}_s_wrap">
-                <button type="button" class="date-picker-trigger" id="${id}_s_trigger">
-                  <ion-icon name="calendar-outline"></ion-icon>
-                  <span class="trigger-text ${startObj.month !== null ? "" : "placeholder"}" id="${id}_s_display">${esc(startDisplay)}</span>
-                  <ion-icon name="chevron-down-outline" style="color:var(--text-3);font-size:14px"></ion-icon>
-                </button>
-                <div class="date-picker-dropdown" id="${id}_s_drop">
-                  <div class="cal-header">
-                    <button type="button" class="btn btn-ghost btn-icon" id="${id}_s_prev">‹</button>
-                    <span class="cal-year-label" id="${id}_s_year_label">2024</span>
-                    <button type="button" class="btn btn-ghost btn-icon" id="${id}_s_next">›</button>
-                  </div>
-                  <div class="cal-month-grid" id="${id}_s_month_grid"></div>
-                  <div class="cal-footer">
-                    <button type="button" class="btn btn-ghost btn-sm" id="${id}_s_clear">Clear</button>
-                    <button type="button" class="btn btn-primary btn-sm" id="${id}_s_apply">Apply</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="date-range-label">End</div>
-              <div class="date-single-wrapper" id="${id}_e_wrap">
-                <button type="button" class="date-picker-trigger" id="${id}_e_trigger">
-                  <ion-icon name="calendar-outline"></ion-icon>
-                  <span class="trigger-text ${endObj.isPresent || endObj.month !== null ? "" : "placeholder"}" id="${id}_e_display">${esc(endDisplay)}</span>
-                  <ion-icon name="chevron-down-outline" style="color:var(--text-3);font-size:14px"></ion-icon>
-                </button>
-                <div class="date-picker-dropdown" id="${id}_e_drop">
-                  <div class="cal-present-row ${endObj.isPresent ? "active" : ""}" id="${id}_e_present_row">
-                    <span class="cal-present-label">
-                      <ion-icon name="radio-button-on-outline"></ion-icon>Currently working here
-                    </span>
-                    <div class="cal-toggle ${endObj.isPresent ? "on" : ""}" id="${id}_e_toggle"></div>
-                  </div>
-                  <div id="${id}_e_picker_body" style="${endObj.isPresent ? "opacity:0.4;pointer-events:none" : ""}">
-                    <div class="cal-header">
-                      <button type="button" class="btn btn-ghost btn-icon" id="${id}_e_prev">‹</button>
-                      <span class="cal-year-label" id="${id}_e_year_label">2025</span>
-                      <button type="button" class="btn btn-ghost btn-icon" id="${id}_e_next">›</button>
-                    </div>
-                    <div class="cal-month-grid" id="${id}_e_month_grid"></div>
-                  </div>
-                  <div class="cal-footer">
-                    <button type="button" class="btn btn-ghost btn-sm" id="${id}_e_clear">Clear</button>
-                    <button type="button" class="btn btn-primary btn-sm" id="${id}_e_apply">Apply</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div class="dp-months" id="${id}mg"></div>
           </div>
-          <input type="hidden" name="${fieldName}" id="${id}_hidden" value="${esc(initialValue || "")}" />`;
-    }
-
-    // ─────────────────────────────────────────────────────────
-    // buildMetaField — Duration (calendar) + Location (text)
-    // Stores as "X months · Location" or just "X months"
-    // ─────────────────────────────────────────────────────────
-    function buildMetaField(fieldName, initialValue) {
-      const id = "meta_" + Math.random().toString(36).slice(2, 7);
-
-      // Parse existing meta: "7 months · Addis Ababa, Ethiopia"
-      let existingLocation = "";
-      let existingDuration = "";
-
-      if (initialValue) {
-        const dotIdx = initialValue.indexOf("·");
-        if (dotIdx !== -1) {
-          existingDuration = initialValue.slice(0, dotIdx).trim();
-          existingLocation = initialValue.slice(dotIdx + 1).trim();
-        } else {
-          // Check if it looks like a duration or just location
-          if (/\d+\s*(month|year)/i.test(initialValue)) {
-            existingDuration = initialValue.trim();
-          } else {
-            existingLocation = initialValue.trim();
-          }
-        }
-      }
-
-      const previewText = initialValue || "";
-
-      return `
-          <div class="meta-field-box" id="${id}_box">
-            <!-- Live Preview -->
-            <div>
-              <div class="meta-section-label">Preview</div>
-              <div class="meta-duration-preview" id="${id}_preview">
-                <ion-icon name="time-outline"></ion-icon>
-                <span class="preview-text ${previewText ? "" : "empty"}" id="${id}_preview_text">
-                  ${esc(previewText || "Duration will appear here...")}
-                </span>
-              </div>
-            </div>
-
-            <!-- Date Range for duration calculation -->
-            <div>
-              <div class="meta-section-label">📅 Date Range (for auto-duration)</div>
-              <div class="meta-date-row">
-                <!-- Start -->
-                <div>
-                  <div class="date-range-label">Start</div>
-                  <div class="date-single-wrapper" id="${id}_s_wrap">
-                    <button type="button" class="date-picker-trigger" id="${id}_s_trigger">
-                      <ion-icon name="calendar-outline"></ion-icon>
-                      <span class="trigger-text placeholder" id="${id}_s_display">Start date</span>
-                      <ion-icon name="chevron-down-outline" style="color:var(--text-3);font-size:14px"></ion-icon>
-                    </button>
-                    <div class="date-picker-dropdown" id="${id}_s_drop">
-                      <div class="cal-header">
-                        <button type="button" class="btn btn-ghost btn-icon" id="${id}_s_prev">‹</button>
-                        <span class="cal-year-label" id="${id}_s_year_label">2024</span>
-                        <button type="button" class="btn btn-ghost btn-icon" id="${id}_s_next">›</button>
-                      </div>
-                      <div class="cal-month-grid" id="${id}_s_month_grid"></div>
-                      <div class="cal-footer">
-                        <button type="button" class="btn btn-ghost btn-sm" id="${id}_s_clear">Clear</button>
-                        <button type="button" class="btn btn-primary btn-sm" id="${id}_s_apply">Apply</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- End -->
-                <div>
-                  <div class="date-range-label">End</div>
-                  <div class="date-single-wrapper" id="${id}_e_wrap">
-                    <button type="button" class="date-picker-trigger" id="${id}_e_trigger">
-                      <ion-icon name="calendar-outline"></ion-icon>
-                      <span class="trigger-text placeholder" id="${id}_e_display">End date</span>
-                      <ion-icon name="chevron-down-outline" style="color:var(--text-3);font-size:14px"></ion-icon>
-                    </button>
-                    <div class="date-picker-dropdown" id="${id}_e_drop">
-                      <div class="cal-present-row" id="${id}_e_present_row">
-                        <span class="cal-present-label">
-                          <ion-icon name="radio-button-on-outline"></ion-icon>Currently here
-                        </span>
-                        <div class="cal-toggle" id="${id}_e_toggle"></div>
-                      </div>
-                      <div id="${id}_e_picker_body">
-                        <div class="cal-header">
-                          <button type="button" class="btn btn-ghost btn-icon" id="${id}_e_prev">‹</button>
-                          <span class="cal-year-label" id="${id}_e_year_label">2025</span>
-                          <button type="button" class="btn btn-ghost btn-icon" id="${id}_e_next">›</button>
-                        </div>
-                        <div class="cal-month-grid" id="${id}_e_month_grid"></div>
-                      </div>
-                      <div class="cal-footer">
-                        <button type="button" class="btn btn-ghost btn-sm" id="${id}_e_clear">Clear</button>
-                        <button type="button" class="btn btn-primary btn-sm" id="${id}_e_apply">Apply</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Location -->
-            <div>
-              <div class="meta-section-label">📍 Location (optional)</div>
-              <div class="meta-loc-row">
-                <ion-icon name="location-outline"></ion-icon>
-                <input
-                  type="text"
-                  id="${id}_location"
-                  placeholder="e.g. Addis Ababa, Ethiopia"
-                  value="${esc(existingLocation)}"
-                />
-              </div>
-            </div>
+          <div class="dp-footer">
+            <button type="button" class="btn btn-ghost btn-sm" id="${id}cl">Clear</button>
+            <button type="button" class="btn btn-primary btn-sm" id="${id}ap">Apply</button>
           </div>
-          <input type="hidden" name="${fieldName}" id="${id}_hidden" value="${esc(initialValue || "")}" />`;
-    }
+        </div>
+      </div>`;
 
-    // ─────────────────────────────────────────────────────────
-    // bindDatePickers — wires all pickers inside a container
-    // ─────────────────────────────────────────────────────────
-    function bindDatePickers(ctx) {
-      ctx = ctx || document;
+      /* binder — call after HTML is in DOM */
+      function bind(root = document) {
+        let selM = parsed ? parsed.m : null;
+        let selY = parsed ? parsed.y : new Date().getFullYear();
+        let present = isPresentNow;
+        let none = isNoneNow;
 
-      // Close on outside click
-      document.addEventListener("click", (e) => {
-        if (!e.target.closest(".date-single-wrapper") && !e.target.closest(".meta-field-box")) {
-          document.querySelectorAll(".date-picker-dropdown.open").forEach(d => d.classList.remove("open"));
-          document.querySelectorAll(".date-picker-trigger.open").forEach(t => t.classList.remove("open"));
+        const T = root.getElementById(id + "t");
+        const D = root.getElementById(id + "d");
+        const H = root.getElementById(id + "h");
+        const drop = root.getElementById(id + "drop");
+        const body = root.getElementById(id + "body");
+        const yrEl = root.getElementById(id + "yr");
+        const mg = root.getElementById(id + "mg");
+        const prRow = root.getElementById(id + "pr");
+        const prPl = root.getElementById(id + "pt");
+        const nrRow = root.getElementById(id + "nr");
+        const nrPl = root.getElementById(id + "nt");
+
+        /* render month grid */
+        function renderMonths() {
+          if (!yrEl || !mg) return;
+          yrEl.textContent = selY;
+          mg.innerHTML = MONTHS_S.map((m, i) =>
+            `<button type="button" class="dp-month${selM === i && !present && !none ? " sel" : ""}" data-m="${i}">${m}</button>`
+          ).join("");
+          mg.querySelectorAll(".dp-month").forEach(b => b.addEventListener("click", () => {
+            selM = +b.dataset.m; present = false; none = false;
+            syncToggles(); renderMonths();
+          }));
         }
-      }, { capture: true });
 
-      // ── Bind meta fields (Duration + Location) ──
-      ctx.querySelectorAll("[id$='_box']").forEach(box => {
-        const id = box.id.replace("_box", "");
-        bindMetaField(id, box);
-      });
-
-      // ── Bind single date pickers (issue_date, expiry) ──
-      ctx.querySelectorAll("[id$='_wrap']").forEach(wrap => {
-        const wid = wrap.id;
-        // Skip range sub-wrappers and meta sub-wrappers
-        if (wid.endsWith("_s_wrap") || wid.endsWith("_e_wrap")) return;
-        // Skip if inside a meta box (already handled above)
-        if (wrap.closest("[id$='_box']")) return;
-        // Skip range wrappers that contain _s_drop
-        if (wrap.querySelector("[id$='_s_drop']")) return;
-        const id = wid.replace("_wrap", "");
-        if (document.getElementById(id + "_trigger")) {
-          initSinglePicker(id);
+        /* toggle the present/none rows visually */
+        function syncToggles() {
+          if (prRow) { prRow.classList.toggle("on", present); prPl.classList.toggle("on", present); }
+          if (nrRow) { nrRow.classList.toggle("on", none); nrPl.classList.toggle("on", none); }
+          if (body) body.classList.toggle("disabled", present || none);
         }
-      });
 
-      // ── Bind date range pickers (date_range field) ──
-      ctx.querySelectorAll("[id$='_wrap']").forEach(wrap => {
-        if (wrap.closest("[id$='_box']")) return; // skip meta
-        if (wrap.id.endsWith("_s_wrap") || wrap.id.endsWith("_e_wrap")) return;
-        if (wrap.querySelector("[id$='_s_drop']")) {
-          const baseId = wrap.id.replace("_wrap", "");
-          initRangePicker(baseId);
-        }
-      });
-    }
+        /* present row click */
+        prRow?.addEventListener("click", () => { present = !present; if (present) none = false; syncToggles(); renderMonths(); });
+        /* none row click */
+        nrRow?.addEventListener("click", () => { none = !none; if (none) present = false; syncToggles(); renderMonths(); });
 
-    // ── Meta Field Binder ──
-    function bindMetaField(id, box) {
-      const hiddenEl = document.getElementById(id + "_hidden");
-      const previewEl = document.getElementById(id + "_preview_text");
-      const locationEl = document.getElementById(id + "_location");
+        /* year nav */
+        root.getElementById(id + "py")?.addEventListener("click", () => { selY--; renderMonths(); });
+        root.getElementById(id + "ny")?.addEventListener("click", () => { selY++; renderMonths(); });
 
-      if (!hiddenEl || !previewEl || !locationEl) return;
+        /* clear */
+        root.getElementById(id + "cl")?.addEventListener("click", () => {
+          selM = null; present = false; none = false;
+          H.value = ""; D.textContent = ph; D.classList.add("ph");
+          syncToggles(); renderMonths(); closeThisDrop();
+          opts.onApply?.("");
+        });
 
-      let startObj = { month: null, year: null };
-      let endObj = { month: null, year: null, isPresent: false };
+        /* apply */
+        root.getElementById(id + "ap")?.addEventListener("click", () => {
+          let val = "";
+          if (present) val = "Present";
+          else if (none) val = opts.noneLabel || "No Expiration";
+          else if (selM !== null) val = fmtMY({ m: selM, y: selY });
+          H.value = val;
+          D.textContent = val || ph;
+          D.classList.toggle("ph", !val);
+          closeThisDrop();
+          opts.onApply?.(val);
+        });
 
-      function updatePreviewAndHidden() {
-        const dur = computeDurationStr(startObj, endObj);
-        const loc = locationEl.value.trim();
-        let val = "";
-        if (dur && loc) val = dur + " · " + loc;
-        else if (dur) val = dur;
-        else if (loc) val = loc;
-        hiddenEl.value = val;
-        previewEl.textContent = val || "Duration will appear here...";
-        previewEl.className = "preview-text" + (val ? "" : " empty");
+        /* open/close toggle */
+        function closeThisDrop() { drop.classList.remove("open"); T.classList.remove("open"); }
+        T.addEventListener("click", e => {
+          e.stopPropagation();
+          const wasOpen = drop.classList.contains("open");
+          closePickers();
+          if (!wasOpen) { drop.classList.add("open"); T.classList.add("open"); renderMonths(); }
+        });
+        drop.addEventListener("click", e => e.stopPropagation());
+
+        renderMonths();
       }
 
-      locationEl.addEventListener("input", updatePreviewAndHidden);
-
-      // Start half
-      bindMetaHalf(id + "_s", false, (obj) => {
-        startObj = obj;
-        updatePreviewAndHidden();
-      });
-
-      // End half
-      bindMetaHalf(id + "_e", true, (obj) => {
-        endObj = obj;
-        updatePreviewAndHidden();
-      });
+      return { html, bind };
     }
 
-    function bindMetaHalf(id, hasPresent, onChange) {
-      const trigger = document.getElementById(id + "_trigger");
-      const drop = document.getElementById(id + "_drop");
-      const display = document.getElementById(id + "_display");
-      const presentRow = hasPresent ? document.getElementById(id + "_present_row") : null;
-      const presToggle = hasPresent ? document.getElementById(id + "_toggle") : null;
-      const pickerBody = hasPresent ? document.getElementById(id + "_picker_body") : null;
+    /* ─────────────────────────────────────────────
+       buildRangePicker(name, value) → { html, bind }
+       Produces "Feb 2026 — Present" stored in one hidden input.
+    ───────────────────────────────────────────── */
+    function buildRangePicker(name, value = "") {
+      const rid = uid();
 
-      if (!trigger || !drop || !display) return;
+      /* parse existing range */
+      let sObj = null, eObj = null, eIsPresent = false;
+      const cleaned = value.replace(/·.*$/, "").trim();
+      const parts = cleaned.split(/\s*[—–]\s*|\s*--\s*|\s+-\s+/);
+      if (parts.length >= 2) {
+        sObj = parseMY(parts[0]);
+        eIsPresent = /^present$/i.test(parts[1].trim());
+        if (!eIsPresent) eObj = parseMY(parts[1]);
+      }
 
-      let selMonth = null;
-      let selYear = new Date().getFullYear();
-      let isPresent = false;
+      const sVal = sObj ? fmtMY(sObj) : "";
+      const eVal = eIsPresent ? "Present" : (eObj ? fmtMY(eObj) : "");
 
-      function renderGrid() {
-        const yearLabel = document.getElementById(id + "_year_label");
-        const monthGrid = document.getElementById(id + "_month_grid");
-        if (!yearLabel || !monthGrid) return;
-        yearLabel.textContent = selYear;
-        monthGrid.innerHTML = MONTH_SHORT.map((m, i) =>
-          `<button type="button" class="cal-month-btn ${selMonth === i && !isPresent ? "selected" : ""}" data-m="${i}">${m}</button>`
-        ).join("");
-        monthGrid.querySelectorAll(".cal-month-btn").forEach(btn => {
-          btn.addEventListener("click", () => {
-            selMonth = +btn.dataset.m;
-            isPresent = false;
-            if (presentRow) presentRow.classList.remove("active");
-            if (presToggle) presToggle.classList.remove("on");
-            if (pickerBody) { pickerBody.style.opacity = "1"; pickerBody.style.pointerEvents = ""; }
-            renderGrid();
-          });
+      /* build two sub-pickers */
+      const sP = buildPicker({ name: "__range_s_" + rid, value: sVal, placeholder: "Start date" });
+      const eP = buildPicker({ name: "__range_e_" + rid, value: eVal, placeholder: "End date", hasPresent: true });
+
+      const html = `
+      <div class="two-col" id="${rid}rw">
+        <div><div class="sub-label">Start</div>${sP.html}</div>
+        <div><div class="sub-label">End</div>${eP.html}</div>
+      </div>
+      <input type="hidden" name="${name}" id="${rid}rh" value="${esc(value)}" />`;
+
+      function bind(root = document) {
+        const H = root.getElementById(rid + "rh");
+
+        function updateHidden() {
+          const sH = root.querySelector(`[name="__range_s_${rid}"]`);
+          const eH = root.querySelector(`[name="__range_e_${rid}"]`);
+          const sv = sH?.value || "", ev = eH?.value || "";
+          H.value = sv && ev ? sv + " — " + ev : sv || "";
+        }
+
+        sP.bind(root); sP.opts = { onApply: updateHidden };
+        eP.bind(root); eP.opts = { onApply: updateHidden };
+
+        /* patch onApply after bind via hidden input observation */
+        const sApply = root.getElementById(sP.html.match(/id="(\w+)ap"/)?.[1] + "ap");
+        const eApply = root.getElementById(eP.html.match(/id="(\w+)ap"/)?.[1] + "ap");
+        const sClear = root.getElementById(sP.html.match(/id="(\w+)cl"/)?.[1] + "cl");
+        const eClear = root.getElementById(eP.html.match(/id="(\w+)cl"/)?.[1] + "cl");
+        [sApply, eApply, sClear, eClear].forEach(b => b?.addEventListener("click", () => setTimeout(updateHidden, 30)));
+      }
+
+      return { html, bind };
+    }
+
+    /* ─────────────────────────────────────────────
+       buildMetaField(name, value) → { html, bind }
+       Smart Duration+Location field.
+       Stores: "7 months · Addis Ababa, Ethiopia"
+    ───────────────────────────────────────────── */
+    function buildMetaField(name, value = "") {
+      const mid = uid();
+
+      /* parse existing */
+      let existLoc = "", existDur = "";
+      const dotI = value.indexOf("·");
+      if (dotI !== -1) {
+        existDur = value.slice(0, dotI).trim();
+        existLoc = value.slice(dotI + 1).trim();
+      } else {
+        if (/\d+\s*(month|year)/i.test(value)) existDur = value.trim();
+        else existLoc = value.trim();
+      }
+
+      /* two sub-pickers for duration calculation */
+      const sP = buildPicker({ name: "__meta_s_" + mid, value: "", placeholder: "Start date" });
+      const eP = buildPicker({ name: "__meta_e_" + mid, value: "", placeholder: "End date", hasPresent: true });
+
+      const html = `
+      <div class="meta-box" id="${mid}mb">
+        <div>
+          <div class="sub-label">Live Preview</div>
+          <div class="meta-preview">
+            <ion-icon name="time-outline"></ion-icon>
+            <span class="pv-text${value ? "" : " empty"}" id="${mid}pv">${esc(value || "Duration will appear here…")}</span>
+          </div>
+        </div>
+        <div>
+          <div class="sub-label">📅 Date range (auto-calculates duration)</div>
+          <div class="two-col">
+            <div><div class="sub-label">Start</div>${sP.html}</div>
+            <div><div class="sub-label">End</div>${eP.html}</div>
+          </div>
+        </div>
+        <div>
+          <div class="sub-label">📍 Location (optional)</div>
+          <div class="loc-row">
+            <ion-icon name="location-outline"></ion-icon>
+            <input type="text" id="${mid}loc" placeholder="e.g. Addis Ababa, Ethiopia" value="${esc(existLoc)}" />
+          </div>
+        </div>
+      </div>
+      <input type="hidden" name="${name}" id="${mid}h" value="${esc(value)}" />`;
+
+      function bind(root = document) {
+        const H = root.getElementById(mid + "h");
+        const pv = root.getElementById(mid + "pv");
+        const loc = root.getElementById(mid + "loc");
+        const sH = () => root.querySelector(`[name="__meta_s_${mid}"]`);
+        const eH = () => root.querySelector(`[name="__meta_e_${mid}"]`);
+
+        function refresh() {
+          const sv = sH()?.value || "", ev = eH()?.value || "";
+          const sO = parseMY(sv);
+          const eO = /^present$/i.test(ev) ? null : parseMY(ev);
+          const ePresent = /^present$/i.test(ev);
+          const dur = calcDur(sO, ePresent ? null : eO);
+          const l = loc.value.trim();
+          const out = dur && l ? dur + " · " + l : dur || l || "";
+          H.value = out;
+          pv.textContent = out || "Duration will appear here…";
+          pv.className = "pv-text" + (out ? "" : " empty");
+        }
+
+        sP.bind(root); eP.bind(root);
+        loc.addEventListener("input", refresh);
+
+        /* patch apply/clear buttons */
+        const ids = [sP, eP].flatMap(p => {
+          const m = p.html.match(/id="(\w+)[at]/g) || [];
+          return m.map(x => x.replace(/id="/, "").replace(/[at]$/, ""));
+        });
+        ids.forEach(base => {
+          root.getElementById(base + "ap")?.addEventListener("click", () => setTimeout(refresh, 30));
+          root.getElementById(base + "cl")?.addEventListener("click", () => setTimeout(refresh, 30));
         });
       }
 
-      if (presentRow) {
-        presentRow.addEventListener("click", () => {
-          isPresent = !isPresent;
-          presentRow.classList.toggle("active", isPresent);
-          presToggle && presToggle.classList.toggle("on", isPresent);
-          if (pickerBody) {
-            pickerBody.style.opacity = isPresent ? "0.4" : "1";
-            pickerBody.style.pointerEvents = isPresent ? "none" : "";
-          }
-        });
-      }
-
-      const prevBtn = document.getElementById(id + "_prev");
-      const nextBtn = document.getElementById(id + "_next");
-      if (prevBtn) prevBtn.addEventListener("click", () => { selYear--; renderGrid(); });
-      if (nextBtn) nextBtn.addEventListener("click", () => { selYear++; renderGrid(); });
-
-      const clearBtn = document.getElementById(id + "_clear");
-      if (clearBtn) clearBtn.addEventListener("click", () => {
-        selMonth = null;
-        isPresent = false;
-        display.textContent = id.endsWith("_s") ? "Start date" : "End date";
-        display.classList.add("placeholder");
-        if (presentRow) presentRow.classList.remove("active");
-        if (presToggle) presToggle.classList.remove("on");
-        if (pickerBody) { pickerBody.style.opacity = "1"; pickerBody.style.pointerEvents = ""; }
-        drop.classList.remove("open");
-        trigger.classList.remove("open");
-        onChange({ month: null, year: null, isPresent: false });
-        renderGrid();
-      });
-
-      const applyBtn = document.getElementById(id + "_apply");
-      if (applyBtn) applyBtn.addEventListener("click", () => {
-        if (isPresent) {
-          display.textContent = "Present";
-          display.classList.remove("placeholder");
-          onChange({ month: null, year: null, isPresent: true });
-        } else if (selMonth !== null) {
-          display.textContent = MONTH_SHORT[selMonth] + " " + selYear;
-          display.classList.remove("placeholder");
-          onChange({ month: selMonth, year: selYear, isPresent: false });
-        }
-        drop.classList.remove("open");
-        trigger.classList.remove("open");
-      });
-
-      trigger.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const isOpen = drop.classList.contains("open");
-        document.querySelectorAll(".date-picker-dropdown.open").forEach(d => d.classList.remove("open"));
-        document.querySelectorAll(".date-picker-trigger.open").forEach(t => t.classList.remove("open"));
-        if (!isOpen) { drop.classList.add("open"); trigger.classList.add("open"); renderGrid(); }
-      });
-      drop.addEventListener("click", e => e.stopPropagation());
-      renderGrid();
+      return { html, bind };
     }
 
-    // ── Single Picker (issue_date / expiry) ──
-    function initSinglePicker(id) {
-      const trigger = document.getElementById(id + "_trigger");
-      const drop = document.getElementById(id + "_drop");
-      const hidden = document.getElementById(id + "_hidden");
-      const display = document.getElementById(id + "_display");
-      const noneRow = document.getElementById(id + "_none_row");
-      const noneToggle = document.getElementById(id + "_none_toggle");
-      const pickerBody = document.getElementById(id + "_picker_body");
-
-      if (!trigger || !drop || !hidden) return;
-
-      let selMonth = null;
-      let selYear = new Date().getFullYear();
-      let isNone = false;
-
-      const existing = parseDateStr(hidden.value);
-      if (existing.month !== null) { selMonth = existing.month; selYear = existing.year; }
-
-      if (noneRow) {
-        isNone = /^no\s*expir/i.test(hidden.value || "");
-        if (isNone) {
-          noneRow.classList.add("active");
-          if (noneToggle) noneToggle.classList.add("on");
-          if (pickerBody) { pickerBody.style.opacity = "0.4"; pickerBody.style.pointerEvents = "none"; }
-        }
-        noneRow.addEventListener("click", () => {
-          isNone = !isNone;
-          noneRow.classList.toggle("active", isNone);
-          if (noneToggle) noneToggle.classList.toggle("on", isNone);
-          if (pickerBody) { pickerBody.style.opacity = isNone ? "0.4" : "1"; pickerBody.style.pointerEvents = isNone ? "none" : ""; }
-        });
-      }
-
-      function renderGrid() {
-        const yearLabel = document.getElementById(id + "_year_label");
-        const monthGrid = document.getElementById(id + "_month_grid");
-        if (!yearLabel || !monthGrid) return;
-        yearLabel.textContent = selYear;
-        monthGrid.innerHTML = MONTH_SHORT.map((m, i) =>
-          `<button type="button" class="cal-month-btn ${selMonth === i ? "selected" : ""}" data-m="${i}">${m}</button>`
-        ).join("");
-        monthGrid.querySelectorAll(".cal-month-btn").forEach(btn => {
-          btn.addEventListener("click", () => { selMonth = +btn.dataset.m; renderGrid(); });
-        });
-      }
-
-      const prevBtn = document.getElementById(id + "_prev");
-      const nextBtn = document.getElementById(id + "_next");
-      if (prevBtn) prevBtn.addEventListener("click", () => { selYear--; renderGrid(); });
-      if (nextBtn) nextBtn.addEventListener("click", () => { selYear++; renderGrid(); });
-
-      const clearBtn = document.getElementById(id + "_clear");
-      if (clearBtn) clearBtn.addEventListener("click", () => {
-        selMonth = null; hidden.value = "";
-        display.textContent = "Select month & year";
-        display.classList.add("placeholder");
-        isNone = false;
-        if (noneRow) { noneRow.classList.remove("active"); if (noneToggle) noneToggle.classList.remove("on"); }
-        drop.classList.remove("open"); trigger.classList.remove("open");
-        renderGrid();
-      });
-
-      const applyBtn = document.getElementById(id + "_apply");
-      if (applyBtn) applyBtn.addEventListener("click", () => {
-        if (isNone) {
-          hidden.value = "No Expiration";
-          display.textContent = "No Expiration";
-          display.classList.remove("placeholder");
-        } else if (selMonth !== null) {
-          const val = MONTH_SHORT[selMonth] + " " + selYear;
-          hidden.value = val;
-          display.textContent = val;
-          display.classList.remove("placeholder");
-        }
-        drop.classList.remove("open"); trigger.classList.remove("open");
-      });
-
-      trigger.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const isOpen = drop.classList.contains("open");
-        document.querySelectorAll(".date-picker-dropdown.open").forEach(d => d.classList.remove("open"));
-        document.querySelectorAll(".date-picker-trigger.open").forEach(t => t.classList.remove("open"));
-        if (!isOpen) { drop.classList.add("open"); trigger.classList.add("open"); renderGrid(); }
-      });
-      drop.addEventListener("click", e => e.stopPropagation());
-      renderGrid();
+    /* ─────────────────────────────────────────────
+       bindAllPickers(root)
+       Finds every picker/meta/range already in DOM and binds them.
+       Called once after modal HTML injection.
+    ───────────────────────────────────────────── */
+    function bindAllPickers(root = document) {
+      /* nothing to do — pickers are bound individually when built.
+         This is a no-op safety valve kept for external callers. */
     }
 
-    // ── Range Picker (date_range in roles) ──
-    function initRangePicker(baseId) {
-      initHalfRangePicker(baseId + "_s", false);
-      initHalfRangePicker(baseId + "_e", true);
+    /* ═══════════════════════════════════════════════════════════════
+       3. FORM FIELD BUILDER
+    ═══════════════════════════════════════════════════════════════ */
+    const BLANK_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%2321262d'/%3E%3C/svg%3E";
 
-      function updateHidden() {
-        const sDisplay = document.getElementById(baseId + "_s_display");
-        const eDisplay = document.getElementById(baseId + "_e_display");
-        const hidden = document.getElementById(baseId + "_hidden");
-        if (!hidden) return;
-        const sVal = sDisplay ? sDisplay.textContent.trim() : "";
-        const eVal = eDisplay ? eDisplay.textContent.trim() : "";
-        if (sVal && sVal !== "Start date" && eVal && eVal !== "End date") {
-          hidden.value = sVal + " — " + eVal;
-        } else if (sVal && sVal !== "Start date") {
-          hidden.value = sVal;
-        } else {
-          hidden.value = "";
+    /* returns { html, binders[] } */
+    function buildField(f, item) {
+      const val = item?.[f.key] ?? "";
+      const ph = f.ph || "";
+      const binders = [];
+
+      let html = "";
+
+      switch (f.type) {
+        case "monthyear": {
+          const p = buildPicker({ name: f.key, value: val, placeholder: "Select month & year" });
+          binders.push(p.bind.bind(p));
+          html = wrap(f.label, p.html);
+          break;
         }
+        case "monthyear_optional": {
+          const p = buildPicker({ name: f.key, value: val, placeholder: "Select or choose no expiration", hasNone: true, noneLabel: "No Expiration" });
+          binders.push(p.bind.bind(p));
+          html = wrap(f.label, p.html);
+          break;
+        }
+        case "daterange": {
+          const p = buildRangePicker(f.key, val);
+          binders.push(p.bind.bind(p));
+          html = wrap(f.label, p.html);
+          break;
+        }
+        case "meta": {
+          const p = buildMetaField(f.key, val);
+          binders.push(p.bind.bind(p));
+          html = wrap(f.label, p.html);
+          break;
+        }
+        case "textarea":
+          html = wrap(f.label, `<textarea name="${f.key}" placeholder="${esc(ph)}">${esc(val)}</textarea>`);
+          break;
+        case "select": {
+          const opts = (f.options || []).map(o => `<option value="${o}"${String(val) === String(o) ? " selected" : ""}>${o}</option>`).join("");
+          html = wrap(f.label, `<select name="${f.key}">${opts}</select>`);
+          break;
+        }
+        case "image":
+          html = wrap(f.label,
+            `<div class="upload-area">
+            <img src="${esc(val) || BLANK_IMG}" class="upload-thumb" data-preview="${f.key}" />
+            <div class="upload-ctrl">
+              <input type="file" accept="image/*" data-upload="${f.key}" />
+              <input type="hidden" name="${f.key}" value="${esc(val)}" />
+              <span class="upload-st" data-ust="${f.key}">${val ? "Current image" : "No image"}</span>
+            </div>
+          </div>`
+          );
+          break;
+        case "hint":
+          html = `<div class="field-hint" style="margin-bottom:14px">${f.text}</div>`;
+          break;
+        default:
+          html = wrap(f.label, `<input type="${f.type}" name="${f.key}" value="${esc(val)}" placeholder="${esc(ph)}" />`);
       }
 
-      [baseId + "_s_apply", baseId + "_s_clear",
-      baseId + "_e_apply", baseId + "_e_clear"].forEach(btnId => {
-        const btn = document.getElementById(btnId);
-        if (btn) btn.addEventListener("click", () => setTimeout(updateHidden, 50));
-      });
+      return { html, binders };
     }
 
-    function initHalfRangePicker(id, hasPresent) {
-      const trigger = document.getElementById(id + "_trigger");
-      const drop = document.getElementById(id + "_drop");
-      const display = document.getElementById(id + "_display");
-      const presentRow = hasPresent ? document.getElementById(id + "_present_row") : null;
-      const presToggle = hasPresent ? document.getElementById(id + "_toggle") : null;
-      const pickerBody = hasPresent ? document.getElementById(id + "_picker_body") : null;
-
-      if (!trigger || !drop || !display) return;
-
-      let selMonth = null;
-      let selYear = new Date().getFullYear();
-      let isPresent = false;
-
-      const initText = display.textContent.trim();
-      if (initText === "Present") { isPresent = true; }
-      else {
-        const p = parseDateStr(initText);
-        if (p.month !== null) { selMonth = p.month; selYear = p.year; }
-      }
-
-      if (presentRow) {
-        presentRow.addEventListener("click", () => {
-          isPresent = !isPresent;
-          presentRow.classList.toggle("active", isPresent);
-          presToggle && presToggle.classList.toggle("on", isPresent);
-          if (pickerBody) {
-            pickerBody.style.opacity = isPresent ? "0.4" : "1";
-            pickerBody.style.pointerEvents = isPresent ? "none" : "";
-          }
-        });
-      }
-
-      function renderGrid() {
-        const yearLabel = document.getElementById(id + "_year_label");
-        const monthGrid = document.getElementById(id + "_month_grid");
-        if (!yearLabel || !monthGrid) return;
-        yearLabel.textContent = selYear;
-        monthGrid.innerHTML = MONTH_SHORT.map((m, i) =>
-          `<button type="button" class="cal-month-btn ${selMonth === i && !isPresent ? "selected" : ""}" data-m="${i}">${m}</button>`
-        ).join("");
-        monthGrid.querySelectorAll(".cal-month-btn").forEach(btn => {
-          btn.addEventListener("click", () => {
-            selMonth = +btn.dataset.m; isPresent = false;
-            if (presentRow) presentRow.classList.remove("active");
-            if (presToggle) presToggle.classList.remove("on");
-            if (pickerBody) { pickerBody.style.opacity = "1"; pickerBody.style.pointerEvents = ""; }
-            renderGrid();
-          });
-        });
-      }
-
-      const prevBtn = document.getElementById(id + "_prev");
-      const nextBtn = document.getElementById(id + "_next");
-      if (prevBtn) prevBtn.addEventListener("click", () => { selYear--; renderGrid(); });
-      if (nextBtn) nextBtn.addEventListener("click", () => { selYear++; renderGrid(); });
-
-      const clearBtn = document.getElementById(id + "_clear");
-      if (clearBtn) clearBtn.addEventListener("click", () => {
-        selMonth = null; isPresent = false;
-        display.textContent = id.endsWith("_s") ? "Start date" : "End date";
-        display.classList.add("placeholder");
-        if (presentRow) presentRow.classList.remove("active");
-        if (presToggle) presToggle.classList.remove("on");
-        if (pickerBody) { pickerBody.style.opacity = "1"; pickerBody.style.pointerEvents = ""; }
-        drop.classList.remove("open"); trigger.classList.remove("open");
-        renderGrid();
-      });
-
-      const applyBtn = document.getElementById(id + "_apply");
-      if (applyBtn) applyBtn.addEventListener("click", () => {
-        if (isPresent) {
-          display.textContent = "Present";
-          display.classList.remove("placeholder");
-        } else if (selMonth !== null) {
-          display.textContent = MONTH_SHORT[selMonth] + " " + selYear;
-          display.classList.remove("placeholder");
-        }
-        drop.classList.remove("open"); trigger.classList.remove("open");
-      });
-
-      trigger.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const isOpen = drop.classList.contains("open");
-        document.querySelectorAll(".date-picker-dropdown.open").forEach(d => d.classList.remove("open"));
-        document.querySelectorAll(".date-picker-trigger.open").forEach(t => t.classList.remove("open"));
-        if (!isOpen) { drop.classList.add("open"); trigger.classList.add("open"); renderGrid(); }
-      });
-      drop.addEventListener("click", e => e.stopPropagation());
-      renderGrid();
+    function wrap(label, inner) {
+      return `<div class="field"><label>${label}</label>${inner}</div>`;
     }
 
-    // ═══════════════════════════════════════
-    // SECTION DEFINITIONS
-    // ═══════════════════════════════════════
+    /* build all fields, return combined html + bound function */
+    function buildFields(fields, item) {
+      const all = fields.map(f => buildField(f, item));
+      const html = all.map(x => x.html).join("");
+      const bind = (root = document) => all.forEach(x => x.binders.forEach(b => b(root)));
+      return { html, bind };
+    }
+
+    /* collect form values */
+    function collectForm(fields, ctx = $("#modal-box")) {
+      const body = {};
+      fields.forEach(f => {
+        const el = $(`[name="${f.key}"]`, ctx);
+        if (!el) return;
+        body[f.key] = f.type === "number" ? (+el.value || 0) : (el.value || "");
+      });
+      return body;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       4. SECTION DEFINITIONS  (single source of truth)
+    ═══════════════════════════════════════════════════════════════ */
     const SECTIONS = [
       { group: "Content" },
       { key: "profile", title: "Profile", icon: "person-outline", custom: true },
@@ -2028,8 +1804,7 @@
           { key: "text", label: "Text", type: "text", ph: "QA Automation Lead" },
           { key: "sort_order", label: "Order", type: "number" },
         ],
-        display: (i) => esc(i.text),
-        subtitle: (i) => "Order: " + (i.sort_order || 0),
+        display: i => esc(i.text), subtitle: i => "Order: " + (i.sort_order || 0),
       },
       {
         key: "stats", title: "Impact Metrics", icon: "speedometer-outline",
@@ -2037,45 +1812,42 @@
           { key: "label", label: "Label", type: "text", ph: "Testing Time Reduced" },
           { key: "value", label: "Value", type: "number", ph: "40" },
           { key: "suffix", label: "Suffix", type: "text", ph: "%" },
-          { key: "icon", label: "Ion-icon Name", type: "text", ph: "speedometer-outline" },
-          { key: "reveal", label: "Reveal Direction", type: "select", options: ["left", "right", "bottom"] },
+          { key: "icon", label: "Ion-icon name", type: "text", ph: "speedometer-outline" },
+          { key: "reveal", label: "Reveal direction", type: "select", options: ["left", "right", "bottom"] },
           { key: "sort_order", label: "Order", type: "number" },
         ],
-        display: (i) => esc(i.label) + ": <strong>" + i.value + esc(i.suffix || "") + "</strong>",
-        subtitle: (i) => "Icon: " + i.icon,
+        display: i => esc(i.label) + ": <strong>" + i.value + esc(i.suffix || "") + "</strong>",
+        subtitle: i => "icon: " + i.icon,
       },
       {
         key: "services", title: "Services", icon: "construct-outline",
         fields: [
           { key: "title", label: "Title", type: "text" },
           { key: "description", label: "Description", type: "textarea" },
-          { key: "icon", label: "Ion-icon Name", type: "text", ph: "code-slash-outline" },
+          { key: "icon", label: "Ion-icon name", type: "text", ph: "code-slash-outline" },
           { key: "reveal", label: "Reveal", type: "select", options: ["left", "right"] },
           { key: "sort_order", label: "Order", type: "number" },
         ],
-        display: (i) => esc(i.title),
-        subtitle: (i) => (i.description || "").substring(0, 60) + "...",
+        display: i => esc(i.title), subtitle: i => (i.description || "").slice(0, 60) + "…",
       },
       {
         key: "tech_stack", title: "Tech Stack", icon: "hardware-chip-outline",
         fields: [
           { key: "name", label: "Name", type: "text", ph: "Python" },
-          { key: "icon", label: "Ion-icon Name", type: "text", ph: "logo-python" },
+          { key: "icon", label: "Ion-icon name", type: "text", ph: "logo-python" },
           { key: "sort_order", label: "Order", type: "number" },
         ],
-        display: (i) => esc(i.name),
-        subtitle: (i) => "Icon: " + i.icon,
+        display: i => esc(i.name), subtitle: i => "icon: " + i.icon,
       },
       {
         key: "testimonials", title: "Testimonials", icon: "chatbubbles-outline",
         fields: [
-          { key: "name", label: "Person Name", type: "text" },
-          { key: "avatar_url", label: "Avatar Image", type: "image" },
-          { key: "text", label: "Testimonial Text", type: "textarea" },
+          { key: "name", label: "Name", type: "text" },
+          { key: "avatar_url", label: "Avatar", type: "image" },
+          { key: "text", label: "Testimonial text", type: "textarea" },
           { key: "sort_order", label: "Order", type: "number" },
         ],
-        display: (i) => esc(i.name),
-        subtitle: (i) => (i.text || "").substring(0, 50) + "...",
+        display: i => esc(i.name), subtitle: i => (i.text || "").slice(0, 50) + "…",
       },
       { group: "Resume" },
       { key: "experience", title: "Experience", icon: "briefcase-outline", custom: true },
@@ -2083,11 +1855,11 @@
       {
         key: "skills", title: "Skill Bars", icon: "bar-chart-outline",
         fields: [
-          { key: "name", label: "Skill Name", type: "text" },
+          { key: "name", label: "Skill name", type: "text" },
           { key: "percentage", label: "Percentage", type: "number", ph: "90" },
           { key: "sort_order", label: "Order", type: "number" },
         ],
-        display: (i) => esc(i.name) + " — <strong>" + i.percentage + "%</strong>",
+        display: i => esc(i.name) + " — <strong>" + i.percentage + "%</strong>",
         subtitle: () => "",
       },
       { group: "Portfolio" },
@@ -2095,14 +1867,13 @@
         key: "projects", title: "Projects", icon: "images-outline",
         fields: [
           { key: "title", label: "Title", type: "text" },
-          { key: "category", label: "Category", type: "text", ph: "fintech / automation / telecom / web apps" },
-          { key: "image_url", label: "Project Image", type: "image" },
-          { key: "description", label: "Category Label", type: "text", ph: "FinTech — Company" },
+          { key: "category", label: "Category", type: "text", ph: "fintech / automation / web apps" },
+          { key: "image_url", label: "Project image", type: "image" },
+          { key: "description", label: "Category label", type: "text", ph: "FinTech — Company" },
           { key: "link", label: "Link", type: "text", ph: "#" },
           { key: "sort_order", label: "Order", type: "number" },
         ],
-        display: (i) => esc(i.title),
-        subtitle: (i) => "[" + i.category + "] " + (i.description || ""),
+        display: i => esc(i.title), subtitle: i => "[" + i.category + "] " + (i.description || ""),
       },
       {
         key: "certificates", title: "Certificates", icon: "ribbon-outline",
@@ -2110,15 +1881,14 @@
           { key: "title", label: "Title", type: "text" },
           { key: "issuer", label: "Issuer", type: "text" },
           { key: "credential_id", label: "Credential ID", type: "text" },
-          { key: "issue_date", label: "Issue Date", type: "monthyear" },
-          { key: "expiry", label: "Expiry Date", type: "monthyear_optional" },
-          { key: "verify_url", label: "Verify URL", type: "text", ph: "https://..." },
+          { key: "issue_date", label: "Issue date", type: "monthyear" },
+          { key: "expiry", label: "Expiry date", type: "monthyear_optional" },
+          { key: "verify_url", label: "Verify URL", type: "text", ph: "https://…" },
           { key: "status", label: "Status", type: "select", options: ["Verified", "ALUMNI", "Pending"] },
-          { key: "icon", label: "Icon", type: "text", ph: "ribbon-outline" },
+          { key: "icon", label: "Icon name", type: "text", ph: "ribbon-outline" },
           { key: "sort_order", label: "Order", type: "number" },
         ],
-        display: (i) => esc(i.title),
-        subtitle: (i) => i.issuer + " · " + i.status,
+        display: i => esc(i.title), subtitle: i => i.issuer + " · " + i.status,
       },
       { group: "Sidebar" },
       {
@@ -2126,493 +1896,432 @@
         fields: [
           { key: "type", label: "Type", type: "text", ph: "Email / Phone / Location" },
           { key: "value", label: "Value", type: "text", ph: "mesfiny711@gmail.com" },
-          { key: "icon", label: "Ion-icon Name", type: "text", ph: "mail-outline" },
+          { key: "icon", label: "Ion-icon name", type: "text", ph: "mail-outline" },
           { key: "sort_order", label: "Order", type: "number" },
         ],
-        display: (i) => "<strong>" + esc(i.type) + "</strong>: " + esc(i.value),
-        subtitle: (i) => "Icon: " + i.icon,
+        display: i => "<strong>" + esc(i.type) + "</strong>: " + esc(i.value),
+        subtitle: i => "icon: " + i.icon,
       },
       {
         key: "social_links", title: "Social Links", icon: "share-social-outline",
         fields: [
           { key: "platform", label: "Platform", type: "text", ph: "LinkedIn" },
-          { key: "url", label: "URL", type: "text", ph: "https://linkedin.com/in/..." },
-          { key: "icon", label: "Ion-icon Name", type: "text", ph: "logo-linkedin" },
+          { key: "url", label: "URL", type: "text", ph: "https://linkedin.com/in/…" },
+          { key: "icon", label: "Ion-icon name", type: "text", ph: "logo-linkedin" },
           { key: "sort_order", label: "Order", type: "number" },
         ],
-        display: (i) => "<strong>" + esc(i.platform) + "</strong>",
-        subtitle: (i) => i.url,
+        display: i => "<strong>" + esc(i.platform) + "</strong>",
+        subtitle: i => i.url,
       },
       { group: "System" },
       { key: "settings", title: "Settings", icon: "settings-outline", custom: true },
     ];
 
-    const sectionMap = {};
-    SECTIONS.filter(s => s.key).forEach(s => sectionMap[s.key] = s);
+    const secMap = Object.fromEntries(SECTIONS.filter(s => s.key).map(s => [s.key, s]));
 
-    // ═══════════════════════════════════════
-    // AUTH
-    // ═══════════════════════════════════════
-    $("#login-form").addEventListener("submit", async (e) => {
+    /* company / role field definitions (used in both experience & education) */
+    const COMPANY_FIELDS = section => [
+      { key: "name", label: section === "education" ? "School name" : "Company name", type: "text" },
+      { key: "meta", label: "Duration / Location", type: "meta" },
+      { key: "icon", label: "Ion-icon name", type: "text", ph: "business-outline" },
+      { key: "is_single", label: "Single entry (dashed)", type: "select", options: ["0", "1"] },
+      { key: "sort_order", label: "Order", type: "number" },
+    ];
+
+    const ROLE_FIELDS = [
+      { key: "title", label: "Role / Degree title", type: "text" },
+      { key: "date_range", label: "Date range", type: "daterange" },
+      { key: "description", label: "Description", type: "textarea" },
+      { key: "tags", label: "Tags (comma-separated)", type: "text", ph: "Python, CI/CD, Agile" },
+      { key: "sort_order", label: "Order", type: "number" },
+    ];
+
+    /* ═══════════════════════════════════════════════════════════════
+       5. AUTH
+    ═══════════════════════════════════════════════════════════════ */
+    $("#login-form").addEventListener("submit", async e => {
       e.preventDefault();
-      const u = $("#login-user").value.trim();
-      const p = $("#login-pass").value;
-      const err = $("#login-error");
+      const u = $("#lu").value.trim(), p = $("#lp").value, err = $("#login-err");
       err.textContent = "";
       try {
-        const data = await fetch(API + "/auth/login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        const d = await fetch(API + "/auth/login", {
+          method: "POST", headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username: u, password: p }),
         }).then(r => r.json());
-        if (data.token) {
-          TOKEN = data.token;
-          currentUsername = data.username;
-          localStorage.setItem("admin_token", TOKEN);
-          initPanel();
-        } else {
-          err.textContent = data.error || "Login failed";
-        }
+        if (d.token) { TOKEN = d.token; currentUser = d.username; localStorage.setItem("admin_token", TOKEN); initPanel(); }
+        else err.textContent = d.error || "Login failed";
       } catch { err.textContent = "Connection failed"; }
     });
 
     function logout() {
-      TOKEN = null;
-      localStorage.removeItem("admin_token");
+      TOKEN = null; localStorage.removeItem("admin_token");
       $("#admin-panel").style.display = "none";
       $("#login-screen").style.display = "flex";
-      $("#login-pass").value = "";
+      $("#lp").value = "";
     }
     $("#logout-btn").addEventListener("click", logout);
 
-    // ═══════════════════════════════════════
-    // PANEL
-    // ═══════════════════════════════════════
+    /* ═══════════════════════════════════════════════════════════════
+       6. PANEL INIT
+    ═══════════════════════════════════════════════════════════════ */
     function initPanel() {
       $("#login-screen").style.display = "none";
       $("#admin-panel").style.display = "block";
-      $("#panel-username").textContent = currentUsername || "admin";
+      $("#ph-user").textContent = currentUser || "admin";
       buildNav();
       switchTab("profile");
     }
 
     function buildNav() {
-      let navHTML = "", mobileHTML = "";
+      let nav = "", mob = "";
       SECTIONS.forEach(s => {
-        if (s.group) { navHTML += '<div class="nav-group-label">' + s.group + "</div>"; return; }
-        navHTML += '<button class="nav-btn" data-tab="' + s.key + '"><ion-icon name="' + s.icon + '"></ion-icon>' + s.title + "</button>";
-        mobileHTML += '<button data-tab="' + s.key + '"><ion-icon name="' + s.icon + '"></ion-icon>' + s.title + "</button>";
+        if (s.group) { nav += `<div class="nav-group">${s.group}</div>`; return; }
+        const b = `<button data-tab="${s.key}"><ion-icon name="${s.icon}"></ion-icon>${s.title}</button>`;
+        nav += b.replace("button", "button class=\"nav-btn\"");
+        mob += b;
       });
-      $("#admin-nav").innerHTML = navHTML;
-      $("#mobile-nav").innerHTML = mobileHTML;
+      $("#admin-nav").innerHTML = nav;
+      $("#mobile-nav").innerHTML = mob;
       $$("[data-tab]").forEach(b => b.addEventListener("click", () => switchTab(b.dataset.tab)));
     }
 
     async function switchTab(key) {
       currentTab = key;
       $$("[data-tab]").forEach(b => b.classList.toggle("active", b.dataset.tab === key));
-      const el = $("#admin-content");
-      const sec = sectionMap[key];
+      const el = $("#admin-content"), sec = secMap[key];
       if (!sec) return;
       try {
         if (sec.custom) {
           if (key === "profile") await renderProfile(el);
-          else if (key === "experience") await renderCompanySection(el, "experience", "Experience");
-          else if (key === "education") await renderCompanySection(el, "education", "Education");
+          else if (key === "experience") await renderTimeline(el, "experience", "Experience");
+          else if (key === "education") await renderTimeline(el, "education", "Education");
           else if (key === "settings") renderSettings(el);
         } else {
-          await renderCrudList(el, key);
+          await renderCrud(el, key);
         }
       } catch (err) {
-        el.innerHTML = '<div class="empty-state"><ion-icon name="alert-circle-outline"></ion-icon><p>Error: ' + esc(err.message) + '</p><button class="btn btn-ghost" onclick="switchTab(\'' + key + '\')">Retry</button></div>';
+        el.innerHTML = `<div class="empty"><ion-icon name="alert-circle-outline"></ion-icon><p>Error: ${esc(err.message)}</p><button class="btn btn-ghost" onclick="switchTab('${key}')">Retry</button></div>`;
       }
     }
 
-    // ═══════════════════════════════════════
-    // FORM HELPERS
-    // ═══════════════════════════════════════
-    function buildField(f, item) {
-      const val = item != null && item[f.key] != null ? item[f.key] : "";
-      const ph = f.ph || "";
+    /* ═══════════════════════════════════════════════════════════════
+       7. GENERIC CRUD RENDERER
+    ═══════════════════════════════════════════════════════════════ */
+    async function renderCrud(el, key) {
+      const sec = secMap[key], items = await apiFetch("/" + key);
+      el.innerHTML = `
+      <div class="sec-header">
+        <h2 class="sec-title"><ion-icon name="${sec.icon}"></ion-icon>${sec.title}<span class="sec-count">${items.length}</span></h2>
+        <button class="btn btn-primary" id="crud-add"><ion-icon name="add-outline"></ion-icon> Add New</button>
+      </div>
+      <div id="crud-items">${items.length === 0
+          ? `<div class="empty"><ion-icon name="${sec.icon}"></ion-icon><p>No ${sec.title.toLowerCase()} yet</p></div>`
+          : `<div class="item-list">${items.map(item => `
+            <div class="item-card" data-id="${item.id}">
+              <div class="ic-body">
+                <div class="ic-title">${sec.display(item)}</div>
+                <div class="ic-sub">${esc(sec.subtitle ? sec.subtitle(item) : "#" + item.id)}</div>
+              </div>
+              <div class="ic-actions">
+                <span class="ic-order">${item.sort_order ?? 0}</span>
+                <button class="btn btn-ghost btn-sm btn-edit">Edit</button>
+                <button class="btn btn-danger btn-sm btn-del">Delete</button>
+              </div>
+            </div>`).join("")}</div>`
+        }</div>`;
 
-      if (f.type === "monthyear") {
-        return '<div class="field"><label>' + f.label + "</label>" +
-          buildSingleDatePicker(f.key, val, { placeholder: "Select month & year" }) + "</div>";
-      }
-      if (f.type === "monthyear_optional") {
-        return '<div class="field"><label>' + f.label + "</label>" +
-          buildSingleDatePicker(f.key, val, { allowNone: true, noneLabel: "No Expiration", placeholder: "Select expiry or no expiration" }) + "</div>";
-      }
-      if (f.type === "daterange") {
-        return '<div class="field"><label>' + f.label + "</label>" +
-          buildDateRangePicker(f.key, val) + "</div>";
-      }
-      // ✅ NEW: Duration + Location meta field
-      if (f.type === "meta") {
-        return '<div class="field"><label>' + f.label + "</label>" +
-          buildMetaField(f.key, val) + "</div>";
-      }
-      if (f.type === "textarea") {
-        return '<div class="field"><label>' + f.label + '</label><textarea name="' + f.key + '" placeholder="' + esc(ph) + '">' + esc(val) + "</textarea></div>";
-      }
-      if (f.type === "select") {
-        let opts = "";
-        (f.options || []).forEach(o => {
-          opts += '<option value="' + o + '"' + (String(val) === String(o) ? " selected" : "") + ">" + o + "</option>";
-        });
-        return '<div class="field"><label>' + f.label + '</label><select name="' + f.key + '">' + opts + "</select></div>";
-      }
-      if (f.type === "image") {
-        const placeholder = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%2321262d'/%3E%3C/svg%3E";
-        return '<div class="field"><label>' + f.label + "</label>" +
-          '<div class="upload-area">' +
-          '<img src="' + (esc(val) || placeholder) + '" class="upload-preview" data-preview="' + f.key + '" />' +
-          '<div class="upload-controls">' +
-          '<input type="file" accept="image/*" data-upload="' + f.key + '" />' +
-          '<input type="hidden" name="' + f.key + '" value="' + esc(val) + '" />' +
-          '<span class="upload-status" data-upload-status="' + f.key + '">' + (val ? "Current image" : "No image") + "</span>" +
-          "</div></div></div>";
-      }
-      return '<div class="field"><label>' + f.label + '</label><input type="' + f.type + '" name="' + f.key + '" value="' + esc(val) + '" placeholder="' + esc(ph) + '" /></div>';
-    }
-
-    function collectFormData(fields, ctx) {
-      const body = {};
-      fields.forEach(f => {
-        const el = $('[name="' + f.key + '"]', ctx || $("#modal-box"));
-        if (!el) return;
-        if (f.type === "number") body[f.key] = +el.value || 0;
-        else body[f.key] = el.value || "";
-      });
-      return body;
-    }
-
-    // ═══════════════════════════════════════
-    // GENERIC CRUD
-    // ═══════════════════════════════════════
-    async function renderCrudList(el, key) {
-      const sec = sectionMap[key];
-      const items = await api("/" + key);
-      el.innerHTML =
-        '<div class="section-header"><h2 class="section-title"><ion-icon name="' + sec.icon + '"></ion-icon>' + sec.title +
-        '<span class="section-count">' + items.length + "</span></h2>" +
-        '<button class="btn btn-primary" id="crud-add"><ion-icon name="add-outline"></ion-icon> Add New</button></div>' +
-        '<div id="crud-items">' +
-        (items.length === 0
-          ? '<div class="empty-state"><ion-icon name="' + sec.icon + '"></ion-icon><p>No ' + sec.title.toLowerCase() + " yet</p></div>"
-          : '<div class="item-list">' +
-          items.map(item =>
-            '<div class="item-card" data-id="' + item.id + '">' +
-            '<div class="item-card-body"><div class="item-card-title">' + sec.display(item) +
-            '</div><div class="item-card-sub">' + esc(sec.subtitle ? sec.subtitle(item) : "#" + item.id) + "</div></div>" +
-            '<div class="item-card-actions"><span class="item-card-order">' + (item.sort_order != null ? item.sort_order : 0) + "</span>" +
-            '<button class="btn btn-ghost btn-sm btn-edit">Edit</button>' +
-            '<button class="btn btn-danger btn-sm btn-del">Delete</button></div></div>'
-          ).join("") + "</div>") +
-        "</div>";
-
-      $("#crud-add").onclick = () => openItemModal(key, null);
-      $("#crud-items").addEventListener("click", async (e) => {
-        const card = e.target.closest("[data-id]");
-        if (!card) return;
+      $("#crud-add").onclick = () => openItemModal(key, null, items);
+      $("#crud-items").addEventListener("click", async e => {
+        const card = e.target.closest("[data-id]"); if (!card) return;
         const item = items.find(i => i.id === +card.dataset.id);
-        if (e.target.closest(".btn-edit")) openItemModal(key, item);
+        if (e.target.closest(".btn-edit")) openItemModal(key, item, items);
         else if (e.target.closest(".btn-del")) {
-          const ok = await confirmDialog("Delete?", "This item will be permanently removed.");
-          if (!ok) return;
-          await api("/" + key + "/" + item.id, "DELETE");
-          toast("Deleted");
-          switchTab(key);
+          if (!await confirm("Delete?", "This item will be permanently removed.")) return;
+          await apiFetch("/" + key + "/" + item.id, "DELETE");
+          toast("Deleted"); switchTab(key);
         }
       });
     }
 
-    function openItemModal(key, item) {
-      const sec = sectionMap[key];
-      const isEdit = !!item;
-      openModal(
-        '<div class="modal-header"><h2>' + (isEdit ? "Edit" : "Add") + " " + sec.title.replace(/s$/, "") + "</h2>" +
-        '<button class="btn btn-icon btn-ghost" onclick="closeModal()"><ion-icon name="close-outline"></ion-icon></button></div>' +
-        '<form id="item-form"><div class="modal-body">' +
-        sec.fields.map(f => buildField(f, item)).join("") +
-        '</div><div class="modal-footer"><button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>' +
-        '<button type="submit" class="btn btn-primary">' + (isEdit ? "Save" : "Create") + "</button></div></form>"
-      );
-      bindImageUploads();
-      bindDatePickers($("#modal-box"));
-      $("#item-form").onsubmit = async (e) => {
+    /* ═══════════════════════════════════════════════════════════════
+       8. ITEM MODAL
+    ═══════════════════════════════════════════════════════════════ */
+    function openItemModal(key, item, _items) {
+      const sec = secMap[key], isEdit = !!item;
+      const { html, bind } = buildFields(sec.fields, item);
+      openModal(`
+      <div class="modal-head">
+        <h2>${isEdit ? "Edit" : "Add"} ${sec.title.replace(/s$/, "")}</h2>
+        <button class="btn btn-icon btn-ghost" onclick="closeModal()"><ion-icon name="close-outline"></ion-icon></button>
+      </div>
+      <form id="item-form">
+        <div class="modal-body">${html}</div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">${isEdit ? "Save" : "Create"}</button>
+        </div>
+      </form>`);
+      bindUploads(); bind($("#modal-box"));
+      $("#item-form").onsubmit = async e => {
         e.preventDefault();
-        const body = collectFormData(sec.fields);
+        const body = collectForm(sec.fields);
         try {
-          if (isEdit) await api("/" + key + "/" + item.id, "PUT", body);
-          else await api("/" + key, "POST", body);
-          closeModal();
-          toast(isEdit ? "Updated!" : "Created!");
-          switchTab(key);
-        } catch (err) { toast(err.message, "error"); }
+          if (isEdit) await apiFetch("/" + key + "/" + item.id, "PUT", body);
+          else await apiFetch("/" + key, "POST", body);
+          closeModal(); toast(isEdit ? "Updated!" : "Created!"); switchTab(key);
+        } catch (err) { toast(err.message, "err"); }
       };
     }
 
-    // ═══════════════════════════════════════
-    // PROFILE
-    // ═══════════════════════════════════════
-    async function renderProfile(el) {
-      const p = await api("/profile");
-      const currentStatus = p.availability || "available";
-      const statusOptions = [
-        { value: "available", label: "Available for Hire", color: "#2ecc87", icon: "checkmark-circle" },
-        { value: "busy", label: "Busy / Limited", color: "#e8a838", icon: "time" },
-        { value: "unavailable", label: "Not Available", color: "#f85149", icon: "close-circle" },
-      ];
-      const currentOpt = statusOptions.find(s => s.value === currentStatus) || statusOptions[0];
-
-      el.innerHTML =
-        '<div class="section-header"><h2 class="section-title"><ion-icon name="person-outline"></ion-icon> Profile &amp; About</h2></div>' +
-        '<div class="status-card">' +
-        '<div class="status-info"><h3><span class="status-dot" id="status-dot" style="background:' + currentOpt.color + ";box-shadow:0 0 8px " + currentOpt.color + '60"></span><span id="status-label">' + currentOpt.label + "</span></h3><p>Controls the badge on your portfolio avatar</p></div>" +
-        '<div class="status-buttons" id="status-buttons">' +
-        statusOptions.map(s =>
-          '<button class="btn ' + (s.value === currentStatus ? "btn-primary" : "btn-ghost") + ' btn-sm" data-availability="' + s.value + '"' +
-          (s.value === currentStatus ? ' style="background:' + s.color + ";border-color:" + s.color + '"' : "") +
-          '><ion-icon name="' + s.icon + '"></ion-icon> ' + s.label + "</button>"
-        ).join("") + "</div></div>" +
-        '<form id="profile-form">' +
-        '<div class="form-row">' +
-        '<div class="field"><label>Full Name</label><input name="name" value="' + esc(p.name) + '" placeholder="Your Name" /></div>' +
-        '<div class="field"><label>Primary Title</label><input name="title" value="' + esc(p.title) + '" placeholder="QA Automation Lead" /></div>' +
-        "</div>" +
-        '<div class="field"><label>Avatar Image</label>' +
-        '<div class="upload-area">' +
-        '<img src="' + esc(p.avatar_url) + '" class="profile-avatar upload-preview" data-preview="avatar_url" />' +
-        '<div class="upload-controls">' +
-        '<input type="file" accept="image/*" data-upload="avatar_url" />' +
-        '<input type="hidden" name="avatar_url" value="' + esc(p.avatar_url) + '" />' +
-        '<span class="upload-status" data-upload-status="avatar_url">Current avatar</span>' +
-        "</div></div></div>" +
-        '<div class="field"><label>About Text</label>' +
-        '<textarea name="about_text" style="min-height:200px" placeholder="Write about yourself...">' + esc(p.about_text) + "</textarea>" +
-        '<div class="field-hint">Use **text** for green highlights. Blank line = new paragraph.</div></div>' +
-        '<input type="hidden" name="availability" id="availability-input" value="' + currentStatus + '" />' +
-        '<button type="submit" class="btn btn-primary btn-lg"><ion-icon name="save-outline"></ion-icon> Save Profile</button></form>';
-
-      const statusColors = { available: "#2ecc87", busy: "#e8a838", unavailable: "#f85149" };
-      $("#status-buttons").addEventListener("click", async (e) => {
-        const btn = e.target.closest("[data-availability]");
-        if (!btn) return;
-        const ns = btn.dataset.availability;
-        const opt = statusOptions.find(s => s.value === ns);
-        $("#availability-input").value = ns;
-        $$("#status-buttons .btn").forEach(b => {
-          if (b.dataset.availability === ns) { b.className = "btn btn-primary btn-sm"; b.style.background = statusColors[ns]; b.style.borderColor = statusColors[ns]; }
-          else { b.className = "btn btn-ghost btn-sm"; b.style.background = ""; b.style.borderColor = ""; }
-        });
-        $("#status-dot").style.background = opt.color;
-        $("#status-dot").style.boxShadow = "0 0 8px " + opt.color + "60";
-        $("#status-label").textContent = opt.label;
-        try {
-          await api("/profile", "PUT", { name: $('[name="name"]').value, title: $('[name="title"]').value, about_text: $('[name="about_text"]').value, avatar_url: $('[name="avatar_url"]').value, availability: ns });
-          toast("Status: " + opt.label);
-        } catch (err) { toast(err.message, "error"); }
-      });
-
-      bindImageUploads(el);
-      $("#profile-form").onsubmit = async (e) => {
-        e.preventDefault();
-        try {
-          await api("/profile", "PUT", { name: $('[name="name"]').value, title: $('[name="title"]').value, about_text: $('[name="about_text"]').value, avatar_url: $('[name="avatar_url"]').value, availability: $("#availability-input").value });
-          toast("Profile saved!");
-        } catch (err) { toast(err.message, "error"); }
-      };
-    }
-
-    // ═══════════════════════════════════════
-    // EXPERIENCE / EDUCATION
-    // ═══════════════════════════════════════
-    async function renderCompanySection(el, section, label) {
-      const allCompanies = await api("/companies");
-      const allRoles = await api("/roles");
-      const companies = allCompanies.filter(c => c.section === section);
-
-      const companyFields = [
-        { key: "name", label: section === "education" ? "School Name" : "Company Name", type: "text" },
-        // ✅ meta now uses the new calendar+location picker
-        { key: "meta", label: "Duration / Location", type: "meta" },
-        { key: "icon", label: "Ion-icon Name", type: "text", ph: "business-outline" },
-        { key: "is_single", label: "Single Entry (dashed)", type: "select", options: ["0", "1"] },
-        { key: "sort_order", label: "Order", type: "number" },
-      ];
-
-      const roleFields = [
-        { key: "title", label: "Role / Degree Title", type: "text" },
-        { key: "date_range", label: "Date Range", type: "daterange" },
-        { key: "description", label: "Description", type: "textarea" },
-        { key: "tags", label: "Tags (comma-separated)", type: "text", ph: "Python, CI/CD, Agile" },
-        { key: "sort_order", label: "Order", type: "number" },
-      ];
-
-      el.innerHTML =
-        '<div class="section-header"><h2 class="section-title"><ion-icon name="' + (section === "education" ? "school" : "briefcase") + '-outline"></ion-icon> ' + label +
-        ' <span class="section-count">' + companies.length + "</span></h2>" +
-        '<button class="btn btn-primary" id="add-company"><ion-icon name="add-outline"></ion-icon> Add ' +
-        (section === "education" ? "School" : "Company") + "</button></div>" +
-        '<div id="companies-list">' +
-        (companies.length === 0
-          ? '<div class="empty-state"><ion-icon name="' + (section === "education" ? "school" : "briefcase") + '-outline"></ion-icon><p>No entries yet</p></div>'
-          : companies.map(c => {
-            const roles = allRoles.filter(r => r.company_id === c.id);
-            return (
-              '<div class="item-card" data-cid="' + c.id + '" style="flex-direction:column;align-items:stretch;margin-bottom:8px">' +
-              '<div style="display:flex;justify-content:space-between;align-items:center">' +
-              '<div class="item-card-body"><div class="item-card-title">' + esc(c.name) +
-              '</div><div class="item-card-sub">' + esc(c.meta) + "</div></div>" +
-              '<div class="item-card-actions"><span class="item-card-order">' + (c.sort_order || 0) + "</span>" +
-              '<button class="btn btn-ghost btn-sm btn-edit-co">Edit</button>' +
-              '<button class="btn btn-danger btn-sm btn-del-co">Delete</button></div></div>' +
-              '<div class="roles-container">' +
-              roles.map(r =>
-                '<div class="item-card" data-rid="' + r.id + '">' +
-                '<div class="item-card-body"><div class="item-card-title" style="font-size:13px">' + esc(r.title) +
-                '</div><div class="item-card-sub">' + esc(r.date_range) + "</div></div>" +
-                '<div class="item-card-actions"><span class="item-card-order">' + (r.sort_order || 0) + "</span>" +
-                '<button class="btn btn-ghost btn-sm btn-edit-role">Edit</button>' +
-                '<button class="btn btn-danger btn-sm btn-del-role">Delete</button></div></div>'
-              ).join("") +
-              '<button class="add-role-btn" data-for-company="' + c.id + '">+ Add Role</button>' +
-              "</div></div>"
-            );
-          }).join("")) +
-        "</div>";
-
-      $("#add-company").onclick = () =>
-        openCustomForm("Add " + (section === "education" ? "School" : "Company"), companyFields, null, async (body) => {
-          body.section = section;
-          await api("/companies", "POST", body);
-          toast("Added!");
-          switchTab(section);
-        });
-
-      $("#companies-list").addEventListener("click", async (e) => {
-        if (e.target.closest(".btn-edit-co")) {
-          const cid = +e.target.closest("[data-cid]").dataset.cid;
-          const c = companies.find(x => x.id === cid);
-          openCustomForm("Edit " + esc(c.name), companyFields, c, async (body) => {
-            body.section = section;
-            await api("/companies/" + c.id, "PUT", body);
-            toast("Updated!");
-            switchTab(section);
-          });
-          return;
-        }
-        if (e.target.closest(".btn-del-co")) {
-          const cid = +e.target.closest("[data-cid]").dataset.cid;
-          const c = companies.find(x => x.id === cid);
-          const ok = await confirmDialog("Delete?", '"' + c.name + '" and all its roles will be removed.');
-          if (!ok) return;
-          await api("/companies/" + cid, "DELETE");
-          toast("Deleted");
-          switchTab(section);
-          return;
-        }
-        if (e.target.closest(".add-role-btn")) {
-          const cid = +e.target.closest("[data-for-company]").dataset.forCompany;
-          openCustomForm("Add Role", roleFields, null, async (body) => {
-            body.company_id = cid;
-            body.tags = JSON.stringify(body.tags ? body.tags.split(",").map(t => t.trim()).filter(Boolean) : []);
-            await api("/roles", "POST", body);
-            toast("Role added!");
-            switchTab(section);
-          });
-          return;
-        }
-        if (e.target.closest(".btn-edit-role")) {
-          const rid = +e.target.closest("[data-rid]").dataset.rid;
-          const r = allRoles.find(x => x.id === rid);
-          let tagsStr = "";
-          try { tagsStr = JSON.parse(r.tags || "[]").join(", "); } catch { }
-          openCustomForm("Edit Role", roleFields, { ...r, tags: tagsStr }, async (body) => {
-            body.company_id = r.company_id;
-            body.tags = JSON.stringify(body.tags ? body.tags.split(",").map(t => t.trim()).filter(Boolean) : []);
-            await api("/roles/" + r.id, "PUT", body);
-            toast("Updated!");
-            switchTab(section);
-          });
-          return;
-        }
-        if (e.target.closest(".btn-del-role")) {
-          const rid = +e.target.closest("[data-rid]").dataset.rid;
-          const ok = await confirmDialog("Delete role?", "This role will be permanently removed.");
-          if (!ok) return;
-          await api("/roles/" + rid, "DELETE");
-          toast("Deleted");
-          switchTab(section);
-        }
-      });
-    }
-
+    /* ═══════════════════════════════════════════════════════════════
+       9. CUSTOM FORM (companies / roles)
+    ═══════════════════════════════════════════════════════════════ */
     function openCustomForm(title, fields, item, onSubmit) {
       const isEdit = !!item;
-      openModal(
-        '<div class="modal-header"><h2>' + title + "</h2>" +
-        '<button class="btn btn-icon btn-ghost" onclick="closeModal()"><ion-icon name="close-outline"></ion-icon></button></div>' +
-        '<form id="custom-form"><div class="modal-body">' +
-        fields.map(f => buildField(f, item)).join("") +
-        '</div><div class="modal-footer"><button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>' +
-        '<button type="submit" class="btn btn-primary">' + (isEdit ? "Save" : "Create") + "</button></div></form>"
+      const { html, bind } = buildFields(fields, item);
+      openModal(`
+      <div class="modal-head">
+        <h2>${title}</h2>
+        <button class="btn btn-icon btn-ghost" onclick="closeModal()"><ion-icon name="close-outline"></ion-icon></button>
+      </div>
+      <form id="cust-form">
+        <div class="modal-body">${html}</div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">${isEdit ? "Save" : "Create"}</button>
+        </div>
+      </form>`);
+      bindUploads(); bind($("#modal-box"));
+      $("#cust-form").onsubmit = async e => {
+        e.preventDefault();
+        const body = collectForm(fields);
+        try { await onSubmit(body); closeModal(); }
+        catch (err) { toast(err.message, "err"); }
+      };
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       10. PROFILE
+    ═══════════════════════════════════════════════════════════════ */
+    async function renderProfile(el) {
+      const p = await apiFetch("/profile");
+      const cur = p.availability || "available";
+      const STATUS = [
+        { v: "available", l: "Available for Hire", c: "#2ecc87", ic: "checkmark-circle" },
+        { v: "busy", l: "Busy / Limited", c: "#e8a838", ic: "time" },
+        { v: "unavailable", l: "Not Available", c: "#f85149", ic: "close-circle" },
+      ];
+      const curSt = STATUS.find(s => s.v === cur) || STATUS[0];
+
+      el.innerHTML = `
+      <div class="sec-header"><h2 class="sec-title"><ion-icon name="person-outline"></ion-icon> Profile &amp; About</h2></div>
+      <div class="status-card">
+        <div class="st-info">
+          <h3><span class="st-dot" id="st-dot" style="background:${curSt.c};box-shadow:0 0 8px ${curSt.c}60"></span>
+          <span id="st-label">${curSt.l}</span></h3>
+          <p>Controls the availability badge on your portfolio avatar</p>
+        </div>
+        <div class="st-btns" id="st-btns">
+          ${STATUS.map(s => `
+            <button class="btn ${s.v === cur ? "btn-primary" : "btn-ghost"} btn-sm" data-av="${s.v}"
+              ${s.v === cur ? `style="background:${s.c};border-color:${s.c}"` : ""}>
+              <ion-icon name="${s.ic}"></ion-icon> ${s.l}
+            </button>`).join("")}
+        </div>
+      </div>
+      <form id="pf-form">
+        <div class="form-row">
+          <div class="field"><label>Full name</label><input name="name" value="${esc(p.name)}" placeholder="Your Name" /></div>
+          <div class="field"><label>Primary title</label><input name="title" value="${esc(p.title)}" placeholder="QA Automation Lead" /></div>
+        </div>
+        <div class="field"><label>Avatar image</label>
+          <div class="upload-area">
+            <img src="${esc(p.avatar_url) || BLANK_IMG}" class="upload-thumb lg" data-preview="avatar_url" />
+            <div class="upload-ctrl">
+              <input type="file" accept="image/*" data-upload="avatar_url" />
+              <input type="hidden" name="avatar_url" value="${esc(p.avatar_url)}" />
+              <span class="upload-st" data-ust="avatar_url">Current avatar</span>
+            </div>
+          </div>
+        </div>
+        <div class="field"><label>About text</label>
+          <textarea name="about_text" style="min-height:190px" placeholder="Write about yourself…">${esc(p.about_text)}</textarea>
+          <div class="field-hint">Use **bold** for green highlights. Blank line = new paragraph.</div>
+        </div>
+        <input type="hidden" name="availability" id="av-inp" value="${cur}" />
+        <button type="submit" class="btn btn-primary btn-lg"><ion-icon name="save-outline"></ion-icon> Save Profile</button>
+      </form>`;
+
+      bindUploads(el);
+
+      /* availability buttons */
+      const colMap = { available: "#2ecc87", busy: "#e8a838", unavailable: "#f85149" };
+      $("#st-btns").addEventListener("click", async e => {
+        const btn = e.target.closest("[data-av]"); if (!btn) return;
+        const nv = btn.dataset.av, st = STATUS.find(s => s.v === nv);
+        $("#av-inp").value = nv;
+        $$("#st-btns .btn").forEach(b => {
+          if (b.dataset.av === nv) { b.className = "btn btn-primary btn-sm"; b.style.cssText = `background:${colMap[nv]};border-color:${colMap[nv]}`; }
+          else { b.className = "btn btn-ghost btn-sm"; b.style.cssText = ""; }
+        });
+        $("#st-dot").style.cssText = `background:${st.c};box-shadow:0 0 8px ${st.c}60`;
+        $("#st-label").textContent = st.l;
+        try {
+          await apiFetch("/profile", "PUT", { name: $('[name="name"]').value, title: $('[name="title"]').value, about_text: $('[name="about_text"]').value, avatar_url: $('[name="avatar_url"]').value, availability: nv });
+          toast("Status: " + st.l);
+        } catch (err) { toast(err.message, "err"); }
+      });
+
+      $("#pf-form").onsubmit = async e => {
+        e.preventDefault();
+        try {
+          await apiFetch("/profile", "PUT", { name: $('[name="name"]').value, title: $('[name="title"]').value, about_text: $('[name="about_text"]').value, avatar_url: $('[name="avatar_url"]').value, availability: $("#av-inp").value });
+          toast("Profile saved!");
+        } catch (err) { toast(err.message, "err"); }
+      };
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       11. EXPERIENCE / EDUCATION  (nested companies → roles)
+    ═══════════════════════════════════════════════════════════════ */
+    async function renderTimeline(el, section, label) {
+      const [allCo, allRoles] = await Promise.all([apiFetch("/companies"), apiFetch("/roles")]);
+      const cos = allCo.filter(c => c.section === section);
+      const icon = section === "education" ? "school" : "briefcase";
+
+      el.innerHTML = `
+      <div class="sec-header">
+        <h2 class="sec-title"><ion-icon name="${icon}-outline"></ion-icon> ${label} <span class="sec-count">${cos.length}</span></h2>
+        <button class="btn btn-primary" id="add-co"><ion-icon name="add-outline"></ion-icon> Add ${section === "education" ? "School" : "Company"}</button>
+      </div>
+      <div id="co-list">${cos.length === 0
+          ? `<div class="empty"><ion-icon name="${icon}-outline"></ion-icon><p>No entries yet</p></div>`
+          : cos.map(c => {
+            const roles = allRoles.filter(r => r.company_id === c.id);
+            return `
+              <div class="item-card" data-cid="${c.id}" style="flex-direction:column;align-items:stretch;margin-bottom:8px">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <div class="ic-body">
+                    <div class="ic-title">${esc(c.name)}</div>
+                    <div class="ic-sub">${esc(c.meta)}</div>
+                  </div>
+                  <div class="ic-actions">
+                    <span class="ic-order">${c.sort_order || 0}</span>
+                    <button class="btn btn-ghost btn-sm btn-eco">Edit</button>
+                    <button class="btn btn-danger btn-sm btn-dco">Delete</button>
+                  </div>
+                </div>
+                <div class="roles-wrap">
+                  ${roles.map(r => `
+                    <div class="item-card" data-rid="${r.id}">
+                      <div class="ic-body">
+                        <div class="ic-title" style="font-size:13px">${esc(r.title)}</div>
+                        <div class="ic-sub">${esc(r.date_range)}</div>
+                      </div>
+                      <div class="ic-actions">
+                        <span class="ic-order">${r.sort_order || 0}</span>
+                        <button class="btn btn-ghost btn-sm btn-ero">Edit</button>
+                        <button class="btn btn-danger btn-sm btn-dro">Delete</button>
+                      </div>
+                    </div>`).join("")}
+                  <button class="add-role-btn" data-fcid="${c.id}">+ Add Role</button>
+                </div>
+              </div>`;
+          }).join("")
+        }</div>`;
+
+      /* add company */
+      $("#add-co").onclick = () => openCustomForm(
+        "Add " + (section === "education" ? "School" : "Company"),
+        COMPANY_FIELDS(section), null,
+        async body => { body.section = section; await apiFetch("/companies", "POST", body); toast("Added!"); switchTab(section); }
       );
-      bindImageUploads();
-      bindDatePickers($("#modal-box"));
-      $("#custom-form").onsubmit = async (e) => {
-        e.preventDefault();
-        const body = collectFormData(fields);
-        try {
-          await onSubmit(body);
-          closeModal();
-        } catch (err) { toast(err.message, "error"); }
-      };
+
+      /* delegated events */
+      $("#co-list").addEventListener("click", async e => {
+        /* edit company */
+        if (e.target.closest(".btn-eco")) {
+          const cid = +e.target.closest("[data-cid]").dataset.cid;
+          const c = cos.find(x => x.id === cid);
+          openCustomForm("Edit " + esc(c.name), COMPANY_FIELDS(section), c, async body => {
+            body.section = section; await apiFetch("/companies/" + cid, "PUT", body); toast("Updated!"); switchTab(section);
+          }); return;
+        }
+        /* delete company */
+        if (e.target.closest(".btn-dco")) {
+          const cid = +e.target.closest("[data-cid]").dataset.cid;
+          const c = cos.find(x => x.id === cid);
+          if (!await confirm("Delete?", `"${c.name}" and all its roles will be removed.`)) return;
+          await apiFetch("/companies/" + cid, "DELETE"); toast("Deleted"); switchTab(section); return;
+        }
+        /* add role */
+        if (e.target.closest(".add-role-btn")) {
+          const cid = +e.target.closest("[data-fcid]").dataset.fcid;
+          openCustomForm("Add Role", ROLE_FIELDS, null, async body => {
+            body.company_id = cid;
+            body.tags = JSON.stringify((body.tags || "").split(",").map(t => t.trim()).filter(Boolean));
+            await apiFetch("/roles", "POST", body); toast("Role added!"); switchTab(section);
+          }); return;
+        }
+        /* edit role */
+        if (e.target.closest(".btn-ero")) {
+          const rid = +e.target.closest("[data-rid]").dataset.rid;
+          const r = allRoles.find(x => x.id === rid);
+          let tags = ""; try { tags = JSON.parse(r.tags || "[]").join(", "); } catch { }
+          openCustomForm("Edit Role", ROLE_FIELDS, { ...r, tags }, async body => {
+            body.company_id = r.company_id;
+            body.tags = JSON.stringify((body.tags || "").split(",").map(t => t.trim()).filter(Boolean));
+            await apiFetch("/roles/" + rid, "PUT", body); toast("Updated!"); switchTab(section);
+          }); return;
+        }
+        /* delete role */
+        if (e.target.closest(".btn-dro")) {
+          const rid = +e.target.closest("[data-rid]").dataset.rid;
+          if (!await confirm("Delete role?", "This role will be permanently removed.")) return;
+          await apiFetch("/roles/" + rid, "DELETE"); toast("Deleted"); switchTab(section);
+        }
+      });
     }
 
-    // ═══════════════════════════════════════
-    // SETTINGS
-    // ═══════════════════════════════════════
+    /* ═══════════════════════════════════════════════════════════════
+       12. SETTINGS
+    ═══════════════════════════════════════════════════════════════ */
     function renderSettings(el) {
-      el.innerHTML =
-        '<div class="section-header"><h2 class="section-title"><ion-icon name="settings-outline"></ion-icon> Settings</h2></div>' +
-        '<div style="max-width:420px"><h3 style="font-size:16px;margin-bottom:16px">Change Password</h3>' +
-        '<form id="pw-form">' +
-        '<div class="field"><label>Current Password</label><input type="password" name="current" required autocomplete="current-password" /></div>' +
-        '<div class="field"><label>New Password</label><input type="password" name="newPassword" required minlength="6" autocomplete="new-password" /></div>' +
-        '<div class="field"><label>Confirm New Password</label><input type="password" name="confirmPassword" required minlength="6" autocomplete="new-password" /></div>' +
-        '<button type="submit" class="btn btn-primary"><ion-icon name="lock-closed-outline"></ion-icon> Update Password</button></form></div>' +
-        '<div style="margin-top:40px;padding-top:24px;border-top:1px solid var(--border)">' +
-        '<h3 style="font-size:16px;margin-bottom:12px;color:var(--text-2)">About</h3>' +
-        '<p style="font-size:13px;color:var(--text-3);line-height:1.7">Portfolio CMS v1.0<br>Netlify Functions + Turso + Cloudinary<br><a href="/" target="_blank">View portfolio →</a></p></div>';
+      el.innerHTML = `
+      <div class="sec-header"><h2 class="sec-title"><ion-icon name="settings-outline"></ion-icon> Settings</h2></div>
+      <div style="max-width:400px">
+        <h3 style="font-size:15px;margin-bottom:14px">Change Password</h3>
+        <form id="pw-form">
+          <div class="field"><label>Current password</label><input type="password" name="current" required autocomplete="current-password" /></div>
+          <div class="field"><label>New password</label><input type="password" name="np" required minlength="6" autocomplete="new-password" /></div>
+          <div class="field"><label>Confirm new password</label><input type="password" name="cp" required minlength="6" autocomplete="new-password" /></div>
+          <button type="submit" class="btn btn-primary"><ion-icon name="lock-closed-outline"></ion-icon> Update Password</button>
+        </form>
+        <div style="margin-top:36px;padding-top:20px;border-top:1px solid var(--border)">
+          <p style="font-size:12px;color:var(--text-3);line-height:1.8">
+            Portfolio CMS v1.0<br>Netlify Functions · Turso · Cloudinary<br>
+            <a href="/" target="_blank">View live portfolio →</a>
+          </p>
+        </div>
+      </div>`;
 
-      $("#pw-form").onsubmit = async (e) => {
+      $("#pw-form").onsubmit = async e => {
         e.preventDefault();
-        const cur = $('[name="current"]').value;
-        const np = $('[name="newPassword"]').value;
-        const cp = $('[name="confirmPassword"]').value;
-        if (np !== cp) { toast("Passwords don't match", "error"); return; }
-        if (np.length < 6) { toast("Min 6 characters", "error"); return; }
-        try {
-          await api("/auth/change-password", "POST", { current: cur, newPassword: np });
-          toast("Password changed!");
-          e.target.reset();
-        } catch (err) { toast(err.message, "error"); }
+        const cur = $('[name="current"]').value, np = $('[name="np"]').value, cp = $('[name="cp"]').value;
+        if (np !== cp) { toast("Passwords don't match", "err"); return; }
+        if (np.length < 6) { toast("Min 6 characters", "err"); return; }
+        try { await apiFetch("/auth/change-password", "POST", { current: cur, newPassword: np }); toast("Password changed!"); e.target.reset(); }
+        catch (err) { toast(err.message, "err"); }
       };
     }
 
-    // ═══════════════════════════════════════
-    // INIT
-    // ═══════════════════════════════════════
+    /* ═══════════════════════════════════════════════════════════════
+       13. BOOTSTRAP
+    ═══════════════════════════════════════════════════════════════ */
     (async () => {
       if (TOKEN) {
-        try {
-          await api("/profile");
-          currentUsername = "admin";
-          initPanel();
-          return;
-        } catch { /* token expired */ }
+        try { await apiFetch("/profile"); currentUser = "admin"; initPanel(); return; }
+        catch { /* expired */ }
       }
       logout();
     })();
