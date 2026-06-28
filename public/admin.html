@@ -130,7 +130,9 @@
       background: var(--text-3);
     }
 
-    /* ── Date Picker Styles ── */
+    /* ══════════════════════════════════════
+         DATE PICKER STYLES
+      ══════════════════════════════════════ */
     .date-picker-wrapper {
       position: relative;
     }
@@ -144,11 +146,11 @@
       border-radius: var(--radius);
       padding: 10px 14px;
       cursor: pointer;
-      transition: border-color var(--transition), box-shadow var(--transition);
       width: 100%;
       text-align: left;
       color: var(--text-1);
       font-size: 14px;
+      transition: border-color var(--transition), box-shadow var(--transition);
     }
 
     .date-picker-trigger:hover {
@@ -174,7 +176,6 @@
       color: var(--text-3);
     }
 
-    /* Dropdown Calendar */
     .date-picker-dropdown {
       position: absolute;
       top: calc(100% + 6px);
@@ -206,7 +207,6 @@
       }
     }
 
-    /* Calendar Nav */
     .cal-header {
       display: flex;
       align-items: center;
@@ -231,22 +231,15 @@
       color: var(--text-1);
     }
 
-    .cal-month-label {
+    .cal-year-label {
       font-size: 14px;
       font-weight: 700;
       color: var(--text-1);
       font-family: var(--mono);
-      cursor: pointer;
       padding: 4px 8px;
       border-radius: var(--radius);
-      transition: background var(--transition);
     }
 
-    .cal-month-label:hover {
-      background: var(--bg-3);
-    }
-
-    /* Month Grid */
     .cal-month-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -275,39 +268,6 @@
       font-weight: 700;
     }
 
-    /* Year Grid */
-    .cal-year-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      max-height: 180px;
-      overflow-y: auto;
-      margin-bottom: 12px;
-    }
-
-    .cal-year-btn {
-      padding: 6px 2px;
-      border-radius: var(--radius);
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-2);
-      transition: all var(--transition);
-      text-align: center;
-      font-family: var(--mono);
-    }
-
-    .cal-year-btn:hover {
-      background: var(--bg-3);
-      color: var(--text-1);
-    }
-
-    .cal-year-btn.selected {
-      background: var(--accent);
-      color: var(--bg-0);
-      font-weight: 700;
-    }
-
-    /* Present Toggle */
     .cal-present-row {
       display: flex;
       align-items: center;
@@ -374,7 +334,6 @@
       transform: translateX(16px);
     }
 
-    /* Footer Actions */
     .cal-footer {
       display: flex;
       gap: 6px;
@@ -383,7 +342,6 @@
       border-top: 1px solid var(--border);
     }
 
-    /* Date Range Specific */
     .date-range-wrapper {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -400,11 +358,90 @@
       letter-spacing: 0.5px;
     }
 
-    /* Issue Date / Expiry Specific */
     .date-single-wrapper {
       position: relative;
     }
 
+    /* ══════════════════════════════════════
+         DURATION + LOCATION FIELD STYLES
+      ══════════════════════════════════════ */
+    .meta-field-box {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .meta-field-box:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px hsla(155, 70%, 45%, 0.08);
+    }
+
+    .meta-duration-preview {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      border-radius: var(--radius);
+      font-size: 12px;
+      font-family: var(--mono);
+      color: var(--accent);
+      min-height: 36px;
+    }
+
+    .meta-duration-preview ion-icon {
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .meta-duration-preview .preview-text {
+      flex: 1;
+    }
+
+    .meta-duration-preview .preview-text.empty {
+      color: var(--text-3);
+      font-style: italic;
+    }
+
+    .meta-date-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .meta-loc-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .meta-loc-row ion-icon {
+      color: var(--text-3);
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .meta-loc-row input {
+      flex: 1;
+    }
+
+    .meta-section-label {
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    /* ══════════════════════════════════════
+         GENERAL FORM STYLES
+      ══════════════════════════════════════ */
     .field {
       margin-bottom: 16px;
     }
@@ -496,13 +533,6 @@
       padding: 0;
       border-radius: var(--radius);
       font-size: 16px;
-    }
-
-    .btn-bar {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
     }
 
     /* Login */
@@ -619,7 +649,6 @@
       min-height: calc(100vh - 56px);
     }
 
-    /* Nav */
     .admin-nav {
       width: 240px;
       background: var(--bg-1);
@@ -672,7 +701,6 @@
       flex-shrink: 0;
     }
 
-    /* Content */
     .admin-content {
       flex: 1;
       padding: 28px 32px;
@@ -711,7 +739,6 @@
       font-family: var(--mono);
     }
 
-    /* Items */
     .item-list {
       display: flex;
       flex-direction: column;
@@ -770,7 +797,6 @@
       margin-right: 4px;
     }
 
-    /* Roles */
     .roles-container {
       margin-top: 10px;
       margin-left: 16px;
@@ -798,7 +824,6 @@
       text-decoration: underline;
     }
 
-    /* Empty */
     .empty-state {
       text-align: center;
       padding: 48px 20px;
@@ -815,7 +840,6 @@
       margin-bottom: 16px;
     }
 
-    /* Modal */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -838,7 +862,7 @@
       border-radius: var(--radius-xl);
       padding: 0;
       width: 100%;
-      max-width: 560px;
+      max-width: 580px;
       box-shadow: var(--shadow-lg);
       animation: modalIn 0.25s ease;
     }
@@ -870,7 +894,7 @@
 
     .modal-body {
       padding: 20px 24px;
-      max-height: 60vh;
+      max-height: 65vh;
       overflow-y: auto;
       overflow-x: hidden;
     }
@@ -883,7 +907,6 @@
       gap: 8px;
     }
 
-    /* Upload */
     .upload-area {
       display: flex;
       align-items: center;
@@ -946,7 +969,6 @@
       border: 2px solid var(--border);
     }
 
-    /* Toast */
     #toast-container {
       position: fixed;
       bottom: 24px;
@@ -987,7 +1009,6 @@
       color: #fff;
     }
 
-    /* Confirm */
     .confirm-overlay {
       position: fixed;
       inset: 0;
@@ -1031,7 +1052,6 @@
       justify-content: center;
     }
 
-    /* Status Card */
     .status-card {
       background: var(--bg-2);
       border: 1px solid var(--border);
@@ -1073,7 +1093,6 @@
       flex-wrap: wrap;
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
       .admin-nav {
         display: none;
@@ -1083,11 +1102,9 @@
         padding: 20px 16px;
       }
 
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-
-      .date-range-wrapper {
+      .form-row,
+      .date-range-wrapper,
+      .meta-date-row {
         grid-template-columns: 1fr;
       }
 
@@ -1225,7 +1242,6 @@
     </div>
   </div>
 
-  <!-- Toast -->
   <div id="toast-container"></div>
 
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
@@ -1250,10 +1266,7 @@
 
     async function api(endpoint, method = "GET", body = null) {
       const opts = { method, headers: { Authorization: "Bearer " + TOKEN } };
-      if (body) {
-        opts.headers["Content-Type"] = "application/json";
-        opts.body = JSON.stringify(body);
-      }
+      if (body) { opts.headers["Content-Type"] = "application/json"; opts.body = JSON.stringify(body); }
       const res = await fetch(API + endpoint, opts);
       if (res.status === 401) { logout(); throw new Error("Session expired"); }
       const data = await res.json();
@@ -1281,22 +1294,14 @@
       });
     }
 
-    function openModal(html) {
-      $("#modal-box").innerHTML = html;
-      $("#modal-overlay").classList.add("active");
-    }
-    function closeModal() {
-      $("#modal-overlay").classList.remove("active");
-    }
+    function openModal(html) { $("#modal-box").innerHTML = html; $("#modal-overlay").classList.add("active"); }
+    function closeModal() { $("#modal-overlay").classList.remove("active"); }
 
-    $("#modal-overlay").addEventListener("click", (e) => {
-      if (e.target.id === "modal-overlay") closeModal();
-    });
+    $("#modal-overlay").addEventListener("click", (e) => { if (e.target.id === "modal-overlay") closeModal(); });
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
         closeModal();
         $("#confirm-overlay").classList.remove("active");
-        // Close any open date pickers
         document.querySelectorAll(".date-picker-dropdown.open").forEach(d => d.classList.remove("open"));
         document.querySelectorAll(".date-picker-trigger.open").forEach(d => d.classList.remove("open"));
       }
@@ -1341,20 +1346,10 @@
     const MONTH_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const MONTH_FULL = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-    /**
-     * Parses stored strings like:
-     *   "Feb 2026 — Present · 3 months"
-     *   "Sep 2025 — Feb 2026"
-     *   "January 2025"
-     *   "No Expiration"
-     * Returns { month: 0-11 | null, year: number | null, isPresent: bool }
-     */
     function parseDateStr(str) {
       if (!str) return { month: null, year: null, isPresent: false };
       str = str.trim();
       if (/^no\s*expir/i.test(str)) return { month: null, year: null, isPresent: false };
-
-      // Try "MonthName YYYY"
       const m = str.match(/^(\w+)\s+(\d{4})/);
       if (m) {
         const idx = MONTH_FULL.findIndex(n => n.toLowerCase().startsWith(m[1].toLowerCase().slice(0, 3)));
@@ -1363,9 +1358,6 @@
       return { month: null, year: null, isPresent: false };
     }
 
-    /**
-     * Formats { month, year, isPresent } → "Feb 2026" or "Present"
-     */
     function formatDateObj(obj) {
       if (!obj) return "";
       if (obj.isPresent) return "Present";
@@ -1373,17 +1365,31 @@
       return MONTH_SHORT[obj.month] + " " + obj.year;
     }
 
-    /**
-     * Creates a single month-year picker (no range, no Present toggle).
-     * Used for: issue_date, expiry (optional)
-     *
-     * @param {string} fieldName    - hidden input name
-     * @param {string} initialValue - existing string value
-     * @param {object} opts
-     *   opts.allowNone  {bool}   - show "No Expiration" option
-     *   opts.noneLabel  {string} - label for the none option
-     *   opts.placeholder {string}
-     */
+    // ── Duration Computation (mirrors frontend calcDuration) ──
+    function computeDurationStr(startObj, endObj) {
+      if (!startObj || startObj.month === null) return "";
+      const now = new Date();
+      const start = new Date(startObj.year, startObj.month, 1);
+      const end = endObj && endObj.isPresent
+        ? new Date(now.getFullYear(), now.getMonth(), 1)
+        : endObj && endObj.month !== null
+          ? new Date(endObj.year, endObj.month, 1)
+          : null;
+      if (!end) return "";
+      const totalMonths = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+      if (totalMonths < 0) return "";
+      if (totalMonths < 1) return "< 1 month";
+      const years = Math.floor(totalMonths / 12);
+      const months = totalMonths % 12;
+      const parts = [];
+      if (years > 0) parts.push(years + " year" + (years > 1 ? "s" : ""));
+      if (months > 0) parts.push(months + " month" + (months > 1 ? "s" : ""));
+      return parts.join(" ");
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // buildSingleDatePicker — single month/year calendar
+    // ─────────────────────────────────────────────────────────
     function buildSingleDatePicker(fieldName, initialValue, opts = {}) {
       const id = "dp_" + fieldName + "_" + Math.random().toString(36).slice(2, 7);
       const parsed = parseDateStr(initialValue);
@@ -1396,12 +1402,12 @@
           <div class="date-single-wrapper" id="${id}_wrap">
             <button type="button" class="date-picker-trigger" id="${id}_trigger">
               <ion-icon name="calendar-outline"></ion-icon>
-              <span class="trigger-text ${displayText ? '' : 'placeholder'}" id="${id}_display">
+              <span class="trigger-text ${displayText ? "" : "placeholder"}" id="${id}_display">
                 ${esc(displayText || placeholder)}
               </span>
               <ion-icon name="chevron-down-outline" style="color:var(--text-3);font-size:14px"></ion-icon>
             </button>
-            <input type="hidden" name="${fieldName}" id="${id}_hidden" value="${esc(initialValue || '')}" />
+            <input type="hidden" name="${fieldName}" id="${id}_hidden" value="${esc(initialValue || "")}" />
             <div class="date-picker-dropdown" id="${id}_drop">
               ${allowNone ? `
               <div class="cal-present-row" id="${id}_none_row">
@@ -1409,11 +1415,11 @@
                   <ion-icon name="infinite-outline"></ion-icon>${esc(noneLabel)}
                 </span>
                 <div class="cal-toggle" id="${id}_none_toggle"></div>
-              </div>` : ''}
+              </div>` : ""}
               <div id="${id}_picker_body">
                 <div class="cal-header">
                   <button type="button" class="btn btn-ghost btn-icon" id="${id}_prev">‹</button>
-                  <span class="cal-month-label" id="${id}_year_label">2025</span>
+                  <span class="cal-year-label" id="${id}_year_label">2025</span>
                   <button type="button" class="btn btn-ghost btn-icon" id="${id}_next">›</button>
                 </div>
                 <div class="cal-month-grid" id="${id}_month_grid"></div>
@@ -1426,17 +1432,11 @@
           </div>`;
     }
 
-    /**
-     * Creates a date-range picker with Start and End (supports "Present").
-     * Used for: date_range field in roles.
-     *
-     * @param {string} fieldName    - hidden input name
-     * @param {string} initialValue - existing string like "Feb 2026 — Present · 3 months"
-     */
+    // ─────────────────────────────────────────────────────────
+    // buildDateRangePicker — start + end with Present toggle
+    // ─────────────────────────────────────────────────────────
     function buildDateRangePicker(fieldName, initialValue) {
       const id = "drp_" + fieldName + "_" + Math.random().toString(36).slice(2, 7);
-
-      // Parse existing range
       let startObj = { month: null, year: null, isPresent: false };
       let endObj = { month: null, year: null, isPresent: false };
 
@@ -1456,21 +1456,18 @@
 
       return `
           <div class="date-range-wrapper" id="${id}_wrap">
-            <!-- START -->
             <div>
               <div class="date-range-label">Start</div>
               <div class="date-single-wrapper" id="${id}_s_wrap">
                 <button type="button" class="date-picker-trigger" id="${id}_s_trigger">
                   <ion-icon name="calendar-outline"></ion-icon>
-                  <span class="trigger-text ${startObj.month !== null ? '' : 'placeholder'}" id="${id}_s_display">
-                    ${esc(startDisplay)}
-                  </span>
+                  <span class="trigger-text ${startObj.month !== null ? "" : "placeholder"}" id="${id}_s_display">${esc(startDisplay)}</span>
                   <ion-icon name="chevron-down-outline" style="color:var(--text-3);font-size:14px"></ion-icon>
                 </button>
                 <div class="date-picker-dropdown" id="${id}_s_drop">
                   <div class="cal-header">
                     <button type="button" class="btn btn-ghost btn-icon" id="${id}_s_prev">‹</button>
-                    <span class="cal-month-label" id="${id}_s_year_label">2024</span>
+                    <span class="cal-year-label" id="${id}_s_year_label">2024</span>
                     <button type="button" class="btn btn-ghost btn-icon" id="${id}_s_next">›</button>
                   </div>
                   <div class="cal-month-grid" id="${id}_s_month_grid"></div>
@@ -1481,28 +1478,25 @@
                 </div>
               </div>
             </div>
-            <!-- END -->
             <div>
               <div class="date-range-label">End</div>
               <div class="date-single-wrapper" id="${id}_e_wrap">
                 <button type="button" class="date-picker-trigger" id="${id}_e_trigger">
                   <ion-icon name="calendar-outline"></ion-icon>
-                  <span class="trigger-text ${endObj.isPresent || endObj.month !== null ? '' : 'placeholder'}" id="${id}_e_display">
-                    ${esc(endDisplay)}
-                  </span>
+                  <span class="trigger-text ${endObj.isPresent || endObj.month !== null ? "" : "placeholder"}" id="${id}_e_display">${esc(endDisplay)}</span>
                   <ion-icon name="chevron-down-outline" style="color:var(--text-3);font-size:14px"></ion-icon>
                 </button>
                 <div class="date-picker-dropdown" id="${id}_e_drop">
-                  <div class="cal-present-row ${endObj.isPresent ? 'active' : ''}" id="${id}_e_present_row">
+                  <div class="cal-present-row ${endObj.isPresent ? "active" : ""}" id="${id}_e_present_row">
                     <span class="cal-present-label">
                       <ion-icon name="radio-button-on-outline"></ion-icon>Currently working here
                     </span>
-                    <div class="cal-toggle ${endObj.isPresent ? 'on' : ''}" id="${id}_e_toggle"></div>
+                    <div class="cal-toggle ${endObj.isPresent ? "on" : ""}" id="${id}_e_toggle"></div>
                   </div>
-                  <div id="${id}_e_picker_body" style="${endObj.isPresent ? 'opacity:0.4;pointer-events:none' : ''}">
+                  <div id="${id}_e_picker_body" style="${endObj.isPresent ? "opacity:0.4;pointer-events:none" : ""}">
                     <div class="cal-header">
                       <button type="button" class="btn btn-ghost btn-icon" id="${id}_e_prev">‹</button>
-                      <span class="cal-month-label" id="${id}_e_year_label">2025</span>
+                      <span class="cal-year-label" id="${id}_e_year_label">2025</span>
                       <button type="button" class="btn btn-ghost btn-icon" id="${id}_e_next">›</button>
                     </div>
                     <div class="cal-month-grid" id="${id}_e_month_grid"></div>
@@ -1515,46 +1509,313 @@
               </div>
             </div>
           </div>
-          <input type="hidden" name="${fieldName}" id="${id}_hidden" value="${esc(initialValue || '')}" />`;
+          <input type="hidden" name="${fieldName}" id="${id}_hidden" value="${esc(initialValue || "")}" />`;
     }
 
-    /**
-     * Binds all date picker interactions inside a container.
-     * Must be called AFTER the HTML is injected into the DOM.
-     */
+    // ─────────────────────────────────────────────────────────
+    // buildMetaField — Duration (calendar) + Location (text)
+    // Stores as "X months · Location" or just "X months"
+    // ─────────────────────────────────────────────────────────
+    function buildMetaField(fieldName, initialValue) {
+      const id = "meta_" + Math.random().toString(36).slice(2, 7);
+
+      // Parse existing meta: "7 months · Addis Ababa, Ethiopia"
+      let existingLocation = "";
+      let existingDuration = "";
+
+      if (initialValue) {
+        const dotIdx = initialValue.indexOf("·");
+        if (dotIdx !== -1) {
+          existingDuration = initialValue.slice(0, dotIdx).trim();
+          existingLocation = initialValue.slice(dotIdx + 1).trim();
+        } else {
+          // Check if it looks like a duration or just location
+          if (/\d+\s*(month|year)/i.test(initialValue)) {
+            existingDuration = initialValue.trim();
+          } else {
+            existingLocation = initialValue.trim();
+          }
+        }
+      }
+
+      const previewText = initialValue || "";
+
+      return `
+          <div class="meta-field-box" id="${id}_box">
+            <!-- Live Preview -->
+            <div>
+              <div class="meta-section-label">Preview</div>
+              <div class="meta-duration-preview" id="${id}_preview">
+                <ion-icon name="time-outline"></ion-icon>
+                <span class="preview-text ${previewText ? "" : "empty"}" id="${id}_preview_text">
+                  ${esc(previewText || "Duration will appear here...")}
+                </span>
+              </div>
+            </div>
+
+            <!-- Date Range for duration calculation -->
+            <div>
+              <div class="meta-section-label">📅 Date Range (for auto-duration)</div>
+              <div class="meta-date-row">
+                <!-- Start -->
+                <div>
+                  <div class="date-range-label">Start</div>
+                  <div class="date-single-wrapper" id="${id}_s_wrap">
+                    <button type="button" class="date-picker-trigger" id="${id}_s_trigger">
+                      <ion-icon name="calendar-outline"></ion-icon>
+                      <span class="trigger-text placeholder" id="${id}_s_display">Start date</span>
+                      <ion-icon name="chevron-down-outline" style="color:var(--text-3);font-size:14px"></ion-icon>
+                    </button>
+                    <div class="date-picker-dropdown" id="${id}_s_drop">
+                      <div class="cal-header">
+                        <button type="button" class="btn btn-ghost btn-icon" id="${id}_s_prev">‹</button>
+                        <span class="cal-year-label" id="${id}_s_year_label">2024</span>
+                        <button type="button" class="btn btn-ghost btn-icon" id="${id}_s_next">›</button>
+                      </div>
+                      <div class="cal-month-grid" id="${id}_s_month_grid"></div>
+                      <div class="cal-footer">
+                        <button type="button" class="btn btn-ghost btn-sm" id="${id}_s_clear">Clear</button>
+                        <button type="button" class="btn btn-primary btn-sm" id="${id}_s_apply">Apply</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- End -->
+                <div>
+                  <div class="date-range-label">End</div>
+                  <div class="date-single-wrapper" id="${id}_e_wrap">
+                    <button type="button" class="date-picker-trigger" id="${id}_e_trigger">
+                      <ion-icon name="calendar-outline"></ion-icon>
+                      <span class="trigger-text placeholder" id="${id}_e_display">End date</span>
+                      <ion-icon name="chevron-down-outline" style="color:var(--text-3);font-size:14px"></ion-icon>
+                    </button>
+                    <div class="date-picker-dropdown" id="${id}_e_drop">
+                      <div class="cal-present-row" id="${id}_e_present_row">
+                        <span class="cal-present-label">
+                          <ion-icon name="radio-button-on-outline"></ion-icon>Currently here
+                        </span>
+                        <div class="cal-toggle" id="${id}_e_toggle"></div>
+                      </div>
+                      <div id="${id}_e_picker_body">
+                        <div class="cal-header">
+                          <button type="button" class="btn btn-ghost btn-icon" id="${id}_e_prev">‹</button>
+                          <span class="cal-year-label" id="${id}_e_year_label">2025</span>
+                          <button type="button" class="btn btn-ghost btn-icon" id="${id}_e_next">›</button>
+                        </div>
+                        <div class="cal-month-grid" id="${id}_e_month_grid"></div>
+                      </div>
+                      <div class="cal-footer">
+                        <button type="button" class="btn btn-ghost btn-sm" id="${id}_e_clear">Clear</button>
+                        <button type="button" class="btn btn-primary btn-sm" id="${id}_e_apply">Apply</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Location -->
+            <div>
+              <div class="meta-section-label">📍 Location (optional)</div>
+              <div class="meta-loc-row">
+                <ion-icon name="location-outline"></ion-icon>
+                <input
+                  type="text"
+                  id="${id}_location"
+                  placeholder="e.g. Addis Ababa, Ethiopia"
+                  value="${esc(existingLocation)}"
+                />
+              </div>
+            </div>
+          </div>
+          <input type="hidden" name="${fieldName}" id="${id}_hidden" value="${esc(initialValue || "")}" />`;
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // bindDatePickers — wires all pickers inside a container
+    // ─────────────────────────────────────────────────────────
     function bindDatePickers(ctx) {
       ctx = ctx || document;
 
-      // ── Close dropdowns when clicking outside ──
+      // Close on outside click
       document.addEventListener("click", (e) => {
-        if (!e.target.closest(".date-single-wrapper")) {
-          ctx.querySelectorAll(".date-picker-dropdown.open").forEach(d => d.classList.remove("open"));
-          ctx.querySelectorAll(".date-picker-trigger.open").forEach(d => d.classList.remove("open"));
+        if (!e.target.closest(".date-single-wrapper") && !e.target.closest(".meta-field-box")) {
+          document.querySelectorAll(".date-picker-dropdown.open").forEach(d => d.classList.remove("open"));
+          document.querySelectorAll(".date-picker-trigger.open").forEach(t => t.classList.remove("open"));
         }
       }, { capture: true });
 
-      // ── Single pickers (issue_date, expiry) ──
-      ctx.querySelectorAll("[id$='_wrap']:not([id*='_s_wrap']):not([id*='_e_wrap']):not([id*='_wrap'] [id*='_wrap'])").forEach(wrap => {
-        const id = wrap.id.replace("_wrap", "");
-        initSinglePicker(id, wrap);
+      // ── Bind meta fields (Duration + Location) ──
+      ctx.querySelectorAll("[id$='_box']").forEach(box => {
+        const id = box.id.replace("_box", "");
+        bindMetaField(id, box);
       });
 
-      // ── Range pickers ──
+      // ── Bind single date pickers (issue_date, expiry) ──
       ctx.querySelectorAll("[id$='_wrap']").forEach(wrap => {
         const wid = wrap.id;
-        // Detect range wrapper by checking for _s_wrap and _e_wrap children
+        // Skip range sub-wrappers and meta sub-wrappers
+        if (wid.endsWith("_s_wrap") || wid.endsWith("_e_wrap")) return;
+        // Skip if inside a meta box (already handled above)
+        if (wrap.closest("[id$='_box']")) return;
+        // Skip range wrappers that contain _s_drop
+        if (wrap.querySelector("[id$='_s_drop']")) return;
+        const id = wid.replace("_wrap", "");
+        if (document.getElementById(id + "_trigger")) {
+          initSinglePicker(id);
+        }
+      });
+
+      // ── Bind date range pickers (date_range field) ──
+      ctx.querySelectorAll("[id$='_wrap']").forEach(wrap => {
+        if (wrap.closest("[id$='_box']")) return; // skip meta
+        if (wrap.id.endsWith("_s_wrap") || wrap.id.endsWith("_e_wrap")) return;
         if (wrap.querySelector("[id$='_s_drop']")) {
-          const baseId = wid.replace("_wrap", "");
-          initRangePicker(baseId, wrap);
+          const baseId = wrap.id.replace("_wrap", "");
+          initRangePicker(baseId);
         }
       });
     }
 
-    function initSinglePicker(id, wrap) {
+    // ── Meta Field Binder ──
+    function bindMetaField(id, box) {
+      const hiddenEl = document.getElementById(id + "_hidden");
+      const previewEl = document.getElementById(id + "_preview_text");
+      const locationEl = document.getElementById(id + "_location");
+
+      if (!hiddenEl || !previewEl || !locationEl) return;
+
+      let startObj = { month: null, year: null };
+      let endObj = { month: null, year: null, isPresent: false };
+
+      function updatePreviewAndHidden() {
+        const dur = computeDurationStr(startObj, endObj);
+        const loc = locationEl.value.trim();
+        let val = "";
+        if (dur && loc) val = dur + " · " + loc;
+        else if (dur) val = dur;
+        else if (loc) val = loc;
+        hiddenEl.value = val;
+        previewEl.textContent = val || "Duration will appear here...";
+        previewEl.className = "preview-text" + (val ? "" : " empty");
+      }
+
+      locationEl.addEventListener("input", updatePreviewAndHidden);
+
+      // Start half
+      bindMetaHalf(id + "_s", false, (obj) => {
+        startObj = obj;
+        updatePreviewAndHidden();
+      });
+
+      // End half
+      bindMetaHalf(id + "_e", true, (obj) => {
+        endObj = obj;
+        updatePreviewAndHidden();
+      });
+    }
+
+    function bindMetaHalf(id, hasPresent, onChange) {
+      const trigger = document.getElementById(id + "_trigger");
+      const drop = document.getElementById(id + "_drop");
+      const display = document.getElementById(id + "_display");
+      const presentRow = hasPresent ? document.getElementById(id + "_present_row") : null;
+      const presToggle = hasPresent ? document.getElementById(id + "_toggle") : null;
+      const pickerBody = hasPresent ? document.getElementById(id + "_picker_body") : null;
+
+      if (!trigger || !drop || !display) return;
+
+      let selMonth = null;
+      let selYear = new Date().getFullYear();
+      let isPresent = false;
+
+      function renderGrid() {
+        const yearLabel = document.getElementById(id + "_year_label");
+        const monthGrid = document.getElementById(id + "_month_grid");
+        if (!yearLabel || !monthGrid) return;
+        yearLabel.textContent = selYear;
+        monthGrid.innerHTML = MONTH_SHORT.map((m, i) =>
+          `<button type="button" class="cal-month-btn ${selMonth === i && !isPresent ? "selected" : ""}" data-m="${i}">${m}</button>`
+        ).join("");
+        monthGrid.querySelectorAll(".cal-month-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            selMonth = +btn.dataset.m;
+            isPresent = false;
+            if (presentRow) presentRow.classList.remove("active");
+            if (presToggle) presToggle.classList.remove("on");
+            if (pickerBody) { pickerBody.style.opacity = "1"; pickerBody.style.pointerEvents = ""; }
+            renderGrid();
+          });
+        });
+      }
+
+      if (presentRow) {
+        presentRow.addEventListener("click", () => {
+          isPresent = !isPresent;
+          presentRow.classList.toggle("active", isPresent);
+          presToggle && presToggle.classList.toggle("on", isPresent);
+          if (pickerBody) {
+            pickerBody.style.opacity = isPresent ? "0.4" : "1";
+            pickerBody.style.pointerEvents = isPresent ? "none" : "";
+          }
+        });
+      }
+
+      const prevBtn = document.getElementById(id + "_prev");
+      const nextBtn = document.getElementById(id + "_next");
+      if (prevBtn) prevBtn.addEventListener("click", () => { selYear--; renderGrid(); });
+      if (nextBtn) nextBtn.addEventListener("click", () => { selYear++; renderGrid(); });
+
+      const clearBtn = document.getElementById(id + "_clear");
+      if (clearBtn) clearBtn.addEventListener("click", () => {
+        selMonth = null;
+        isPresent = false;
+        display.textContent = id.endsWith("_s") ? "Start date" : "End date";
+        display.classList.add("placeholder");
+        if (presentRow) presentRow.classList.remove("active");
+        if (presToggle) presToggle.classList.remove("on");
+        if (pickerBody) { pickerBody.style.opacity = "1"; pickerBody.style.pointerEvents = ""; }
+        drop.classList.remove("open");
+        trigger.classList.remove("open");
+        onChange({ month: null, year: null, isPresent: false });
+        renderGrid();
+      });
+
+      const applyBtn = document.getElementById(id + "_apply");
+      if (applyBtn) applyBtn.addEventListener("click", () => {
+        if (isPresent) {
+          display.textContent = "Present";
+          display.classList.remove("placeholder");
+          onChange({ month: null, year: null, isPresent: true });
+        } else if (selMonth !== null) {
+          display.textContent = MONTH_SHORT[selMonth] + " " + selYear;
+          display.classList.remove("placeholder");
+          onChange({ month: selMonth, year: selYear, isPresent: false });
+        }
+        drop.classList.remove("open");
+        trigger.classList.remove("open");
+      });
+
+      trigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = drop.classList.contains("open");
+        document.querySelectorAll(".date-picker-dropdown.open").forEach(d => d.classList.remove("open"));
+        document.querySelectorAll(".date-picker-trigger.open").forEach(t => t.classList.remove("open"));
+        if (!isOpen) { drop.classList.add("open"); trigger.classList.add("open"); renderGrid(); }
+      });
+      drop.addEventListener("click", e => e.stopPropagation());
+      renderGrid();
+    }
+
+    // ── Single Picker (issue_date / expiry) ──
+    function initSinglePicker(id) {
       const trigger = document.getElementById(id + "_trigger");
       const drop = document.getElementById(id + "_drop");
       const hidden = document.getElementById(id + "_hidden");
       const display = document.getElementById(id + "_display");
+      const noneRow = document.getElementById(id + "_none_row");
+      const noneToggle = document.getElementById(id + "_none_toggle");
+      const pickerBody = document.getElementById(id + "_picker_body");
 
       if (!trigger || !drop || !hidden) return;
 
@@ -1562,30 +1823,21 @@
       let selYear = new Date().getFullYear();
       let isNone = false;
 
-      // Parse existing value
       const existing = parseDateStr(hidden.value);
       if (existing.month !== null) { selMonth = existing.month; selYear = existing.year; }
 
-      const noneRow = document.getElementById(id + "_none_row");
-      const noneToggle = document.getElementById(id + "_none_toggle");
-      const pickerBody = document.getElementById(id + "_picker_body");
-
-      // None toggle
       if (noneRow) {
         isNone = /^no\s*expir/i.test(hidden.value || "");
         if (isNone) {
           noneRow.classList.add("active");
-          noneToggle.classList.add("on");
+          if (noneToggle) noneToggle.classList.add("on");
           if (pickerBody) { pickerBody.style.opacity = "0.4"; pickerBody.style.pointerEvents = "none"; }
         }
         noneRow.addEventListener("click", () => {
           isNone = !isNone;
           noneRow.classList.toggle("active", isNone);
-          noneToggle.classList.toggle("on", isNone);
-          if (pickerBody) {
-            pickerBody.style.opacity = isNone ? "0.4" : "1";
-            pickerBody.style.pointerEvents = isNone ? "none" : "";
-          }
+          if (noneToggle) noneToggle.classList.toggle("on", isNone);
+          if (pickerBody) { pickerBody.style.opacity = isNone ? "0.4" : "1"; pickerBody.style.pointerEvents = isNone ? "none" : ""; }
         });
       }
 
@@ -1595,37 +1847,29 @@
         if (!yearLabel || !monthGrid) return;
         yearLabel.textContent = selYear;
         monthGrid.innerHTML = MONTH_SHORT.map((m, i) =>
-          `<button type="button" class="cal-month-btn ${selMonth === i ? 'selected' : ''}" data-m="${i}">${m}</button>`
+          `<button type="button" class="cal-month-btn ${selMonth === i ? "selected" : ""}" data-m="${i}">${m}</button>`
         ).join("");
         monthGrid.querySelectorAll(".cal-month-btn").forEach(btn => {
-          btn.addEventListener("click", () => {
-            selMonth = +btn.dataset.m;
-            renderGrid();
-          });
+          btn.addEventListener("click", () => { selMonth = +btn.dataset.m; renderGrid(); });
         });
       }
 
-      // Prev / Next year
       const prevBtn = document.getElementById(id + "_prev");
       const nextBtn = document.getElementById(id + "_next");
       if (prevBtn) prevBtn.addEventListener("click", () => { selYear--; renderGrid(); });
       if (nextBtn) nextBtn.addEventListener("click", () => { selYear++; renderGrid(); });
 
-      // Clear
       const clearBtn = document.getElementById(id + "_clear");
       if (clearBtn) clearBtn.addEventListener("click", () => {
-        selMonth = null;
-        hidden.value = "";
-        display.textContent = trigger.dataset.placeholder || "Select month & year";
+        selMonth = null; hidden.value = "";
+        display.textContent = "Select month & year";
         display.classList.add("placeholder");
         isNone = false;
-        if (noneRow) { noneRow.classList.remove("active"); noneToggle && noneToggle.classList.remove("on"); }
-        drop.classList.remove("open");
-        trigger.classList.remove("open");
+        if (noneRow) { noneRow.classList.remove("active"); if (noneToggle) noneToggle.classList.remove("on"); }
+        drop.classList.remove("open"); trigger.classList.remove("open");
         renderGrid();
       });
 
-      // Apply
       const applyBtn = document.getElementById(id + "_apply");
       if (applyBtn) applyBtn.addEventListener("click", () => {
         if (isNone) {
@@ -1638,35 +1882,25 @@
           display.textContent = val;
           display.classList.remove("placeholder");
         }
-        drop.classList.remove("open");
-        trigger.classList.remove("open");
+        drop.classList.remove("open"); trigger.classList.remove("open");
       });
 
-      // Toggle open
       trigger.addEventListener("click", (e) => {
         e.stopPropagation();
         const isOpen = drop.classList.contains("open");
-        // Close all others
         document.querySelectorAll(".date-picker-dropdown.open").forEach(d => d.classList.remove("open"));
         document.querySelectorAll(".date-picker-trigger.open").forEach(t => t.classList.remove("open"));
-        if (!isOpen) {
-          drop.classList.add("open");
-          trigger.classList.add("open");
-          renderGrid();
-        }
+        if (!isOpen) { drop.classList.add("open"); trigger.classList.add("open"); renderGrid(); }
       });
-
       drop.addEventListener("click", e => e.stopPropagation());
       renderGrid();
     }
 
-    function initRangePicker(baseId, wrap) {
-      // ── START ──
-      initHalfRangePicker(baseId + "_s", wrap, false);
-      // ── END ──
-      initHalfRangePicker(baseId + "_e", wrap, true);
+    // ── Range Picker (date_range in roles) ──
+    function initRangePicker(baseId) {
+      initHalfRangePicker(baseId + "_s", false);
+      initHalfRangePicker(baseId + "_e", true);
 
-      // Update hidden field whenever either half changes
       function updateHidden() {
         const sDisplay = document.getElementById(baseId + "_s_display");
         const eDisplay = document.getElementById(baseId + "_e_display");
@@ -1683,7 +1917,6 @@
         }
       }
 
-      // Observe display text changes
       [baseId + "_s_apply", baseId + "_s_clear",
       baseId + "_e_apply", baseId + "_e_clear"].forEach(btnId => {
         const btn = document.getElementById(btnId);
@@ -1691,10 +1924,13 @@
       });
     }
 
-    function initHalfRangePicker(id, wrap, hasPresent) {
+    function initHalfRangePicker(id, hasPresent) {
       const trigger = document.getElementById(id + "_trigger");
       const drop = document.getElementById(id + "_drop");
       const display = document.getElementById(id + "_display");
+      const presentRow = hasPresent ? document.getElementById(id + "_present_row") : null;
+      const presToggle = hasPresent ? document.getElementById(id + "_toggle") : null;
+      const pickerBody = hasPresent ? document.getElementById(id + "_picker_body") : null;
 
       if (!trigger || !drop || !display) return;
 
@@ -1702,7 +1938,6 @@
       let selYear = new Date().getFullYear();
       let isPresent = false;
 
-      // Parse initial
       const initText = display.textContent.trim();
       if (initText === "Present") { isPresent = true; }
       else {
@@ -1710,15 +1945,11 @@
         if (p.month !== null) { selMonth = p.month; selYear = p.year; }
       }
 
-      const presentRow = hasPresent ? document.getElementById(id + "_present_row") : null;
-      const presentToggle = hasPresent ? document.getElementById(id + "_toggle") : null;
-      const pickerBody = hasPresent ? document.getElementById(id + "_picker_body") : null;
-
       if (presentRow) {
         presentRow.addEventListener("click", () => {
           isPresent = !isPresent;
           presentRow.classList.toggle("active", isPresent);
-          presentToggle && presentToggle.classList.toggle("on", isPresent);
+          presToggle && presToggle.classList.toggle("on", isPresent);
           if (pickerBody) {
             pickerBody.style.opacity = isPresent ? "0.4" : "1";
             pickerBody.style.pointerEvents = isPresent ? "none" : "";
@@ -1732,14 +1963,13 @@
         if (!yearLabel || !monthGrid) return;
         yearLabel.textContent = selYear;
         monthGrid.innerHTML = MONTH_SHORT.map((m, i) =>
-          `<button type="button" class="cal-month-btn ${selMonth === i && !isPresent ? 'selected' : ''}" data-m="${i}">${m}</button>`
+          `<button type="button" class="cal-month-btn ${selMonth === i && !isPresent ? "selected" : ""}" data-m="${i}">${m}</button>`
         ).join("");
         monthGrid.querySelectorAll(".cal-month-btn").forEach(btn => {
           btn.addEventListener("click", () => {
-            selMonth = +btn.dataset.m;
-            isPresent = false;
+            selMonth = +btn.dataset.m; isPresent = false;
             if (presentRow) presentRow.classList.remove("active");
-            if (presentToggle) presentToggle.classList.remove("on");
+            if (presToggle) presToggle.classList.remove("on");
             if (pickerBody) { pickerBody.style.opacity = "1"; pickerBody.style.pointerEvents = ""; }
             renderGrid();
           });
@@ -1753,15 +1983,13 @@
 
       const clearBtn = document.getElementById(id + "_clear");
       if (clearBtn) clearBtn.addEventListener("click", () => {
-        selMonth = null;
-        isPresent = false;
+        selMonth = null; isPresent = false;
         display.textContent = id.endsWith("_s") ? "Start date" : "End date";
         display.classList.add("placeholder");
         if (presentRow) presentRow.classList.remove("active");
-        if (presentToggle) presentToggle.classList.remove("on");
+        if (presToggle) presToggle.classList.remove("on");
         if (pickerBody) { pickerBody.style.opacity = "1"; pickerBody.style.pointerEvents = ""; }
-        drop.classList.remove("open");
-        trigger.classList.remove("open");
+        drop.classList.remove("open"); trigger.classList.remove("open");
         renderGrid();
       });
 
@@ -1774,8 +2002,7 @@
           display.textContent = MONTH_SHORT[selMonth] + " " + selYear;
           display.classList.remove("placeholder");
         }
-        drop.classList.remove("open");
-        trigger.classList.remove("open");
+        drop.classList.remove("open"); trigger.classList.remove("open");
       });
 
       trigger.addEventListener("click", (e) => {
@@ -1783,13 +2010,8 @@
         const isOpen = drop.classList.contains("open");
         document.querySelectorAll(".date-picker-dropdown.open").forEach(d => d.classList.remove("open"));
         document.querySelectorAll(".date-picker-trigger.open").forEach(t => t.classList.remove("open"));
-        if (!isOpen) {
-          drop.classList.add("open");
-          trigger.classList.add("open");
-          renderGrid();
-        }
+        if (!isOpen) { drop.classList.add("open"); trigger.classList.add("open"); renderGrid(); }
       });
-
       drop.addEventListener("click", e => e.stopPropagation());
       renderGrid();
     }
@@ -1888,7 +2110,6 @@
           { key: "title", label: "Title", type: "text" },
           { key: "issuer", label: "Issuer", type: "text" },
           { key: "credential_id", label: "Credential ID", type: "text" },
-          // ✅ These are now calendar pickers — handled specially in buildField
           { key: "issue_date", label: "Issue Date", type: "monthyear" },
           { key: "expiry", label: "Expiry Date", type: "monthyear_optional" },
           { key: "verify_url", label: "Verify URL", type: "text", ph: "https://..." },
@@ -1952,9 +2173,7 @@
         } else {
           err.textContent = data.error || "Login failed";
         }
-      } catch {
-        err.textContent = "Connection failed";
-      }
+      } catch { err.textContent = "Connection failed"; }
     });
 
     function logout() {
@@ -1964,7 +2183,6 @@
       $("#login-screen").style.display = "flex";
       $("#login-pass").value = "";
     }
-
     $("#logout-btn").addEventListener("click", logout);
 
     // ═══════════════════════════════════════
@@ -1979,8 +2197,7 @@
     }
 
     function buildNav() {
-      let navHTML = "";
-      let mobileHTML = "";
+      let navHTML = "", mobileHTML = "";
       SECTIONS.forEach(s => {
         if (s.group) { navHTML += '<div class="nav-group-label">' + s.group + "</div>"; return; }
         navHTML += '<button class="nav-btn" data-tab="' + s.key + '"><ion-icon name="' + s.icon + '"></ion-icon>' + s.title + "</button>";
@@ -2018,31 +2235,23 @@
       const val = item != null && item[f.key] != null ? item[f.key] : "";
       const ph = f.ph || "";
 
-      // ✅ Month-Year calendar picker (required)
       if (f.type === "monthyear") {
         return '<div class="field"><label>' + f.label + "</label>" +
-          buildSingleDatePicker(f.key, val, { placeholder: "Select month & year" }) +
-          "</div>";
+          buildSingleDatePicker(f.key, val, { placeholder: "Select month & year" }) + "</div>";
       }
-
-      // ✅ Month-Year calendar picker (optional — has "No Expiration")
       if (f.type === "monthyear_optional") {
         return '<div class="field"><label>' + f.label + "</label>" +
-          buildSingleDatePicker(f.key, val, {
-            allowNone: true,
-            noneLabel: "No Expiration",
-            placeholder: "Select expiry or no expiration",
-          }) +
-          "</div>";
+          buildSingleDatePicker(f.key, val, { allowNone: true, noneLabel: "No Expiration", placeholder: "Select expiry or no expiration" }) + "</div>";
       }
-
-      // ✅ Date Range picker
       if (f.type === "daterange") {
         return '<div class="field"><label>' + f.label + "</label>" +
-          buildDateRangePicker(f.key, val) +
-          "</div>";
+          buildDateRangePicker(f.key, val) + "</div>";
       }
-
+      // ✅ NEW: Duration + Location meta field
+      if (f.type === "meta") {
+        return '<div class="field"><label>' + f.label + "</label>" +
+          buildMetaField(f.key, val) + "</div>";
+      }
       if (f.type === "textarea") {
         return '<div class="field"><label>' + f.label + '</label><textarea name="' + f.key + '" placeholder="' + esc(ph) + '">' + esc(val) + "</textarea></div>";
       }
@@ -2070,7 +2279,6 @@
     function collectFormData(fields, ctx) {
       const body = {};
       fields.forEach(f => {
-        // Date pickers store in hidden inputs by name
         const el = $('[name="' + f.key + '"]', ctx || $("#modal-box"));
         if (!el) return;
         if (f.type === "number") body[f.key] = +el.value || 0;
@@ -2131,9 +2339,7 @@
         '<button type="submit" class="btn btn-primary">' + (isEdit ? "Save" : "Create") + "</button></div></form>"
       );
       bindImageUploads();
-      // ✅ Bind date pickers after modal HTML is injected
       bindDatePickers($("#modal-box"));
-
       $("#item-form").onsubmit = async (e) => {
         e.preventDefault();
         const body = collectFormData(sec.fields);
@@ -2143,9 +2349,7 @@
           closeModal();
           toast(isEdit ? "Updated!" : "Created!");
           switchTab(key);
-        } catch (err) {
-          toast(err.message, "error");
-        }
+        } catch (err) { toast(err.message, "error"); }
       };
     }
 
@@ -2165,9 +2369,7 @@
       el.innerHTML =
         '<div class="section-header"><h2 class="section-title"><ion-icon name="person-outline"></ion-icon> Profile &amp; About</h2></div>' +
         '<div class="status-card">' +
-        '<div class="status-info"><h3><span class="status-dot" id="status-dot" style="background:' + currentOpt.color + ";box-shadow:0 0 8px " + currentOpt.color + '60"></span>' +
-        '<span id="status-label">' + currentOpt.label + "</span></h3>" +
-        "<p>Controls the badge on your portfolio avatar</p></div>" +
+        '<div class="status-info"><h3><span class="status-dot" id="status-dot" style="background:' + currentOpt.color + ";box-shadow:0 0 8px " + currentOpt.color + '60"></span><span id="status-label">' + currentOpt.label + "</span></h3><p>Controls the badge on your portfolio avatar</p></div>" +
         '<div class="status-buttons" id="status-buttons">' +
         statusOptions.map(s =>
           '<button class="btn ' + (s.value === currentStatus ? "btn-primary" : "btn-ghost") + ' btn-sm" data-availability="' + s.value + '"' +
@@ -2191,8 +2393,7 @@
         '<textarea name="about_text" style="min-height:200px" placeholder="Write about yourself...">' + esc(p.about_text) + "</textarea>" +
         '<div class="field-hint">Use **text** for green highlights. Blank line = new paragraph.</div></div>' +
         '<input type="hidden" name="availability" id="availability-input" value="' + currentStatus + '" />' +
-        '<button type="submit" class="btn btn-primary btn-lg"><ion-icon name="save-outline"></ion-icon> Save Profile</button>' +
-        "</form>";
+        '<button type="submit" class="btn btn-primary btn-lg"><ion-icon name="save-outline"></ion-icon> Save Profile</button></form>';
 
       const statusColors = { available: "#2ecc87", busy: "#e8a838", unavailable: "#f85149" };
       $("#status-buttons").addEventListener("click", async (e) => {
@@ -2202,50 +2403,30 @@
         const opt = statusOptions.find(s => s.value === ns);
         $("#availability-input").value = ns;
         $$("#status-buttons .btn").forEach(b => {
-          if (b.dataset.availability === ns) {
-            b.className = "btn btn-primary btn-sm";
-            b.style.background = statusColors[ns];
-            b.style.borderColor = statusColors[ns];
-          } else {
-            b.className = "btn btn-ghost btn-sm";
-            b.style.background = "";
-            b.style.borderColor = "";
-          }
+          if (b.dataset.availability === ns) { b.className = "btn btn-primary btn-sm"; b.style.background = statusColors[ns]; b.style.borderColor = statusColors[ns]; }
+          else { b.className = "btn btn-ghost btn-sm"; b.style.background = ""; b.style.borderColor = ""; }
         });
         $("#status-dot").style.background = opt.color;
         $("#status-dot").style.boxShadow = "0 0 8px " + opt.color + "60";
         $("#status-label").textContent = opt.label;
         try {
-          await api("/profile", "PUT", {
-            name: $('[name="name"]').value,
-            title: $('[name="title"]').value,
-            about_text: $('[name="about_text"]').value,
-            avatar_url: $('[name="avatar_url"]').value,
-            availability: ns,
-          });
+          await api("/profile", "PUT", { name: $('[name="name"]').value, title: $('[name="title"]').value, about_text: $('[name="about_text"]').value, avatar_url: $('[name="avatar_url"]').value, availability: ns });
           toast("Status: " + opt.label);
         } catch (err) { toast(err.message, "error"); }
       });
 
       bindImageUploads(el);
-
       $("#profile-form").onsubmit = async (e) => {
         e.preventDefault();
         try {
-          await api("/profile", "PUT", {
-            name: $('[name="name"]').value,
-            title: $('[name="title"]').value,
-            about_text: $('[name="about_text"]').value,
-            avatar_url: $('[name="avatar_url"]').value,
-            availability: $("#availability-input").value,
-          });
+          await api("/profile", "PUT", { name: $('[name="name"]').value, title: $('[name="title"]').value, about_text: $('[name="about_text"]').value, avatar_url: $('[name="avatar_url"]').value, availability: $("#availability-input").value });
           toast("Profile saved!");
         } catch (err) { toast(err.message, "error"); }
       };
     }
 
     // ═══════════════════════════════════════
-    // EXPERIENCE / EDUCATION (Nested)
+    // EXPERIENCE / EDUCATION
     // ═══════════════════════════════════════
     async function renderCompanySection(el, section, label) {
       const allCompanies = await api("/companies");
@@ -2254,7 +2435,8 @@
 
       const companyFields = [
         { key: "name", label: section === "education" ? "School Name" : "Company Name", type: "text" },
-        { key: "meta", label: "Duration / Location", type: "text", ph: "7 months · Addis Ababa" },
+        // ✅ meta now uses the new calendar+location picker
+        { key: "meta", label: "Duration / Location", type: "meta" },
         { key: "icon", label: "Ion-icon Name", type: "text", ph: "business-outline" },
         { key: "is_single", label: "Single Entry (dashed)", type: "select", options: ["0", "1"] },
         { key: "sort_order", label: "Order", type: "number" },
@@ -2262,7 +2444,6 @@
 
       const roleFields = [
         { key: "title", label: "Role / Degree Title", type: "text" },
-        // ✅ Date range now uses calendar picker
         { key: "date_range", label: "Date Range", type: "daterange" },
         { key: "description", label: "Description", type: "textarea" },
         { key: "tags", label: "Tags (comma-separated)", type: "text", ph: "Python, CI/CD, Agile" },
@@ -2302,7 +2483,6 @@
           }).join("")) +
         "</div>";
 
-      // Add company
       $("#add-company").onclick = () =>
         openCustomForm("Add " + (section === "education" ? "School" : "Company"), companyFields, null, async (body) => {
           body.section = section;
@@ -2311,7 +2491,6 @@
           switchTab(section);
         });
 
-      // Delegation
       $("#companies-list").addEventListener("click", async (e) => {
         if (e.target.closest(".btn-edit-co")) {
           const cid = +e.target.closest("[data-cid]").dataset.cid;
@@ -2338,9 +2517,7 @@
           const cid = +e.target.closest("[data-for-company]").dataset.forCompany;
           openCustomForm("Add Role", roleFields, null, async (body) => {
             body.company_id = cid;
-            body.tags = JSON.stringify(
-              body.tags ? body.tags.split(",").map(t => t.trim()).filter(Boolean) : []
-            );
+            body.tags = JSON.stringify(body.tags ? body.tags.split(",").map(t => t.trim()).filter(Boolean) : []);
             await api("/roles", "POST", body);
             toast("Role added!");
             switchTab(section);
@@ -2354,9 +2531,7 @@
           try { tagsStr = JSON.parse(r.tags || "[]").join(", "); } catch { }
           openCustomForm("Edit Role", roleFields, { ...r, tags: tagsStr }, async (body) => {
             body.company_id = r.company_id;
-            body.tags = JSON.stringify(
-              body.tags ? body.tags.split(",").map(t => t.trim()).filter(Boolean) : []
-            );
+            body.tags = JSON.stringify(body.tags ? body.tags.split(",").map(t => t.trim()).filter(Boolean) : []);
             await api("/roles/" + r.id, "PUT", body);
             toast("Updated!");
             switchTab(section);
@@ -2385,18 +2560,14 @@
         '<button type="submit" class="btn btn-primary">' + (isEdit ? "Save" : "Create") + "</button></div></form>"
       );
       bindImageUploads();
-      // ✅ Bind date pickers after modal content injected
       bindDatePickers($("#modal-box"));
-
       $("#custom-form").onsubmit = async (e) => {
         e.preventDefault();
         const body = collectFormData(fields);
         try {
           await onSubmit(body);
           closeModal();
-        } catch (err) {
-          toast(err.message, "error");
-        }
+        } catch (err) { toast(err.message, "error"); }
       };
     }
 
