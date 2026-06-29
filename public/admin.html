@@ -130,7 +130,6 @@
       background: var(--text-3)
     }
 
-    /* ── Layout ── */
     .field {
       margin-bottom: 16px
     }
@@ -173,7 +172,6 @@
       gap: 10px
     }
 
-    /* ── Buttons ── */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -240,7 +238,6 @@
       font-size: 16px
     }
 
-    /* ── Date Picker ── */
     .dp-wrap {
       position: relative
     }
@@ -464,7 +461,6 @@
       pointer-events: none
     }
 
-    /* ── Meta field (Location only) ── */
     .meta-box {
       background: var(--bg-1);
       border: 1px solid var(--border);
@@ -511,7 +507,6 @@
       flex-shrink: 0
     }
 
-    /* ── Login ── */
     #login-screen {
       display: flex;
       justify-content: center;
@@ -563,7 +558,6 @@
       font-family: var(--mono)
     }
 
-    /* ── Panel ── */
     #admin-panel {
       display: none
     }
@@ -625,7 +619,6 @@
       min-height: calc(100vh - 56px)
     }
 
-    /* ── Nav ── */
     .admin-nav {
       width: 220px;
       background: var(--bg-1);
@@ -678,7 +671,6 @@
       flex-shrink: 0
     }
 
-    /* ── Content ── */
     .admin-content {
       flex: 1;
       padding: 28px 32px;
@@ -717,7 +709,6 @@
       font-family: var(--mono)
     }
 
-    /* ── Item Cards ── */
     .item-list {
       display: flex;
       flex-direction: column;
@@ -819,7 +810,31 @@
       margin-bottom: 16px
     }
 
-    /* ── Modal ── */
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      color: var(--text-3);
+      gap: 16px;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--bg-3);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
     .modal-ov {
       position: fixed;
       inset: 0;
@@ -886,21 +901,28 @@
       gap: 8px
     }
 
-    /* ── Upload ── */
     .upload-area {
       display: flex;
       align-items: center;
       gap: 14px
     }
 
+    .upload-thumb-wrap {
+      position: relative;
+      cursor: pointer;
+      display: inline-block;
+      border-radius: var(--r);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
     .upload-thumb {
       width: 64px;
       height: 64px;
-      border-radius: var(--r);
       object-fit: cover;
       border: 1px solid var(--border);
       background: var(--bg-3);
-      flex-shrink: 0
+      display: block;
     }
 
     .upload-thumb.lg {
@@ -909,24 +931,28 @@
       border-radius: var(--r-lg)
     }
 
+    .upload-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity var(--t);
+      color: #fff;
+      font-size: 24px;
+    }
+
+    .upload-thumb-wrap:hover .upload-overlay {
+      opacity: 1
+    }
+
     .upload-ctrl {
       flex: 1;
       display: flex;
       flex-direction: column;
       gap: 6px
-    }
-
-    .upload-ctrl input[type=file] {
-      font-size: 12px;
-      padding: 6px;
-      border: 1px dashed var(--border);
-      background: var(--bg-1);
-      border-radius: var(--r);
-      cursor: pointer
-    }
-
-    .upload-ctrl input[type=file]:hover {
-      border-color: var(--accent)
     }
 
     .upload-st {
@@ -947,7 +973,6 @@
       color: var(--danger)
     }
 
-    /* ── Toast ── */
     #toasts {
       position: fixed;
       bottom: 24px;
@@ -988,7 +1013,6 @@
       color: #fff
     }
 
-    /* ── Confirm ── */
     .cfm-ov {
       position: fixed;
       inset: 0;
@@ -1032,7 +1056,6 @@
       justify-content: center
     }
 
-    /* ── Status card ── */
     .status-card {
       background: var(--bg-2);
       border: 1px solid var(--border);
@@ -1074,7 +1097,6 @@
       flex-wrap: wrap
     }
 
-    /* ── Responsive ── */
     @media(max-width:768px) {
       .admin-nav {
         display: none
@@ -1164,7 +1186,6 @@
 
 <body>
 
-  <!-- LOGIN -->
   <div id="login-screen">
     <div class="login-card">
       <div class="login-logo"><span class="br">&lt;</span>YM<span class="sl">/</span><span class="br">&gt;</span></div>
@@ -1180,7 +1201,6 @@
     </div>
   </div>
 
-  <!-- PANEL -->
   <div id="admin-panel">
     <header class="panel-header">
       <div class="panel-logo"><span>&lt;<span class="accent">YM</span>/&gt;</span><span class="cms-badge">CMS</span>
@@ -1198,12 +1218,10 @@
     <nav class="mobile-nav" id="mobile-nav"></nav>
   </div>
 
-  <!-- MODAL -->
   <div class="modal-ov" id="modal-ov">
     <div class="modal-box" id="modal-box"></div>
   </div>
 
-  <!-- CONFIRM -->
   <div class="cfm-ov" id="cfm-ov">
     <div class="cfm-box">
       <h3 id="cfm-title">Are you sure?</h3>
@@ -1223,30 +1241,35 @@
   <script>
     "use strict";
 
-    /* ═══════════════════════════════════════════════════════
-       1. CORE UTILITIES
-    ═══════════════════════════════════════════════════════ */
     const $ = (s, c = document) => c.querySelector(s);
     const $$ = (s, c = document) => [...c.querySelectorAll(s)];
     const API = "/api";
     let TOKEN = localStorage.getItem("admin_token");
     let currentTab = "", currentUser = "";
+    const _cache = {};
 
-    const esc = v => {
-      const d = document.createElement("div");
-      d.textContent = v == null ? "" : String(v);
-      return d.innerHTML;
-    };
+    const esc = v => { const d = document.createElement("div"); d.textContent = v == null ? "" : String(v); return d.innerHTML; };
 
     async function apiFetch(endpoint, method = "GET", body = null) {
+      if (method === "GET" && _cache[endpoint]) return _cache[endpoint];
       const opts = { method, headers: { Authorization: "Bearer " + TOKEN } };
       if (body) { opts.headers["Content-Type"] = "application/json"; opts.body = JSON.stringify(body); }
+
       const res = await fetch(API + endpoint, opts);
       if (res.status === 401) { logout(); throw new Error("Session expired"); }
-      const data = await res.json();
+
+      let data;
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) data = await res.json();
+      else data = { error: `Server error (${res.status})` };
+
       if (!res.ok) throw new Error(data.error || "Request failed");
+      if (method === "GET") _cache[endpoint] = data;
       return data;
     }
+
+    function clearCache() { Object.keys(_cache).forEach(key => delete _cache[key]); }
+    function showLoading(el) { el.innerHTML = `<div class="loading-state"><div class="spinner"></div><p>Loading data...</p></div>`; }
 
     function toast(msg, type = "ok") {
       const el = document.createElement("div");
@@ -1259,39 +1282,22 @@
 
     function cfmDialog(title, text) {
       return new Promise(resolve => {
-        $("#cfm-title").textContent = title;
-        $("#cfm-text").textContent = text;
+        $("#cfm-title").textContent = title; $("#cfm-text").textContent = text;
         $("#cfm-ov").classList.add("open");
         const done = v => { $("#cfm-ov").classList.remove("open"); resolve(v); };
-        $("#cfm-cancel").onclick = () => done(false);
-        $("#cfm-ok").onclick = () => done(true);
+        $("#cfm-cancel").onclick = () => done(false); $("#cfm-ok").onclick = () => done(true);
       });
     }
 
     const openModal = html => { $("#modal-box").innerHTML = html; $("#modal-ov").classList.add("open"); };
     const closeModal = () => { $("#modal-ov").classList.remove("open"); };
-
     $("#modal-ov").addEventListener("click", e => { if (e.target.id === "modal-ov") closeModal(); });
-    document.addEventListener("keydown", e => {
-      if (e.key !== "Escape") return;
-      closeModal();
-      $("#cfm-ov").classList.remove("open");
-      closePickers();
-    });
+    document.addEventListener("keydown", e => { if (e.key !== "Escape") return; closeModal(); $("#cfm-ov").classList.remove("open"); closePickers(); });
 
-    /* close every open picker dropdown */
-    const closePickers = () => {
-      $$(".dp-drop.open").forEach(d => d.classList.remove("open"));
-      $$(".dp-trigger.open").forEach(t => t.classList.remove("open"));
-    };
-    document.addEventListener("click", e => {
-      if (!e.target.closest(".dp-wrap")) closePickers();
-    }, true);
+    const closePickers = () => { $$(".dp-drop.open").forEach(d => d.classList.remove("open")); $$(".dp-trigger.open").forEach(t => t.classList.remove("open")); };
+    document.addEventListener("click", e => { if (!e.target.closest(".dp-wrap")) closePickers(); }, true);
 
-    const toBase64 = file => new Promise((res, rej) => {
-      const r = new FileReader();
-      r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file);
-    });
+    const toBase64 = file => new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); });
 
     function bindUploads(ctx = $("#modal-box")) {
       $$("[data-upload]", ctx).forEach(inp => {
@@ -1299,58 +1305,33 @@
           const key = inp.dataset.upload, file = inp.files[0];
           if (!file) return;
           if (file.size > 5 * 1024 * 1024) { toast("Image must be < 5 MB", "err"); return; }
-          const st = $(`[data-ust="${key}"]`, ctx), pr = $(`[data-preview="${key}"]`, ctx), hid = $(`[name="${key}"]`, ctx);
+          const st = $(`[data-ust="${key}"]`, ctx), pr = $$(`[data-preview="${key}"]`, ctx), hid = $(`[name="${key}"]`, ctx);
           if (st) { st.textContent = "Uploading…"; st.className = "upload-st busy"; }
           try {
             const d = await apiFetch("/upload", "POST", { image: await toBase64(file) });
             if (hid) hid.value = d.url;
-            if (pr) pr.src = d.url;
+            pr.forEach(img => img.src = d.url);
             if (st) { st.textContent = "✓ Uploaded"; st.className = "upload-st ok"; }
-          } catch (err) {
-            if (st) { st.textContent = "✗ " + err.message; st.className = "upload-st err"; }
-          }
+            clearCache();
+          } catch (err) { if (st) { st.textContent = "✗ " + err.message; st.className = "upload-st err"; } }
         });
       });
     }
 
-    /* ═══════════════════════════════════════════════════════
-       2. DATE PICKER ENGINE  — single factory, zero repetition
-    ═══════════════════════════════════════════════════════ */
     const MONTHS_S = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const MONTHS_F = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-    /* "Feb 2026" → {m,y} | null */
     function parseMY(str = "") {
       const match = str.trim().match(/^(\w+)\s+(\d{4})/);
       if (!match) return null;
       const mi = MONTHS_F.findIndex(n => n.toLowerCase().startsWith(match[1].toLowerCase().slice(0, 3)));
       return mi < 0 ? null : { m: mi, y: parseInt(match[2], 10) };
     }
-
-    /* {m,y} → "Feb 2026" */
     const fmtMY = ({ m, y }) => MONTHS_S[m] + " " + y;
+    let _uid = 0; const uid = () => "dp" + (++_uid);
 
-    let _uid = 0;
-    const uid = () => "dp" + (++_uid);
-
-    /*
-      buildPicker(opts) → { html:string, bind(rootEl):void }
-  
-      opts.name        string   — hidden <input> name
-      opts.value       string   — initial stored value
-      opts.placeholder string
-      opts.hasPresent  bool     — "Currently working here" toggle
-      opts.hasNone     bool     — "No Expiration" toggle
-      opts.noneLabel   string
-      opts.onChange    fn(val)  — called every time value changes
-    */
     function buildPicker(opts = {}) {
-      const id = uid();
-      const val = opts.value || "";
-      const ph = opts.placeholder || "Select month & year";
-
-      const isPresentNow = /^present$/i.test(val);
-      const isNoneNow = /^no\s*expir/i.test(val);
+      const id = uid(); const val = opts.value || ""; const ph = opts.placeholder || "Select month & year";
+      const isPresentNow = /^present$/i.test(val); const isNoneNow = /^no\s*expir/i.test(val);
       const parsed = (!isPresentNow && !isNoneNow) ? parseMY(val) : null;
       const dispTxt = isPresentNow ? "Present" : isNoneNow ? (opts.noneLabel || "No Expiration") : (parsed ? fmtMY(parsed) : "");
 
@@ -1363,275 +1344,111 @@
         </button>
         <input type="hidden" name="${opts.name}" id="${id}h" value="${esc(val)}" />
         <div class="dp-drop" id="${id}drop">
-          ${opts.hasPresent ? `
-          <div class="dp-toggle-row${isPresentNow ? " on" : ""}" id="${id}pr">
-            <span class="dp-toggle-label"><ion-icon name="radio-button-on-outline"></ion-icon>Currently working here</span>
-            <div class="toggle-pill${isPresentNow ? " on" : ""}" id="${id}pt"></div>
-          </div>` : ""}
-          ${opts.hasNone ? `
-          <div class="dp-toggle-row${isNoneNow ? " on" : ""}" id="${id}nr">
-            <span class="dp-toggle-label"><ion-icon name="infinite-outline"></ion-icon>${esc(opts.noneLabel || "No Expiration")}</span>
-            <div class="toggle-pill${isNoneNow ? " on" : ""}" id="${id}nt"></div>
-          </div>` : ""}
+          ${opts.hasPresent ? `<div class="dp-toggle-row${isPresentNow ? " on" : ""}" id="${id}pr"><span class="dp-toggle-label"><ion-icon name="radio-button-on-outline"></ion-icon>Currently working here</span><div class="toggle-pill${isPresentNow ? " on" : ""}" id="${id}pt"></div></div>` : ""}
+          ${opts.hasNone ? `<div class="dp-toggle-row${isNoneNow ? " on" : ""}" id="${id}nr"><span class="dp-toggle-label"><ion-icon name="infinite-outline"></ion-icon>${esc(opts.noneLabel || "No Expiration")}</span><div class="toggle-pill${isNoneNow ? " on" : ""}" id="${id}nt"></div></div>` : ""}
           <div class="dp-body${(isPresentNow || isNoneNow) ? " disabled" : ""}" id="${id}body">
-            <div class="dp-year-nav">
-              <button type="button" id="${id}py">‹</button>
-              <span class="dp-year-val" id="${id}yr">${parsed?.y ?? new Date().getFullYear()}</span>
-              <button type="button" id="${id}ny">›</button>
-            </div>
+            <div class="dp-year-nav"><button type="button" id="${id}py">‹</button><span class="dp-year-val" id="${id}yr">${parsed?.y ?? new Date().getFullYear()}</span><button type="button" id="${id}ny">›</button></div>
             <div class="dp-months" id="${id}mg"></div>
           </div>
-          <div class="dp-footer">
-            <button type="button" class="btn btn-ghost btn-sm" id="${id}cl">Clear</button>
-            <button type="button" class="btn btn-primary btn-sm" id="${id}ap">Apply</button>
-          </div>
+          <div class="dp-footer"><button type="button" class="btn btn-ghost btn-sm" id="${id}cl">Clear</button><button type="button" class="btn btn-primary btn-sm" id="${id}ap">Apply</button></div>
         </div>
       </div>`;
 
       function bind(root = document) {
-        let selM = parsed?.m ?? null;
-        let selY = parsed?.y ?? new Date().getFullYear();
-        let present = isPresentNow;
-        let none = isNoneNow;
-
-        const T = root.getElementById(id + "t");
-        const D = root.getElementById(id + "d");
-        const H = root.getElementById(id + "h");
-        const drop = root.getElementById(id + "drop");
-        const body = root.getElementById(id + "body");
-        const yrEl = root.getElementById(id + "yr");
-        const mg = root.getElementById(id + "mg");
-        const prRow = root.getElementById(id + "pr");
-        const prPl = root.getElementById(id + "pt");
-        const nrRow = root.getElementById(id + "nr");
-        const nrPl = root.getElementById(id + "nt");
-
+        let selM = parsed?.m ?? null; let selY = parsed?.y ?? new Date().getFullYear(); let present = isPresentNow; let none = isNoneNow;
+        const T = root.getElementById(id + "t"), D = root.getElementById(id + "d"), H = root.getElementById(id + "h"), drop = root.getElementById(id + "drop"), body = root.getElementById(id + "body"), yrEl = root.getElementById(id + "yr"), mg = root.getElementById(id + "mg"), prRow = root.getElementById(id + "pr"), prPl = root.getElementById(id + "pt"), nrRow = root.getElementById(id + "nr"), nrPl = root.getElementById(id + "nt");
         if (!T || !drop || !H) return;
 
         function renderMonths() {
-          if (!yrEl || !mg) return;
-          yrEl.textContent = selY;
-          mg.innerHTML = MONTHS_S.map((m, i) =>
-            `<button type="button" class="dp-month${selM === i && !present && !none ? " sel" : ""}" data-m="${i}">${m}</button>`
-          ).join("");
-          mg.querySelectorAll(".dp-month").forEach(b => b.addEventListener("click", () => {
-            selM = +b.dataset.m; present = false; none = false;
-            syncToggles(); renderMonths();
-          }));
+          if (!yrEl || !mg) return; yrEl.textContent = selY;
+          mg.innerHTML = MONTHS_S.map((m, i) => `<button type="button" class="dp-month${selM === i && !present && !none ? " sel" : ""}" data-m="${i}">${m}</button>`).join("");
+          mg.querySelectorAll(".dp-month").forEach(b => b.addEventListener("click", () => { selM = +b.dataset.m; present = false; none = false; syncToggles(); renderMonths(); }));
         }
-
         function syncToggles() {
           if (prRow) { prRow.classList.toggle("on", present); prPl.classList.toggle("on", present); }
           if (nrRow) { nrRow.classList.toggle("on", none); nrPl.classList.toggle("on", none); }
           if (body) body.classList.toggle("disabled", present || none);
         }
-
-        function commit(val) {
-          H.value = val;
-          D.textContent = val || ph;
-          D.classList.toggle("ph", !val);
-          opts.onChange?.(val);
-        }
+        function commit(val) { H.value = val; D.textContent = val || ph; D.classList.toggle("ph", !val); opts.onChange?.(val); }
 
         prRow?.addEventListener("click", () => { present = !present; if (present) none = false; syncToggles(); renderMonths(); });
         nrRow?.addEventListener("click", () => { none = !none; if (none) present = false; syncToggles(); renderMonths(); });
-
         root.getElementById(id + "py")?.addEventListener("click", () => { selY--; renderMonths(); });
         root.getElementById(id + "ny")?.addEventListener("click", () => { selY++; renderMonths(); });
-
-        root.getElementById(id + "cl")?.addEventListener("click", () => {
-          selM = null; present = false; none = false;
-          syncToggles(); renderMonths();
-          commit(""); closeThisDrop();
-        });
-
+        root.getElementById(id + "cl")?.addEventListener("click", () => { selM = null; present = false; none = false; syncToggles(); renderMonths(); commit(""); closeThisDrop(); });
         root.getElementById(id + "ap")?.addEventListener("click", () => {
-          let v = "";
-          if (present) v = "Present";
-          else if (none) v = opts.noneLabel || "No Expiration";
-          else if (selM !== null) v = fmtMY({ m: selM, y: selY });
+          let v = ""; if (present) v = "Present"; else if (none) v = opts.noneLabel || "No Expiration"; else if (selM !== null) v = fmtMY({ m: selM, y: selY });
           commit(v); closeThisDrop();
         });
 
         function closeThisDrop() { drop.classList.remove("open"); T.classList.remove("open"); }
-        T.addEventListener("click", e => {
-          e.stopPropagation();
-          const wasOpen = drop.classList.contains("open");
-          closePickers();
-          if (!wasOpen) { drop.classList.add("open"); T.classList.add("open"); renderMonths(); }
-        });
+        T.addEventListener("click", e => { e.stopPropagation(); const wasOpen = drop.classList.contains("open"); closePickers(); if (!wasOpen) { drop.classList.add("open"); T.classList.add("open"); renderMonths(); } });
         drop.addEventListener("click", e => e.stopPropagation());
         renderMonths();
       }
-
       return { html, bind };
     }
 
-    /*
-      buildRangePicker(name, value) → { html, bind }
-      Stores "Feb 2026 — Present" or "Sep 2025 — Feb 2026" in one hidden input.
-    */
     function buildRangePicker(name, value = "") {
-      const rid = uid();
-      let sVal = "", eVal = "";
-
+      const rid = uid(); let sVal = "", eVal = "";
       const cleaned = value.replace(/·.*$/, "").trim();
       const parts = cleaned.split(/\s*[—–]\s*|\s*--\s*|\s+-\s+/);
-      if (parts.length >= 2) {
-        const sO = parseMY(parts[0]);
-        sVal = sO ? fmtMY(sO) : "";
-        const eTok = parts[1].trim();
-        eVal = /^present$/i.test(eTok) ? "Present" : (parseMY(eTok) ? fmtMY(parseMY(eTok)) : "");
-      }
-
-      /* build two pickers — they write into temp hidden inputs, then we combine */
+      if (parts.length >= 2) { const sO = parseMY(parts[0]); sVal = sO ? fmtMY(sO) : ""; const eTok = parts[1].trim(); eVal = /^present$/i.test(eTok) ? "Present" : (parseMY(eTok) ? fmtMY(parseMY(eTok)) : ""); }
       const sKey = "__rs_" + rid, eKey = "__re_" + rid;
-      const sP = buildPicker({ name: sKey, value: sVal, placeholder: "Start date" });
-      const eP = buildPicker({ name: eKey, value: eVal, placeholder: "End date", hasPresent: true });
-
-      const html = `
-      <div class="two-col">
-        <div><div class="sub-label">Start</div>${sP.html}</div>
-        <div><div class="sub-label">End</div>${eP.html}</div>
-      </div>
-      <input type="hidden" name="${name}" id="${rid}rh" value="${esc(value)}" />`;
-
+      let syncRange;
+      const sP = buildPicker({ name: sKey, value: sVal, placeholder: "Start date", onChange: () => syncRange && syncRange() });
+      const eP = buildPicker({ name: eKey, value: eVal, placeholder: "End date", hasPresent: true, onChange: () => syncRange && syncRange() });
+      const html = `<div class="two-col"><div><div class="sub-label">Start</div>${sP.html}</div><div><div class="sub-label">End</div>${eP.html}</div></div><input type="hidden" name="${name}" id="${rid}rh" value="${esc(value)}" />`;
       function bind(root = document) {
         const H = root.getElementById(rid + "rh");
-
-        function syncRange() {
-          const sv = root.querySelector(`[name="${sKey}"]`)?.value || "";
-          const ev = root.querySelector(`[name="${eKey}"]`)?.value || "";
-          H.value = sv && ev ? sv + " — " + ev : sv || ev || "";
-        }
-
-        /* inject onChange into both pickers before binding */
-        sP.bind(root); eP.bind(root);
-
-        /* patch: listen to the hidden inputs via MutationObserver */
-        [sKey, eKey].forEach(k => {
-          const h = root.querySelector(`[name="${k}"]`);
-          if (!h) return;
-          new MutationObserver(syncRange).observe(h, { attributes: true, attributeFilter: ["value"] });
-        });
-
-        /* also catch Apply/Clear button clicks (reliable fallback) */
-        root.querySelectorAll(`[id$="ap"],[id$="cl"]`).forEach(b => {
-          b.addEventListener("click", () => requestAnimationFrame(syncRange));
-        });
+        syncRange = () => { const sv = root.querySelector(`[name="${sKey}"]`)?.value || ""; const ev = root.querySelector(`[name="${eKey}"]`)?.value || ""; H.value = sv && ev ? sv + " — " + ev : sv || ev || ""; };
+        sP.bind(root); eP.bind(root); syncRange();
       }
-
       return { html, bind };
     }
 
-    /*
-      buildMetaField(name, value) → { html, bind }
-      ✅ Location-only input.
-      Duration is auto-computed on the portfolio frontend from role date_ranges.
-      Stores: "Addis Ababa, Ethiopia"  OR  "" (empty = no location)
-      The frontend JS will prepend the computed duration automatically.
-    */
     function buildMetaField(name, value = "") {
-      const mid = uid();
-
-      /* strip any duration prefix that may have been stored previously */
-      let location = value;
-      const dotI = value.indexOf("·");
-      if (dotI !== -1) location = value.slice(dotI + 1).trim();
-      /* if it looks like a pure duration with no location, clear it */
+      const mid = uid(); let location = value;
+      const dotI = value.indexOf("·"); if (dotI !== -1) location = value.slice(dotI + 1).trim();
       if (/^\d+\s*(month|year)/i.test(location)) location = "";
-
       const html = `
       <div class="meta-box" id="${mid}mb">
-        <div class="meta-info">
-          <ion-icon name="information-circle-outline"></ion-icon>
-          Duration is auto-calculated from role dates — just enter the location below.
-        </div>
-        <div class="loc-row">
-          <ion-icon name="location-outline"></ion-icon>
-          <input
-            type="text"
-            id="${mid}loc"
-            placeholder="e.g. Addis Ababa, Ethiopia"
-            value="${esc(location)}"
-          />
-        </div>
+        <div class="meta-info"><ion-icon name="information-circle-outline"></ion-icon>Duration is auto-calculated from role dates — just enter the location below.</div>
+        <div class="loc-row"><ion-icon name="location-outline"></ion-icon><input type="text" id="${mid}loc" placeholder="e.g. Addis Ababa, Ethiopia" value="${esc(location)}" /></div>
       </div>
       <input type="hidden" name="${name}" id="${mid}h" value="${esc(location)}" />`;
-
-      function bind(root = document) {
-        const H = root.getElementById(mid + "h");
-        const loc = root.getElementById(mid + "loc");
-        if (!H || !loc) return;
-        /* keep hidden input in sync with text input */
-        loc.addEventListener("input", () => { H.value = loc.value.trim(); });
-      }
-
+      function bind(root = document) { const H = root.getElementById(mid + "h"); const loc = root.getElementById(mid + "loc"); if (!H || !loc) return; loc.addEventListener("input", () => { H.value = loc.value.trim(); }); }
       return { html, bind };
     }
 
-    /* ═══════════════════════════════════════════════════════
-       3. FIELD BUILDER  — wraps every field type uniformly
-    ═══════════════════════════════════════════════════════ */
     const BLANK_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Crect width='64' height='64' fill='%2321262d'/%3E%3C/svg%3E";
 
     function buildField(f, item) {
-      const val = item?.[f.key] ?? "";
-      const ph = f.ph || "";
-      const binders = [];
-      let html = "";
-
+      const val = item?.[f.key] ?? ""; const ph = f.ph || ""; const binders = []; let html = "";
       switch (f.type) {
-        case "monthyear": {
-          const p = buildPicker({ name: f.key, value: val, placeholder: "Select month & year" });
-          binders.push(r => p.bind(r));
-          html = fieldWrap(f.label, p.html);
-          break;
-        }
-        case "monthyear_optional": {
-          const p = buildPicker({ name: f.key, value: val, placeholder: "Select expiry or choose no expiration", hasNone: true, noneLabel: "No Expiration" });
-          binders.push(r => p.bind(r));
-          html = fieldWrap(f.label, p.html);
-          break;
-        }
-        case "daterange": {
-          const p = buildRangePicker(f.key, val);
-          binders.push(r => p.bind(r));
-          html = fieldWrap(f.label, p.html);
-          break;
-        }
-        case "meta": {
-          const p = buildMetaField(f.key, val);
-          binders.push(r => p.bind(r));
-          html = fieldWrap(f.label, p.html);
-          break;
-        }
-        case "textarea":
-          html = fieldWrap(f.label, `<textarea name="${f.key}" placeholder="${esc(ph)}">${esc(val)}</textarea>`);
-          break;
-        case "select": {
-          const opts = (f.options || []).map(o => `<option value="${o}"${String(val) === String(o) ? " selected" : ""}>${o}</option>`).join("");
-          html = fieldWrap(f.label, `<select name="${f.key}">${opts}</select>`);
-          break;
-        }
+        case "monthyear": { const p = buildPicker({ name: f.key, value: val, placeholder: "Select month & year" }); binders.push(r => p.bind(r)); html = fieldWrap(f.label, p.html); break; }
+        case "monthyear_optional": { const p = buildPicker({ name: f.key, value: val, placeholder: "Select expiry or choose no expiration", hasNone: true, noneLabel: "No Expiration" }); binders.push(r => p.bind(r)); html = fieldWrap(f.label, p.html); break; }
+        case "daterange": { const p = buildRangePicker(f.key, val); binders.push(r => p.bind(r)); html = fieldWrap(f.label, p.html); break; }
+        case "meta": { const p = buildMetaField(f.key, val); binders.push(r => p.bind(r)); html = fieldWrap(f.label, p.html); break; }
+        case "textarea": html = fieldWrap(f.label, `<textarea name="${f.key}" placeholder="${esc(ph)}">${esc(val)}</textarea>`); break;
+        case "select": { const opts = (f.options || []).map(o => `<option value="${o}"${String(val) === String(o) ? " selected" : ""}>${o}</option>`).join(""); html = fieldWrap(f.label, `<select name="${f.key}">${opts}</select>`); break; }
         case "image":
           html = fieldWrap(f.label, `
           <div class="upload-area">
-            <img src="${esc(val) || BLANK_IMG}" class="upload-thumb" data-preview="${f.key}" />
+            <label class="upload-thumb-wrap">
+              <img src="${esc(val) || BLANK_IMG}" class="upload-thumb" data-preview="${f.key}" />
+              <div class="upload-overlay"><ion-icon name="camera-outline"></ion-icon></div>
+              <input type="file" accept="image/*" data-upload="${f.key}" style="display:none" />
+            </label>
             <div class="upload-ctrl">
-              <input type="file" accept="image/*" data-upload="${f.key}" />
               <input type="hidden" name="${f.key}" value="${esc(val)}" />
               <span class="upload-st" data-ust="${f.key}">${val ? "Current image" : "No image"}</span>
             </div>
-          </div>`);
-          break;
-        default:
-          html = fieldWrap(f.label, `<input type="${f.type}" name="${f.key}" value="${esc(val)}" placeholder="${esc(ph)}" />`);
+          </div>`); break;
+        default: html = fieldWrap(f.label, `<input type="${f.type}" name="${f.key}" value="${esc(val)}" placeholder="${esc(ph)}" />`);
       }
-
       return { html, binders };
     }
-
     const fieldWrap = (label, inner) => `<div class="field"><label>${label}</label>${inner}</div>`;
 
     function buildFields(fields, item) {
@@ -1643,142 +1460,33 @@
 
     function collectForm(fields, ctx = $("#modal-box")) {
       const body = {};
-      fields.forEach(f => {
-        const el = $(`[name="${f.key}"]`, ctx);
-        if (!el) return;
-        body[f.key] = f.type === "number" ? (+el.value || 0) : (el.value || "");
-      });
+      fields.forEach(f => { const el = $(`[name="${f.key}"]`, ctx); if (!el) return; body[f.key] = f.type === "number" ? (+el.value || 0) : (el.value || ""); });
       return body;
     }
 
-    /* ═══════════════════════════════════════════════════════
-       4. SECTION DEFINITIONS
-    ═══════════════════════════════════════════════════════ */
     const SECTIONS = [
       { group: "Content" },
       { key: "profile", title: "Profile", icon: "person-outline", custom: true },
-      {
-        key: "typing_texts", title: "Typing Texts", icon: "text-outline",
-        fields: [
-          { key: "text", label: "Text", type: "text", ph: "QA Automation Lead" },
-          { key: "sort_order", label: "Order", type: "number" },
-        ],
-        display: i => esc(i.text), subtitle: i => "Order: " + (i.sort_order || 0),
-      },
-      {
-        key: "stats", title: "Impact Metrics", icon: "speedometer-outline",
-        fields: [
-          { key: "label", label: "Label", type: "text", ph: "Testing Time Reduced" },
-          { key: "value", label: "Value", type: "number", ph: "40" },
-          { key: "suffix", label: "Suffix", type: "text", ph: "%" },
-          { key: "icon", label: "Ion-icon name", type: "text", ph: "speedometer-outline" },
-          { key: "reveal", label: "Reveal direction", type: "select", options: ["left", "right", "bottom"] },
-          { key: "sort_order", label: "Order", type: "number" },
-        ],
-        display: i => esc(i.label) + ": <strong>" + i.value + esc(i.suffix || "") + "</strong>",
-        subtitle: i => "icon: " + i.icon,
-      },
-      {
-        key: "services", title: "Services", icon: "construct-outline",
-        fields: [
-          { key: "title", label: "Title", type: "text" },
-          { key: "description", label: "Description", type: "textarea" },
-          { key: "icon", label: "Ion-icon name", type: "text", ph: "code-slash-outline" },
-          { key: "reveal", label: "Reveal", type: "select", options: ["left", "right"] },
-          { key: "sort_order", label: "Order", type: "number" },
-        ],
-        display: i => esc(i.title), subtitle: i => (i.description || "").slice(0, 60) + "…",
-      },
-      {
-        key: "tech_stack", title: "Tech Stack", icon: "hardware-chip-outline",
-        fields: [
-          { key: "name", label: "Name", type: "text", ph: "Python" },
-          { key: "icon", label: "Ion-icon name", type: "text", ph: "logo-python" },
-          { key: "sort_order", label: "Order", type: "number" },
-        ],
-        display: i => esc(i.name), subtitle: i => "icon: " + i.icon,
-      },
-      {
-        key: "testimonials", title: "Testimonials", icon: "chatbubbles-outline",
-        fields: [
-          { key: "name", label: "Name", type: "text" },
-          { key: "avatar_url", label: "Avatar", type: "image" },
-          { key: "text", label: "Testimonial text", type: "textarea" },
-          { key: "sort_order", label: "Order", type: "number" },
-        ],
-        display: i => esc(i.name), subtitle: i => (i.text || "").slice(0, 50) + "…",
-      },
+      { key: "typing_texts", title: "Typing Texts", icon: "text-outline", fields: [{ key: "text", label: "Text", type: "text", ph: "QA Automation Lead" }, { key: "sort_order", label: "Order", type: "number" }], display: i => esc(i.text), subtitle: i => "Order: " + (i.sort_order || 0) },
+      { key: "stats", title: "Impact Metrics", icon: "speedometer-outline", fields: [{ key: "label", label: "Label", type: "text", ph: "Testing Time Reduced" }, { key: "value", label: "Value", type: "number", ph: "40" }, { key: "suffix", label: "Suffix", type: "text", ph: "%" }, { key: "icon", label: "Ion-icon name", type: "text", ph: "speedometer-outline" }, { key: "reveal", label: "Reveal direction", type: "select", options: ["left", "right", "bottom"] }, { key: "sort_order", label: "Order", type: "number" }], display: i => esc(i.label) + ": <strong>" + i.value + esc(i.suffix || "") + "</strong>", subtitle: i => "icon: " + i.icon },
+      { key: "services", title: "Services", icon: "construct-outline", fields: [{ key: "title", label: "Title", type: "text" }, { key: "description", label: "Description", type: "textarea" }, { key: "icon", label: "Ion-icon name", type: "text", ph: "code-slash-outline" }, { key: "reveal", label: "Reveal", type: "select", options: ["left", "right"] }, { key: "sort_order", label: "Order", type: "number" }], display: i => esc(i.title), subtitle: i => (i.description || "").slice(0, 60) + "…" },
+      { key: "tech_stack", title: "Tech Stack", icon: "hardware-chip-outline", fields: [{ key: "name", label: "Name", type: "text", ph: "Python" }, { key: "icon", label: "Ion-icon name", type: "text", ph: "logo-python" }, { key: "sort_order", label: "Order", type: "number" }], display: i => esc(i.name), subtitle: i => "icon: " + i.icon },
+      { key: "testimonials", title: "Testimonials", icon: "chatbubbles-outline", fields: [{ key: "name", label: "Name", type: "text" }, { key: "avatar_url", label: "Avatar", type: "image" }, { key: "text", label: "Testimonial text", type: "textarea" }, { key: "sort_order", label: "Order", type: "number" }], display: i => esc(i.name), subtitle: i => (i.text || "").slice(0, 50) + "…" },
       { group: "Resume" },
       { key: "experience", title: "Experience", icon: "briefcase-outline", custom: true },
       { key: "education", title: "Education", icon: "school-outline", custom: true },
-      {
-        key: "skills", title: "Skill Bars", icon: "bar-chart-outline",
-        fields: [
-          { key: "name", label: "Skill name", type: "text" },
-          { key: "percentage", label: "Percentage", type: "number", ph: "90" },
-          { key: "sort_order", label: "Order", type: "number" },
-        ],
-        display: i => esc(i.name) + " — <strong>" + i.percentage + "%</strong>",
-        subtitle: () => "",
-      },
+      { key: "skills", title: "Skill Bars", icon: "bar-chart-outline", fields: [{ key: "name", label: "Skill name", type: "text" }, { key: "percentage", label: "Percentage", type: "number", ph: "90" }, { key: "sort_order", label: "Order", type: "number" }], display: i => esc(i.name) + " — <strong>" + i.percentage + "%</strong>", subtitle: () => "" },
       { group: "Portfolio" },
-      {
-        key: "projects", title: "Projects", icon: "images-outline",
-        fields: [
-          { key: "title", label: "Title", type: "text" },
-          { key: "category", label: "Category", type: "text", ph: "fintech / automation / web apps" },
-          { key: "image_url", label: "Project image", type: "image" },
-          { key: "description", label: "Category label", type: "text", ph: "FinTech — Company" },
-          { key: "link", label: "Link", type: "text", ph: "#" },
-          { key: "sort_order", label: "Order", type: "number" },
-        ],
-        display: i => esc(i.title), subtitle: i => "[" + i.category + "] " + (i.description || ""),
-      },
-      {
-        key: "certificates", title: "Certificates", icon: "ribbon-outline",
-        fields: [
-          { key: "title", label: "Title", type: "text" },
-          { key: "issuer", label: "Issuer", type: "text" },
-          { key: "credential_id", label: "Credential ID", type: "text" },
-          { key: "issue_date", label: "Issue date", type: "monthyear" },
-          { key: "expiry", label: "Expiry date", type: "monthyear_optional" },
-          { key: "verify_url", label: "Verify URL", type: "text", ph: "https://…" },
-          { key: "status", label: "Status", type: "select", options: ["Verified", "ALUMNI", "Pending"] },
-          { key: "icon", label: "Icon name", type: "text", ph: "ribbon-outline" },
-          { key: "sort_order", label: "Order", type: "number" },
-        ],
-        display: i => esc(i.title), subtitle: i => i.issuer + " · " + i.status,
-      },
+      { key: "projects", title: "Projects", icon: "images-outline", fields: [{ key: "title", label: "Title", type: "text" }, { key: "category", label: "Category", type: "text", ph: "fintech / automation / web apps" }, { key: "image_url", label: "Project image", type: "image" }, { key: "description", label: "Category label", type: "text", ph: "FinTech — Company" }, { key: "link", label: "Link", type: "text", ph: "#" }, { key: "sort_order", label: "Order", type: "number" }], display: i => esc(i.title), subtitle: i => "[" + i.category + "] " + (i.description || "") },
+      { key: "certificates", title: "Certificates", icon: "ribbon-outline", fields: [{ key: "title", label: "Title", type: "text" }, { key: "issuer", label: "Issuer", type: "text" }, { key: "credential_id", label: "Credential ID", type: "text" }, { key: "issue_date", label: "Issue date", type: "monthyear" }, { key: "expiry", label: "Expiry date", type: "monthyear_optional" }, { key: "verify_url", label: "Verify URL", type: "text", ph: "https://…" }, { key: "status", label: "Status", type: "select", options: ["Verified", "ALUMNI", "Pending"] }, { key: "icon", label: "Icon name", type: "text", ph: "ribbon-outline" }, { key: "sort_order", label: "Order", type: "number" }], display: i => esc(i.title), subtitle: i => i.issuer + " · " + i.status },
       { group: "Sidebar" },
-      {
-        key: "contacts", title: "Contacts", icon: "call-outline",
-        fields: [
-          { key: "type", label: "Type", type: "text", ph: "Email / Phone / Location" },
-          { key: "value", label: "Value", type: "text", ph: "mesfiny711@gmail.com" },
-          { key: "icon", label: "Ion-icon name", type: "text", ph: "mail-outline" },
-          { key: "sort_order", label: "Order", type: "number" },
-        ],
-        display: i => "<strong>" + esc(i.type) + "</strong>: " + esc(i.value),
-        subtitle: i => "icon: " + i.icon,
-      },
-      {
-        key: "social_links", title: "Social Links", icon: "share-social-outline",
-        fields: [
-          { key: "platform", label: "Platform", type: "text", ph: "LinkedIn" },
-          { key: "url", label: "URL", type: "text", ph: "https://linkedin.com/in/…" },
-          { key: "icon", label: "Ion-icon name", type: "text", ph: "logo-linkedin" },
-          { key: "sort_order", label: "Order", type: "number" },
-        ],
-        display: i => "<strong>" + esc(i.platform) + "</strong>",
-        subtitle: i => i.url,
-      },
+      { key: "contacts", title: "Contacts", icon: "call-outline", fields: [{ key: "type", label: "Type", type: "text", ph: "Email / Phone / Location" }, { key: "value", label: "Value", type: "text", ph: "mesfiny711@gmail.com" }, { key: "icon", label: "Ion-icon name", type: "text", ph: "mail-outline" }, { key: "sort_order", label: "Order", type: "number" }], display: i => "<strong>" + esc(i.type) + "</strong>: " + esc(i.value), subtitle: i => "icon: " + i.icon },
+      { key: "social_links", title: "Social Links", icon: "share-social-outline", fields: [{ key: "platform", label: "Platform", type: "text", ph: "LinkedIn" }, { key: "url", label: "URL", type: "text", ph: "https://linkedin.com/in/…" }, { key: "icon", label: "Ion-icon name", type: "text", ph: "logo-linkedin" }, { key: "sort_order", label: "Order", type: "number" }], display: i => "<strong>" + esc(i.platform) + "</strong>", subtitle: i => i.url },
       { group: "System" },
       { key: "settings", title: "Settings", icon: "settings-outline", custom: true },
     ];
-
     const secMap = Object.fromEntries(SECTIONS.filter(s => s.key).map(s => [s.key, s]));
 
-    /* company fields — meta is now location-only */
     const COMPANY_FIELDS = section => [
       { key: "name", label: section === "education" ? "School name" : "Company name", type: "text" },
       { key: "meta", label: "Location (optional)", type: "meta" },
@@ -1786,7 +1494,6 @@
       { key: "is_single", label: "Single entry (dashed)", type: "select", options: ["0", "1"] },
       { key: "sort_order", label: "Order", type: "number" },
     ];
-
     const ROLE_FIELDS = [
       { key: "title", label: "Role / Degree title", type: "text" },
       { key: "date_range", label: "Date range", type: "daterange" },
@@ -1795,75 +1502,43 @@
       { key: "sort_order", label: "Order", type: "number" },
     ];
 
-    /* ═══════════════════════════════════════════════════════
-       5. AUTH
-    ═══════════════════════════════════════════════════════ */
     $("#login-form").addEventListener("submit", async e => {
       e.preventDefault();
       const u = $("#lu").value.trim(), p = $("#lp").value, err = $("#login-err");
       err.textContent = "";
       try {
-        const d = await fetch(API + "/auth/login", {
-          method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username: u, password: p }),
-        }).then(r => r.json());
+        const d = await fetch(API + "/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ username: u, password: p }) }).then(r => r.json());
         if (d.token) { TOKEN = d.token; currentUser = d.username; localStorage.setItem("admin_token", TOKEN); initPanel(); }
         else err.textContent = d.error || "Login failed";
       } catch { err.textContent = "Connection failed"; }
     });
 
-    function logout() {
-      TOKEN = null; localStorage.removeItem("admin_token");
-      $("#admin-panel").style.display = "none";
-      $("#login-screen").style.display = "flex";
-      $("#lp").value = "";
-    }
+    function logout() { TOKEN = null; localStorage.removeItem("admin_token"); $("#admin-panel").style.display = "none"; $("#login-screen").style.display = "flex"; $("#lp").value = ""; }
     $("#logout-btn").addEventListener("click", logout);
 
-    /* ═══════════════════════════════════════════════════════
-       6. PANEL INIT & NAV
-    ═══════════════════════════════════════════════════════ */
-    function initPanel() {
-      $("#login-screen").style.display = "none";
-      $("#admin-panel").style.display = "block";
-      $("#ph-user").textContent = currentUser || "admin";
-      buildNav(); switchTab("profile");
-    }
+    function initPanel() { $("#login-screen").style.display = "none"; $("#admin-panel").style.display = "block"; $("#ph-user").textContent = currentUser || "admin"; buildNav(); switchTab("profile"); }
 
     function buildNav() {
       let nav = "", mob = "";
-      SECTIONS.forEach(s => {
-        if (s.group) { nav += `<div class="nav-group">${s.group}</div>`; return; }
-        nav += `<button class="nav-btn" data-tab="${s.key}"><ion-icon name="${s.icon}"></ion-icon>${s.title}</button>`;
-        mob += `<button data-tab="${s.key}"><ion-icon name="${s.icon}"></ion-icon>${s.title}</button>`;
-      });
-      $("#admin-nav").innerHTML = nav;
-      $("#mobile-nav").innerHTML = mob;
+      SECTIONS.forEach(s => { if (s.group) { nav += `<div class="nav-group">${s.group}</div>`; return; } nav += `<button class="nav-btn" data-tab="${s.key}"><ion-icon name="${s.icon}"></ion-icon>${s.title}</button>`; mob += `<button data-tab="${s.key}"><ion-icon name="${s.icon}"></ion-icon>${s.title}</button>`; });
+      $("#admin-nav").innerHTML = nav; $("#mobile-nav").innerHTML = mob;
       $$("[data-tab]").forEach(b => b.addEventListener("click", () => switchTab(b.dataset.tab)));
     }
 
     async function switchTab(key) {
-      currentTab = key;
-      $$("[data-tab]").forEach(b => b.classList.toggle("active", b.dataset.tab === key));
-      const el = $("#admin-content"), sec = secMap[key];
-      if (!sec) return;
+      currentTab = key; $$("[data-tab]").forEach(b => b.classList.toggle("active", b.dataset.tab === key));
+      const el = $("#admin-content"), sec = secMap[key]; if (!sec) return;
+      showLoading(el);
       try {
         if (sec.custom) {
           if (key === "profile") await renderProfile(el);
           else if (key === "experience") await renderTimeline(el, "experience", "Experience");
           else if (key === "education") await renderTimeline(el, "education", "Education");
           else if (key === "settings") renderSettings(el);
-        } else {
-          await renderCrud(el, key);
-        }
-      } catch (err) {
-        el.innerHTML = `<div class="empty"><ion-icon name="alert-circle-outline"></ion-icon><p>Error: ${esc(err.message)}</p><button class="btn btn-ghost" onclick="switchTab('${key}')">Retry</button></div>`;
-      }
+        } else await renderCrud(el, key);
+      } catch (err) { el.innerHTML = `<div class="empty"><ion-icon name="alert-circle-outline"></ion-icon><p>Error: ${esc(err.message)}</p><button class="btn btn-ghost" onclick="switchTab('${key}')">Retry</button></div>`; }
     }
 
-    /* ═══════════════════════════════════════════════════════
-       7. GENERIC CRUD
-    ═══════════════════════════════════════════════════════ */
     async function renderCrud(el, key) {
       const sec = secMap[key], items = await apiFetch("/" + key);
       el.innerHTML = `
@@ -1871,21 +1546,12 @@
         <h2 class="sec-title"><ion-icon name="${sec.icon}"></ion-icon>${sec.title}<span class="sec-count">${items.length}</span></h2>
         <button class="btn btn-primary" id="crud-add"><ion-icon name="add-outline"></ion-icon> Add New</button>
       </div>
-      <div id="crud-items">${items.length === 0
-          ? `<div class="empty"><ion-icon name="${sec.icon}"></ion-icon><p>No ${sec.title.toLowerCase()} yet</p></div>`
-          : `<div class="item-list">${items.map(item => `
-            <div class="item-card" data-id="${item.id}">
-              <div class="ic-body">
-                <div class="ic-title">${sec.display(item)}</div>
-                <div class="ic-sub">${esc(sec.subtitle ? sec.subtitle(item) : "#" + item.id)}</div>
-              </div>
-              <div class="ic-actions">
-                <span class="ic-order">${item.sort_order ?? 0}</span>
-                <button class="btn btn-ghost btn-sm btn-edit">Edit</button>
-                <button class="btn btn-danger btn-sm btn-del">Delete</button>
-              </div>
-            </div>`).join("")}</div>`
-        }</div>`;
+      <div id="crud-items">${items.length === 0 ? `<div class="empty"><ion-icon name="${sec.icon}"></ion-icon><p>No ${sec.title.toLowerCase()} yet</p></div>` : `<div class="item-list">${items.map(item => `
+        <div class="item-card" data-id="${item.id}">
+          <div class="ic-body"><div class="ic-title">${sec.display(item)}</div><div class="ic-sub">${esc(sec.subtitle ? sec.subtitle(item) : "#" + item.id)}</div></div>
+          <div class="ic-actions"><span class="ic-order">${item.sort_order ?? 0}</span><button class="btn btn-ghost btn-sm btn-edit">Edit</button><button class="btn btn-danger btn-sm btn-del">Delete</button></div>
+        </div>`).join("")}</div>`}</div>`;
+
       $("#crud-add").onclick = () => openItemModal(key, null, items);
       $("#crud-items").addEventListener("click", async e => {
         const card = e.target.closest("[data-id]"); if (!card) return;
@@ -1893,98 +1559,66 @@
         if (e.target.closest(".btn-edit")) openItemModal(key, item, items);
         else if (e.target.closest(".btn-del")) {
           if (!await cfmDialog("Delete?", "This item will be permanently removed.")) return;
-          await apiFetch("/" + key + "/" + item.id, "DELETE");
-          toast("Deleted"); switchTab(key);
+          await apiFetch("/" + key + "/" + item.id, "DELETE"); clearCache(); toast("Deleted"); switchTab(key);
         }
       });
     }
 
-    /* ═══════════════════════════════════════════════════════
-       8. ITEM MODAL
-    ═══════════════════════════════════════════════════════ */
-    function openItemModal(key, item) {
+    function openItemModal(key, item, items) {
       const sec = secMap[key], isEdit = !!item;
       const { html, bind } = buildFields(sec.fields, item);
       openModal(`
-      <div class="modal-head">
-        <h2>${isEdit ? "Edit" : "Add"} ${sec.title.replace(/s$/, "")}</h2>
-        <button class="btn btn-icon btn-ghost" onclick="closeModal()"><ion-icon name="close-outline"></ion-icon></button>
-      </div>
-      <form id="item-form">
-        <div class="modal-body">${html}</div>
-        <div class="modal-foot">
-          <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary">${isEdit ? "Save" : "Create"}</button>
-        </div>
+      <div class="modal-head"><h2>${isEdit ? "Edit" : "Add"} ${sec.title.replace(/s$/, "")}</h2><button class="btn btn-icon btn-ghost" onclick="closeModal()"><ion-icon name="close-outline"></ion-icon></button></div>
+      <form id="item-form"><div class="modal-body">${html}</div>
+        <div class="modal-foot"><button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button><button type="submit" class="btn btn-primary">${isEdit ? "Save" : "Create"}</button></div>
       </form>`);
       bindUploads(); bind($("#modal-box"));
       $("#item-form").onsubmit = async e => {
         e.preventDefault();
         const body = collectForm(sec.fields);
+        // Smart sort_order: If creating new, put it at the bottom
+        if (!isEdit && sec.fields.some(f => f.key === 'sort_order') && !body.sort_order) {
+          body.sort_order = (items && items.length > 0 ? Math.max(...items.map(i => i.sort_order || 0)) : 0) + 1;
+        }
         try {
           if (isEdit) await apiFetch("/" + key + "/" + item.id, "PUT", body);
           else await apiFetch("/" + key, "POST", body);
-          closeModal(); toast(isEdit ? "Updated!" : "Created!"); switchTab(key);
+          clearCache(); closeModal(); toast(isEdit ? "Updated!" : "Created!"); switchTab(key);
         } catch (err) { toast(err.message, "err"); }
       };
     }
 
-    /* ═══════════════════════════════════════════════════════
-       9. CUSTOM FORM
-    ═══════════════════════════════════════════════════════ */
-    function openCustomForm(title, fields, item, onSubmit) {
+    function openCustomForm(title, fields, item, onSubmit, items) {
       const isEdit = !!item;
       const { html, bind } = buildFields(fields, item);
       openModal(`
-      <div class="modal-head">
-        <h2>${title}</h2>
-        <button class="btn btn-icon btn-ghost" onclick="closeModal()"><ion-icon name="close-outline"></ion-icon></button>
-      </div>
-      <form id="cust-form">
-        <div class="modal-body">${html}</div>
-        <div class="modal-foot">
-          <button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary">${isEdit ? "Save" : "Create"}</button>
-        </div>
+      <div class="modal-head"><h2>${title}</h2><button class="btn btn-icon btn-ghost" onclick="closeModal()"><ion-icon name="close-outline"></ion-icon></button></div>
+      <form id="cust-form"><div class="modal-body">${html}</div>
+        <div class="modal-foot"><button type="button" class="btn btn-ghost" onclick="closeModal()">Cancel</button><button type="submit" class="btn btn-primary">${isEdit ? "Save" : "Create"}</button></div>
       </form>`);
       bindUploads(); bind($("#modal-box"));
       $("#cust-form").onsubmit = async e => {
         e.preventDefault();
         const body = collectForm(fields);
-        try { await onSubmit(body); closeModal(); }
-        catch (err) { toast(err.message, "err"); }
+        // Smart sort_order for custom forms too
+        if (!isEdit && fields.some(f => f.key === 'sort_order') && !body.sort_order) {
+          body.sort_order = (items && items.length > 0 ? Math.max(...items.map(i => i.sort_order || 0)) : 0) + 1;
+        }
+        try { await onSubmit(body); clearCache(); closeModal(); } catch (err) { toast(err.message, "err"); }
       };
     }
 
-    /* ═══════════════════════════════════════════════════════
-       10. PROFILE
-    ═══════════════════════════════════════════════════════ */
     async function renderProfile(el) {
       const p = await apiFetch("/profile");
       const cur = p.availability || "available";
-      const STATUS = [
-        { v: "available", l: "Available for Hire", c: "#2ecc87", ic: "checkmark-circle" },
-        { v: "busy", l: "Busy / Limited", c: "#e8a838", ic: "time" },
-        { v: "unavailable", l: "Not Available", c: "#f85149", ic: "close-circle" },
-      ];
+      const STATUS = [{ v: "available", l: "Available for Hire", c: "#2ecc87", ic: "checkmark-circle" }, { v: "busy", l: "Busy / Limited", c: "#e8a838", ic: "time" }, { v: "unavailable", l: "Not Available", c: "#f85149", ic: "close-circle" }];
       const curSt = STATUS.find(s => s.v === cur) || STATUS[0];
 
       el.innerHTML = `
       <div class="sec-header"><h2 class="sec-title"><ion-icon name="person-outline"></ion-icon> Profile &amp; About</h2></div>
       <div class="status-card">
-        <div class="st-info">
-          <h3>
-            <span class="st-dot" id="st-dot" style="background:${curSt.c};box-shadow:0 0 8px ${curSt.c}60"></span>
-            <span id="st-label">${curSt.l}</span>
-          </h3>
-          <p>Controls the availability badge on your portfolio avatar</p>
-        </div>
-        <div class="st-btns" id="st-btns">
-          ${STATUS.map(s => `
-            <button class="btn ${s.v === cur ? "btn-primary" : "btn-ghost"} btn-sm" data-av="${s.v}"
-              ${s.v === cur ? `style="background:${s.c};border-color:${s.c}"` : ""}
-            ><ion-icon name="${s.ic}"></ion-icon> ${s.l}</button>`).join("")}
-        </div>
+        <div class="st-info"><h3><span class="st-dot" id="st-dot" style="background:${curSt.c};box-shadow:0 0 8px ${curSt.c}60"></span><span id="st-label">${curSt.l}</span></h3><p>Controls the availability badge on your portfolio avatar</p></div>
+        <div class="st-btns" id="st-btns">${STATUS.map(s => `<button class="btn ${s.v === cur ? "btn-primary" : "btn-ghost"} btn-sm" data-av="${s.v}" ${s.v === cur ? `style="background:${s.c};border-color:${s.c}"` : ""}><ion-icon name="${s.ic}"></ion-icon> ${s.l}</button>`).join("")}</div>
       </div>
       <form id="pf-form">
         <div class="form-row">
@@ -1993,61 +1627,42 @@
         </div>
         <div class="field"><label>Avatar image</label>
           <div class="upload-area">
-            <img src="${esc(p.avatar_url) || BLANK_IMG}" class="upload-thumb lg" data-preview="avatar_url" />
-            <div class="upload-ctrl">
-              <input type="file" accept="image/*" data-upload="avatar_url" />
-              <input type="hidden" name="avatar_url" value="${esc(p.avatar_url)}" />
-              <span class="upload-st" data-ust="avatar_url">Current avatar</span>
-            </div>
+            <label class="upload-thumb-wrap">
+              <img src="${esc(p.avatar_url) || BLANK_IMG}" class="upload-thumb lg" data-preview="avatar_url" />
+              <div class="upload-overlay"><ion-icon name="camera-outline"></ion-icon></div>
+              <input type="file" accept="image/*" data-upload="avatar_url" style="display:none" />
+            </label>
+            <div class="upload-ctrl"><input type="hidden" name="avatar_url" value="${esc(p.avatar_url)}" /><span class="upload-st" data-ust="avatar_url">Current avatar</span></div>
           </div>
         </div>
-        <div class="field"><label>About text</label>
-          <textarea name="about_text" style="min-height:190px" placeholder="Write about yourself…">${esc(p.about_text)}</textarea>
-          <div class="field-hint">Use **bold** for green highlights. Blank line = new paragraph.</div>
-        </div>
+        <div class="field"><label>About text</label><textarea name="about_text" style="min-height:190px" placeholder="Write about yourself…">${esc(p.about_text)}</textarea><div class="field-hint">Use **bold** for green highlights. Blank line = new paragraph.</div></div>
         <input type="hidden" name="availability" id="av-inp" value="${cur}" />
         <button type="submit" class="btn btn-primary btn-lg"><ion-icon name="save-outline"></ion-icon> Save Profile</button>
       </form>`;
 
       bindUploads(el);
-
       const colMap = { available: "#2ecc87", busy: "#e8a838", unavailable: "#f85149" };
       $("#st-btns").addEventListener("click", async e => {
         const btn = e.target.closest("[data-av]"); if (!btn) return;
         const nv = btn.dataset.av, st = STATUS.find(s => s.v === nv);
         $("#av-inp").value = nv;
-        $$("#st-btns .btn").forEach(b => {
-          if (b.dataset.av === nv) { b.className = "btn btn-primary btn-sm"; b.style.cssText = `background:${colMap[nv]};border-color:${colMap[nv]}`; }
-          else { b.className = "btn btn-ghost btn-sm"; b.style.cssText = ""; }
-        });
-        $("#st-dot").style.cssText = `background:${st.c};box-shadow:0 0 8px ${st.c}60`;
-        $("#st-label").textContent = st.l;
+        $$("#st-btns .btn").forEach(b => { if (b.dataset.av === nv) { b.className = "btn btn-primary btn-sm"; b.style.cssText = `background:${colMap[nv]};border-color:${colMap[nv]}`; } else { b.className = "btn btn-ghost btn-sm"; b.style.cssText = ""; } });
+        $("#st-dot").style.cssText = `background:${st.c};box-shadow:0 0 8px ${st.c}60`; $("#st-label").textContent = st.l;
         try {
-          await apiFetch("/profile", "PUT", {
-            name: $('[name="name"]').value, title: $('[name="title"]').value,
-            about_text: $('[name="about_text"]').value, avatar_url: $('[name="avatar_url"]').value,
-            availability: nv,
-          });
-          toast("Status: " + st.l);
+          await apiFetch("/profile", "PUT", { name: $('[name="name"]').value, title: $('[name="title"]').value, about_text: $('[name="about_text"]').value, avatar_url: $('[name="avatar_url"]').value, availability: nv });
+          clearCache(); toast("Status: " + st.l);
         } catch (err) { toast(err.message, "err"); }
       });
 
       $("#pf-form").onsubmit = async e => {
         e.preventDefault();
         try {
-          await apiFetch("/profile", "PUT", {
-            name: $('[name="name"]').value, title: $('[name="title"]').value,
-            about_text: $('[name="about_text"]').value, avatar_url: $('[name="avatar_url"]').value,
-            availability: $("#av-inp").value,
-          });
-          toast("Profile saved!");
+          await apiFetch("/profile", "PUT", { name: $('[name="name"]').value, title: $('[name="title"]').value, about_text: $('[name="about_text"]').value, avatar_url: $('[name="avatar_url"]').value, availability: $("#av-inp").value });
+          clearCache(); toast("Profile saved!");
         } catch (err) { toast(err.message, "err"); }
       };
     }
 
-    /* ═══════════════════════════════════════════════════════
-       11. EXPERIENCE / EDUCATION
-    ═══════════════════════════════════════════════════════ */
     async function renderTimeline(el, section, label) {
       const [allCo, allRoles] = await Promise.all([apiFetch("/companies"), apiFetch("/roles")]);
       const cos = allCo.filter(c => c.section === section);
@@ -2056,100 +1671,61 @@
       el.innerHTML = `
       <div class="sec-header">
         <h2 class="sec-title"><ion-icon name="${icon}-outline"></ion-icon> ${label} <span class="sec-count">${cos.length}</span></h2>
-        <button class="btn btn-primary" id="add-co">
-          <ion-icon name="add-outline"></ion-icon> Add ${section === "education" ? "School" : "Company"}
-        </button>
+        <button class="btn btn-primary" id="add-co"><ion-icon name="add-outline"></ion-icon> Add ${section === "education" ? "School" : "Company"}</button>
       </div>
-      <div id="co-list">${cos.length === 0
-          ? `<div class="empty"><ion-icon name="${icon}-outline"></ion-icon><p>No entries yet</p></div>`
-          : cos.map(c => {
-            const roles = allRoles.filter(r => r.company_id === c.id);
-            return `
-              <div class="item-card" data-cid="${c.id}" style="flex-direction:column;align-items:stretch;margin-bottom:8px">
-                <div style="display:flex;justify-content:space-between;align-items:center">
-                  <div class="ic-body">
-                    <div class="ic-title">${esc(c.name)}</div>
-                    <div class="ic-sub">${esc(c.meta || "No location set")}</div>
-                  </div>
-                  <div class="ic-actions">
-                    <span class="ic-order">${c.sort_order || 0}</span>
-                    <button class="btn btn-ghost btn-sm btn-eco">Edit</button>
-                    <button class="btn btn-danger btn-sm btn-dco">Delete</button>
-                  </div>
-                </div>
-                <div class="roles-wrap">
-                  ${roles.map(r => `
-                    <div class="item-card" data-rid="${r.id}">
-                      <div class="ic-body">
-                        <div class="ic-title" style="font-size:13px">${esc(r.title)}</div>
-                        <div class="ic-sub">${esc(r.date_range)}</div>
-                      </div>
-                      <div class="ic-actions">
-                        <span class="ic-order">${r.sort_order || 0}</span>
-                        <button class="btn btn-ghost btn-sm btn-ero">Edit</button>
-                        <button class="btn btn-danger btn-sm btn-dro">Delete</button>
-                      </div>
-                    </div>`).join("")}
-                  <button class="add-role-btn" data-fcid="${c.id}">+ Add Role</button>
-                </div>
-              </div>`;
-          }).join("")
-        }</div>`;
+      <div id="co-list">${cos.length === 0 ? `<div class="empty"><ion-icon name="${icon}-outline"></ion-icon><p>No entries yet</p></div>` : cos.map(c => {
+        const roles = allRoles.filter(r => r.company_id === c.id);
+        return `
+          <div class="item-card" data-cid="${c.id}" style="flex-direction:column;align-items:stretch;margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div class="ic-body"><div class="ic-title">${esc(c.name)}</div><div class="ic-sub">${esc(c.meta || "No location set")}</div></div>
+              <div class="ic-actions"><span class="ic-order">${c.sort_order || 0}</span><button class="btn btn-ghost btn-sm btn-eco">Edit</button><button class="btn btn-danger btn-sm btn-dco">Delete</button></div>
+            </div>
+            <div class="roles-wrap">
+              ${roles.map(r => `<div class="item-card" data-rid="${r.id}"><div class="ic-body"><div class="ic-title" style="font-size:13px">${esc(r.title)}</div><div class="ic-sub">${esc(r.date_range)}</div></div><div class="ic-actions"><span class="ic-order">${r.sort_order || 0}</span><button class="btn btn-ghost btn-sm btn-ero">Edit</button><button class="btn btn-danger btn-sm btn-dro">Delete</button></div></div>`).join("")}
+              <button class="add-role-btn" data-fcid="${c.id}">+ Add Role</button>
+            </div>
+          </div>`;
+      }).join("")}</div>`;
 
-      $("#add-co").onclick = () => openCustomForm(
-        "Add " + (section === "education" ? "School" : "Company"),
-        COMPANY_FIELDS(section), null,
-        async body => { body.section = section; await apiFetch("/companies", "POST", body); toast("Added!"); switchTab(section); }
-      );
+      $("#add-co").onclick = () => openCustomForm("Add " + (section === "education" ? "School" : "Company"), COMPANY_FIELDS(section), null, async body => { body.section = section; await apiFetch("/companies", "POST", body); toast("Added!"); switchTab(section); }, cos);
 
       $("#co-list").addEventListener("click", async e => {
-        /* edit company */
         if (e.target.closest(".btn-eco")) {
-          const cid = +e.target.closest("[data-cid]").dataset.cid;
-          const c = cos.find(x => x.id === cid);
-          openCustomForm("Edit " + esc(c.name), COMPANY_FIELDS(section), c, async body => {
-            body.section = section; await apiFetch("/companies/" + cid, "PUT", body); toast("Updated!"); switchTab(section);
-          }); return;
+          const cid = +e.target.closest("[data-cid]").dataset.cid; const c = cos.find(x => x.id === cid);
+          openCustomForm("Edit " + esc(c.name), COMPANY_FIELDS(section), c, async body => { body.section = section; await apiFetch("/companies/" + cid, "PUT", body); toast("Updated!"); switchTab(section); }, cos); return;
         }
-        /* delete company */
         if (e.target.closest(".btn-dco")) {
-          const cid = +e.target.closest("[data-cid]").dataset.cid;
-          const c = cos.find(x => x.id === cid);
+          const cid = +e.target.closest("[data-cid]").dataset.cid; const c = cos.find(x => x.id === cid);
           if (!await cfmDialog("Delete?", `"${c.name}" and all its roles will be removed.`)) return;
-          await apiFetch("/companies/" + cid, "DELETE"); toast("Deleted"); switchTab(section); return;
+          await apiFetch("/companies/" + cid, "DELETE"); clearCache(); toast("Deleted"); switchTab(section); return;
         }
-        /* add role */
         if (e.target.closest(".add-role-btn")) {
           const cid = +e.target.closest("[data-fcid]").dataset.fcid;
+          const companyRoles = allRoles.filter(r => r.company_id === cid);
           openCustomForm("Add Role", ROLE_FIELDS, null, async body => {
             body.company_id = cid;
             body.tags = JSON.stringify((body.tags || "").split(",").map(t => t.trim()).filter(Boolean));
             await apiFetch("/roles", "POST", body); toast("Role added!"); switchTab(section);
-          }); return;
+          }, companyRoles); return;
         }
-        /* edit role */
         if (e.target.closest(".btn-ero")) {
-          const rid = +e.target.closest("[data-rid]").dataset.rid;
-          const r = allRoles.find(x => x.id === rid);
-          let tags = ""; try { tags = JSON.parse(r.tags || "[]").join(", "); } catch { }
+          const rid = +e.target.closest("[data-rid]").dataset.rid; const r = allRoles.find(x => x.id === rid);
+          let tags = ""; try { tags = JSON.parse(r.tags || "[]").join(", "); } catch { tags = r.tags || ""; }
           openCustomForm("Edit Role", ROLE_FIELDS, { ...r, tags }, async body => {
             body.company_id = r.company_id;
             body.tags = JSON.stringify((body.tags || "").split(",").map(t => t.trim()).filter(Boolean));
             await apiFetch("/roles/" + rid, "PUT", body); toast("Updated!"); switchTab(section);
-          }); return;
+          }, allRoles.filter(x => x.company_id === r.company_id)); return;
         }
-        /* delete role */
         if (e.target.closest(".btn-dro")) {
           const rid = +e.target.closest("[data-rid]").dataset.rid;
           if (!await cfmDialog("Delete role?", "This role will be permanently removed.")) return;
-          await apiFetch("/roles/" + rid, "DELETE"); toast("Deleted"); switchTab(section);
+          await apiFetch("/roles/" + rid, "DELETE"); clearCache(); toast("Deleted"); switchTab(section);
         }
       });
     }
 
-    /* ═══════════════════════════════════════════════════════
-       12. SETTINGS
-    ═══════════════════════════════════════════════════════ */
     function renderSettings(el) {
       el.innerHTML = `
       <div class="sec-header"><h2 class="sec-title"><ion-icon name="settings-outline"></ion-icon> Settings</h2></div>
@@ -2162,10 +1738,7 @@
           <button type="submit" class="btn btn-primary"><ion-icon name="lock-closed-outline"></ion-icon> Update Password</button>
         </form>
         <div style="margin-top:36px;padding-top:20px;border-top:1px solid var(--border)">
-          <p style="font-size:12px;color:var(--text-3);line-height:1.8">
-            Portfolio CMS v1.0 · Netlify Functions · Turso · Cloudinary<br>
-            <a href="/" target="_blank">View live portfolio →</a>
-          </p>
+          <p style="font-size:12px;color:var(--text-3);line-height:1.8">Portfolio CMS v1.0 · Netlify Functions · Turso · Cloudinary<br><a href="/" target="_blank">View live portfolio →</a></p>
         </div>
       </div>`;
 
@@ -2174,23 +1747,34 @@
         const cur = $('[name="current"]').value, np = $('[name="np"]').value, cp = $('[name="cp"]').value;
         if (np !== cp) { toast("Passwords don't match", "err"); return; }
         if (np.length < 6) { toast("Min 6 characters", "err"); return; }
-        try {
-          await apiFetch("/auth/change-password", "POST", { current: cur, newPassword: np });
-          toast("Password changed!"); e.target.reset();
-        } catch (err) { toast(err.message, "err"); }
+        try { await apiFetch("/auth/change-password", "POST", { current: cur, newPassword: np }); toast("Password changed!"); e.target.reset(); } catch (err) { toast(err.message, "err"); }
       };
     }
 
-    /* ═══════════════════════════════════════════════════════
-       13. BOOTSTRAP
-    ═══════════════════════════════════════════════════════ */
     (async () => {
-      if (TOKEN) {
-        try { await apiFetch("/profile"); currentUser = "admin"; initPanel(); return; }
-        catch { /* token expired */ }
-      }
+      if (TOKEN) { try { await apiFetch("/profile"); currentUser = "admin"; initPanel(); return; } catch { /* token expired */ } }
       logout();
     })();
+
+    /* ============================================
+   BROADCAST CHANNEL (INSTANT SAME-BROWSER UPDATES)
+   ============================================ */
+    const broadcastChannel = new BroadcastChannel("portfolio-updates");
+
+    const originalToast = toast;
+    window.toast = function (msg, type = "ok") {
+      originalToast(msg, type);
+      if (type === "ok" && !msg.includes("Status:")) {
+        broadcastChannel.postMessage({ type: "update", timestamp: Date.now() });
+      }
+    };
+
+    broadcastChannel.addEventListener("message", (event) => {
+      if (event.data.type === "update") {
+        console.log("🔄 Update detected in another tab — refreshing...");
+        switchTab(currentTab);
+      }
+    });
   </script>
 </body>
 

@@ -1,74 +1,39 @@
-import { query, get, run, initSchema } from "../../lib/db.mjs";
+import { query, get, run, initSchema, updateLastUpdated, getLastUpdated } from "../../lib/db.mjs";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-const SECRET = process.env.JWT_SECRET || "change-this";
+const SECRET = process.env.JWT_SECRET;
+if (!SECRET && process.env.NODE_ENV === "production") throw new Error("FATAL: JWT_SECRET missing in prod!");
+const ACTIVE_SECRET = SECRET || "dev-secret-change-me";
 
-// ─── Startup diagnostics ───
-console.log("[API] Function loaded");
-console.log(
-  "[API] TURSO_DATABASE_URL:",
-  process.env.TURSO_DATABASE_URL
-    ? "✅ Set (" + process.env.TURSO_DATABASE_URL.substring(0, 25) + "...)"
-    : "❌ MISSING",
-);
-console.log(
-  "[API] TURSO_AUTH_TOKEN:",
-  process.env.TURSO_AUTH_TOKEN ? "✅ Set" : "❌ MISSING",
-);
-console.log(
-  "[API] JWT_SECRET:",
-  process.env.JWT_SECRET ? "✅ Set" : "⚠️ Using default",
-);
-console.log(
-  "[API] CLOUDINARY_CLOUD_NAME:",
-  process.env.CLOUDINARY_CLOUD_NAME ? "✅ Set" : "⚠️ Not set",
-);
-
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Authorization, Content-Type",
-  "Content-Type": "application/json",
-};
+const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(",") : ["http://localhost:3000", "http://localhost:5173"];
 
 let schemaReady = false;
 async function ensureSchema() {
   if (schemaReady) return;
-  try {
-    await initSchema();
-    schemaReady = true;
-    console.log("[API] Schema ready");
-  } catch (err) {
-    console.error("[API] Schema init FAILED:", err.message);
-    throw err;
-  }
+  await initSchema();
+  schemaReady = true;
 }
 
-function ok(data) {
-  return { statusCode: 200, headers: CORS_HEADERS, body: JSON.stringify(data) };
-}
-function bad(msg, code = 400) {
-  console.log(`[API] Error ${code}: ${msg}`);
+function getCorsHeaders(event) {
+  const origin = event.headers.origin || event.headers.Origin;
+  const corsOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
-    statusCode: code,
-    headers: CORS_HEADERS,
-    body: JSON.stringify({ error: msg }),
+    "Access-Control-Allow-Origin": corsOrigin,
+    "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Authorization, Content-Type",
+    "Content-Type": "application/json",
   };
 }
-function unauthorized() {
-  return bad("Unauthorized", 401);
-}
+
+function ok(data, event) { return { statusCode: 200, headers: getCorsHeaders(event), body: JSON.stringify(data) }; }
+function bad(msg, code = 400, event) { return { statusCode: code, headers: getCorsHeaders(event), body: JSON.stringify({ error: msg }) }; }
+function unauthorized(event) { return bad("Unauthorized", 401, event); }
 
 function verifyAuth(headers) {
-  const authHeader = headers["authorization"] || headers["Authorization"];
-  const token = authHeader?.split(" ")[1];
+  const token = (headers["authorization"] || headers["Authorization"])?.split(" ")[1];
   if (!token) return null;
-  try {
-    return jwt.verify(token, SECRET);
-  } catch {
-    return null;
-  }
+  try { return jwt.verify(token, ACTIVE_SECRET); } catch { return null; }
 }
 
 const TABLES = {
@@ -79,97 +44,62 @@ const TABLES = {
   services: ["title", "description", "icon", "reveal", "sort_order"],
   tech_stack: ["name", "icon", "sort_order"],
   companies: ["name", "meta", "icon", "section", "is_single", "sort_order"],
-  roles: [
-    "company_id",
-    "title",
-    "date_range",
-    "description",
-    "tags",
-    "sort_order",
-  ],
+  roles: ["company_id", "title", "date_range", "description", "tags", "sort_order"],
   skills: ["name", "percentage", "sort_order"],
-  projects: [
-    "title",
-    "category",
-    "image_url",
-    "description",
-    "link",
-    "sort_order",
-  ],
-  certificates: [
-    "title",
-    "issuer",
-    "credential_id",
-    "issue_date",
-    "expiry",
-    "verify_url",
-    "status",
-    "icon",
-    "sort_order",
-  ],
+  projects: ["title", "category", "image_url", "description", "link", "sort_order"],
+  certificates: ["title", "issuer", "credential_id", "issue_date", "expiry", "verify_url", "status", "icon", "sort_order"],
   testimonials: ["name", "avatar_url", "text", "sort_order"],
 };
 
-async function handleCrud(table, method, id, body, user) {
+async function handleCrud(table, method, id, body, user, event) {
   const fields = TABLES[table];
-  if (!fields) return bad("Unknown resource", 404);
+  if (!fields) return bad("Unknown resource", 404, event);
+  if ((method === "PUT" || method === "DELETE") && !id) return bad("Missing resource ID", 400, event);
 
-  if (method === "GET" && !id) {
-    return ok(await query(`SELECT * FROM ${table} ORDER BY sort_order, id`));
-  }
+  if (method === "GET" && !id) return ok(await query(`SELECT * FROM ${table} ORDER BY sort_order, id`), event);
   if (method === "GET" && id) {
     const row = await get(`SELECT * FROM ${table} WHERE id = ?`, [id]);
-    return row ? ok(row) : bad("Not found", 404);
+    return row ? ok(row, event) : bad("Not found", 404, event);
   }
-  if (!user) return unauthorized();
+  if (!user) return unauthorized(event);
 
   if (method === "POST") {
-    const cols = fields.filter((f) => body[f] !== undefined);
-    const vals = cols.map((f) => body[f]);
-    if (!cols.length) return bad("No valid fields");
-    const result = await run(
-      `INSERT INTO ${table} (${cols.join(",")}) VALUES (${cols.map(() => "?").join(",")})`,
-      vals,
-    );
-    return ok({ id: Number(result.lastInsertRowid), ...body });
+    const cols = fields.filter(f => body[f] !== undefined);
+    const vals = cols.map(f => body[f]);
+    if (!cols.length) return bad("No valid fields", 400, event);
+    const result = await run(`INSERT INTO ${table} (${cols.join(",")}) VALUES (${cols.map(() => "?").join(",")})`, vals);
+    await updateLastUpdated();
+    return ok({ id: Number(result.lastInsertRowid), ...body }, event);
   }
-
   if (method === "PUT" && id) {
-    const cols = fields.filter((f) => body[f] !== undefined);
-    const vals = cols.map((f) => body[f]);
-    if (!cols.length) return bad("No valid fields");
-    await run(
-      `UPDATE ${table} SET ${cols.map((f) => `${f}=?`).join(",")} WHERE id=?`,
-      [...vals, id],
-    );
-    return ok({ id: +id, ...body });
+    const cols = fields.filter(f => body[f] !== undefined);
+    const vals = cols.map(f => body[f]);
+    if (!cols.length) return bad("No valid fields", 400, event);
+    await run(`UPDATE ${table} SET ${cols.map(f => `${f}=?`).join(",")} WHERE id=?`, [...vals, id]);
+    await updateLastUpdated();
+    return ok({ id: +id, ...body }, event);
   }
-
   if (method === "DELETE" && id) {
     await run(`DELETE FROM ${table} WHERE id=?`, [id]);
-    return ok({ deleted: true });
+    await updateLastUpdated();
+    return ok({ deleted: true }, event);
   }
-
-  return bad("Method not allowed", 405);
+  return bad("Method not allowed", 405, event);
 }
 
-async function handleUpload(body) {
+async function handleUpload(body, event) {
   const { image } = body;
-  if (!image) return bad("No image data");
+  if (!image) return bad("No image data", 400, event);
+  if (typeof image === 'string' && image.length > 5 * 1024 * 1024) return bad("Image too large (Max 5MB)", 413, event);
 
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
   const apiKey = process.env.CLOUDINARY_API_KEY;
   const apiSecret = process.env.CLOUDINARY_API_SECRET;
-
-  if (!cloudName || !apiKey || !apiSecret) {
-    return bad("Cloudinary not configured");
-  }
+  if (!cloudName || !apiKey || !apiSecret) return bad("Cloudinary not configured", 500, event);
 
   const timestamp = Math.floor(Date.now() / 1000);
   const { createHash } = await import("crypto");
-  const signature = createHash("sha1")
-    .update(`folder=portfolio&timestamp=${timestamp}${apiSecret}`)
-    .digest("hex");
+  const signature = createHash("sha1").update(`folder=portfolio&timestamp=${timestamp}${apiSecret}`).digest("hex");
 
   const formData = new URLSearchParams();
   formData.append("file", image);
@@ -178,153 +108,90 @@ async function handleUpload(body) {
   formData.append("signature", signature);
   formData.append("folder", "portfolio");
 
-  const res = await fetch(
-    `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-    { method: "POST", body: formData },
-  );
-  const data = await res.json();
-
-  if (data.secure_url) return ok({ url: data.secure_url });
-  return bad("Upload failed: " + (data.error?.message || "Unknown"));
+  try {
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, { method: "POST", body: formData });
+    const data = await res.json();
+    if (data.secure_url) {
+      await updateLastUpdated();
+      return ok({ url: data.secure_url }, event);
+    }
+    return bad("Upload failed: " + (data.error?.message || "Unknown"), 500, event);
+  } catch (err) {
+    return bad("Cloudinary request failed: " + err.message, 500, event);
+  }
 }
 
-// ═══════════════════════════════════════
-// MAIN HANDLER
-// ═══════════════════════════════════════
-
 export const handler = async (event) => {
-  if (event.httpMethod === "OPTIONS") {
-    return { statusCode: 204, headers: CORS_HEADERS, body: "" };
-  }
+  if (event.httpMethod === "OPTIONS") return { statusCode: 204, headers: getCorsHeaders(event), body: "" };
 
   const method = event.httpMethod;
   const rawPath = event.path || "";
-  const cleanPath = rawPath
-    .replace(/^\/?\.netlify\/functions\/api\/?/, "")
-    .replace(/^\/?(api)?\/?/, "")
-    .replace(/\/+$/, "");
+  const cleanPath = rawPath.replace(/^\/?\.netlify\/functions\/api\/?/, "").replace(/^\/?(api)?\/?/, "").replace(/\/+$/, "");
   const segments = cleanPath.split("/").filter(Boolean);
 
   let body = {};
-  if (event.body) {
-    try {
-      body = JSON.parse(event.body);
-    } catch {
-      // not JSON
-    }
-  }
-
-  console.log(`[API] ${method} /${segments.join("/")}`);
+  if (event.body) { try { body = JSON.parse(event.body); } catch { /* not JSON */ } }
 
   try {
     await ensureSchema();
-
     const user = verifyAuth(event.headers);
 
-    // Auth
     if (segments[0] === "auth") {
       if (segments[1] === "login" && method === "POST") {
         const { username, password } = body;
-        if (!username || !password)
-          return bad("Username and password required");
-        const u = await get("SELECT * FROM admin_users WHERE username = ?", [
-          username,
-        ]);
-        if (!u || !bcrypt.compareSync(password, u.password_hash)) {
-          return bad("Invalid credentials", 401);
-        }
-        const token = jwt.sign({ id: u.id, username: u.username }, SECRET, {
-          expiresIn: "24h",
-        });
-        return ok({ token, username: u.username });
+        if (!username || !password) return bad("Username and password required", 400, event);
+        const u = await get("SELECT * FROM admin_users WHERE username = ?", [username]);
+        if (!u || !bcrypt.compareSync(password, u.password_hash)) return bad("Invalid credentials", 401, event);
+        const token = jwt.sign({ id: u.id, username: u.username }, ACTIVE_SECRET, { expiresIn: "24h" });
+        return ok({ token, username: u.username }, event);
       }
       if (segments[1] === "change-password" && method === "POST") {
-        if (!user) return unauthorized();
+        if (!user) return unauthorized(event);
         const { current, newPassword } = body;
-        if (!current || !newPassword) return bad("Both passwords required");
-        const u = await get("SELECT * FROM admin_users WHERE id = ?", [
-          user.id,
-        ]);
-        if (!u || !bcrypt.compareSync(current, u.password_hash))
-          return bad("Wrong password");
-        await run("UPDATE admin_users SET password_hash = ? WHERE id = ?", [
-          bcrypt.hashSync(newPassword, 12),
-          user.id,
-        ]);
-        return ok({ message: "Password changed" });
+        const u = await get("SELECT * FROM admin_users WHERE id = ?", [user.id]);
+        if (!u || !bcrypt.compareSync(current, u.password_hash)) return bad("Wrong password", 401, event);
+        await run("UPDATE admin_users SET password_hash = ? WHERE id = ?", [bcrypt.hashSync(newPassword, 12), user.id]);
+        await updateLastUpdated();
+        return ok({ message: "Password changed" }, event);
       }
-      return bad("Not found", 404);
+      return bad("Not found", 404, event);
     }
 
-    // Upload
     if (segments[0] === "upload" && method === "POST") {
-      if (!user) return unauthorized();
-      return await handleUpload(body);
+      if (!user) return unauthorized(event);
+      return await handleUpload(body, event);
     }
 
-    // Profile
-    // Profile
     if (segments[0] === "profile") {
       if (method === "GET") {
         let profile = await get("SELECT * FROM profile WHERE id = 1");
         if (!profile) {
-          await run(
-            `INSERT OR IGNORE INTO profile (id, name, title, about_text, avatar_url, "availability")
-         VALUES (1, '', '', '', '', 'available')`,
-          );
+          await run(`INSERT OR IGNORE INTO profile (id, name, title, about_text, avatar_url, "availability") VALUES (1, '', '', '', '', 'available')`);
           profile = await get("SELECT * FROM profile WHERE id = 1");
         }
-        return ok(profile || {});
+        return ok(profile || {}, event);
       }
       if (method === "PUT") {
-        if (!user) return unauthorized();
+        if (!user) return unauthorized(event);
         const { name, title, about_text, avatar_url, availability } = body;
-        const exists = await get("SELECT id FROM profile WHERE id = 1");
-        if (exists) {
-          await run(
-            `UPDATE profile SET name=?, title=?, about_text=?, avatar_url=?, "availability"=? WHERE id=1`,
-            [
-              name || "",
-              title || "",
-              about_text || "",
-              avatar_url || "",
-              availability || "available",
-            ],
-          );
-        } else {
-          await run(
-            `INSERT INTO profile (id, name, title, about_text, avatar_url, "availability")
-         VALUES (1, ?, ?, ?, ?, ?)`,
-            [
-              name || "",
-              title || "",
-              about_text || "",
-              avatar_url || "",
-              availability || "available",
-            ],
-          );
-        }
-        return ok({ message: "Profile updated" });
+        await run(
+          `INSERT INTO profile (id, name, title, about_text, avatar_url, "availability") VALUES (1, ?, ?, ?, ?, ?)
+           ON CONFLICT(id) DO UPDATE SET name = excluded.name, title = excluded.title, about_text = excluded.about_text, avatar_url = excluded.avatar_url, "availability" = excluded.availability`,
+          [name || "", title || "", about_text || "", avatar_url || "", availability || "available"]
+        );
+        await updateLastUpdated();
+        return ok({ message: "Profile updated" }, event);
       }
     }
 
-    // Portfolio (combined)
+    // NEW: Meta endpoint for real-time polling
+    if (segments[0] === "meta" && method === "GET") {
+      const lastUpdated = await getLastUpdated();
+      return ok({ last_updated: lastUpdated }, event);
+    }
+
     if (segments[0] === "portfolio" && method === "GET") {
-      const [
-        profile,
-        contacts,
-        social_links,
-        typing_texts,
-        stats,
-        services,
-        tech_stack,
-        skills,
-        projects,
-        certificates,
-        testimonials,
-        companies,
-        roles,
-      ] = await Promise.all([
+      const [profile, contacts, social_links, typing_texts, stats, services, tech_stack, skills, projects, certificates, testimonials, companies, roles] = await Promise.all([
         get("SELECT * FROM profile WHERE id = 1"),
         query("SELECT * FROM contacts ORDER BY sort_order"),
         query("SELECT * FROM social_links ORDER BY sort_order"),
@@ -339,48 +206,20 @@ export const handler = async (event) => {
         query("SELECT * FROM companies ORDER BY sort_order"),
         query("SELECT * FROM roles ORDER BY sort_order"),
       ]);
-      const withRoles = (section) =>
-        companies
-          .filter((c) => c.section === section)
-          .map((c) => ({
-            ...c,
-            roles: roles.filter((r) => r.company_id === c.id),
-          }));
+      const withRoles = (section) => companies.filter(c => c.section === section).map(c => ({ ...c, roles: roles.filter(r => r.company_id === c.id) }));
       return ok({
-        profile: profile || {},
-        contacts,
-        social_links,
-        typing_texts,
-        stats,
-        services,
-        tech_stack,
-        skills,
-        projects,
-        certificates,
-        testimonials,
-        experience: withRoles("experience"),
-        education: withRoles("education"),
-      });
+        profile: profile || {}, contacts, social_links, typing_texts, stats, services, tech_stack, skills, projects, certificates, testimonials,
+        experience: withRoles("experience"), education: withRoles("education"),
+      }, event);
     }
 
-    // CRUD
     const table = segments[0];
     const id = segments[1] ? +segments[1] : null;
-    if (table && TABLES[table]) {
-      return await handleCrud(table, method, id, body, user);
-    }
+    if (table && TABLES[table]) return await handleCrud(table, method, id, body, user, event);
 
-    return bad(`Not found: ${method} /${segments.join("/")}`, 404);
+    return bad(`Not found: ${method} /${segments.join("/")}`, 404, event);
   } catch (err) {
     console.error("[API] CRASH:", err.message, err.stack);
-    return {
-      statusCode: 500,
-      headers: CORS_HEADERS,
-      body: JSON.stringify({
-        error: "Internal server error",
-        message: err.message,
-        ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
-      }),
-    };
+    return { statusCode: 500, headers: getCorsHeaders(event), body: JSON.stringify({ error: "Internal server error", message: err.message }) };
   }
 };
