@@ -1,4 +1,5 @@
-import { query, get, run, initSchema, updateLastUpdated, getLastUpdated } from "../../lib/db.mjs";
+// netlify/functions/api.mjs
+import { query, get, run, initSchema, updateLastUpdated, getLastUpdated, hashIP, checkRateLimit, saveMessage, getMessages, getMessage, markMessageRead, markAllMessagesRead, deleteMessage, getUnreadCount, logAnalytics, getAnalytics } from "../../lib/db.mjs";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
@@ -13,6 +14,13 @@ async function ensureSchema() {
   if (schemaReady) return;
   await initSchema();
   schemaReady = true;
+}
+
+function getClientIP(event) {
+  return event.headers["x-nf-client-connection-ip"] ||
+    event.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
+    event.headers["client-ip"] ||
+    "unknown";
 }
 
 function getCorsHeaders(event) {
@@ -135,7 +143,10 @@ export const handler = async (event) => {
   try {
     await ensureSchema();
     const user = verifyAuth(event.headers);
+    const clientIP = getClientIP(event);
+    const ipHash = hashIP(clientIP);
 
+    // ═══ AUTH ═══
     if (segments[0] === "auth") {
       if (segments[1] === "login" && method === "POST") {
         const { username, password } = body;
@@ -157,11 +168,78 @@ export const handler = async (event) => {
       return bad("Not found", 404, event);
     }
 
+    // ═══ UPLOAD ═══
     if (segments[0] === "upload" && method === "POST") {
       if (!user) return unauthorized(event);
       return await handleUpload(body, event);
     }
 
+    // ═══ PUBLIC: CONTACT FORM ═══
+    if (segments[0] === "contact" && method === "POST") {
+      const { name, email, message, website } = body; // website = honeypot
+
+      // Honeypot: if 'website' field is filled, it's a bot
+      if (website) return bad("Spam detected", 400, event);
+
+      if (!name || !email || !message) return bad("All fields required", 400, event);
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return bad("Invalid email", 400, event);
+      if (message.length > 2000) return bad("Message too long (max 2000 chars)", 400, event);
+
+      // Rate limit: 1 message per IP every 15 minutes
+      const rateLimited = await checkRateLimit(ipHash, "messages", 15);
+      if (rateLimited) return bad("Please wait before sending another message", 429, event);
+
+      const id = await saveMessage(name.trim(), email.trim(), message.trim(), ipHash);
+      return ok({ id, message: "Message sent successfully" }, event);
+    }
+
+    // ═══ PUBLIC: ANALYTICS LOGGING ═══
+    if (segments[0] === "analytics" && method === "POST") {
+      const { event_type, page } = body;
+      const validTypes = ["page_view", "cv_download"];
+      if (!validTypes.includes(event_type)) return bad("Invalid event type", 400, event);
+
+      await logAnalytics(event_type, page || null, ipHash);
+      return ok({ logged: true }, event);
+    }
+
+    // ═══ ADMIN: MESSAGES ═══
+    if (segments[0] === "messages") {
+      if (!user) return unauthorized(event);
+
+      if (method === "GET" && !segments[1]) {
+        const messages = await getMessages();
+        return ok(messages, event);
+      }
+      if (method === "GET" && segments[1]) {
+        const msg = await getMessage(+segments[1]);
+        if (!msg) return bad("Not found", 404, event);
+        await markMessageRead(+segments[1]);
+        return ok(msg, event);
+      }
+      if (segments[1] === "mark-all-read" && method === "POST") {
+        await markAllMessagesRead();
+        return ok({ message: "All marked as read" }, event);
+      }
+      if (method === "DELETE" && segments[1]) {
+        await deleteMessage(+segments[1]);
+        return ok({ deleted: true }, event);
+      }
+      if (segments[1] === "unread-count" && method === "GET") {
+        const count = await getUnreadCount();
+        return ok({ count }, event);
+      }
+      return bad("Not found", 404, event);
+    }
+
+    // ═══ ADMIN: ANALYTICS DASHBOARD ═══
+    if (segments[0] === "analytics" && method === "GET") {
+      if (!user) return unauthorized(event);
+      const data = await getAnalytics();
+      return ok(data, event);
+    }
+
+    // ═══ PROFILE ═══
     if (segments[0] === "profile") {
       if (method === "GET") {
         let profile = await get("SELECT * FROM profile WHERE id = 1");
@@ -184,12 +262,16 @@ export const handler = async (event) => {
       }
     }
 
-    // NEW: Meta endpoint for real-time polling
+    // ═══ META (REAL-TIME POLLING) ═══
     if (segments[0] === "meta" && method === "GET") {
-      const lastUpdated = await getLastUpdated();
-      return ok({ last_updated: lastUpdated }, event);
+      const [lastUpdated, unreadCount] = await Promise.all([
+        getLastUpdated(),
+        getUnreadCount()
+      ]);
+      return ok({ last_updated: lastUpdated, unread_messages: unreadCount }, event);
     }
 
+    // ═══ PORTFOLIO (PUBLIC) ═══
     if (segments[0] === "portfolio" && method === "GET") {
       const [profile, contacts, social_links, typing_texts, stats, services, tech_stack, skills, projects, certificates, testimonials, companies, roles] = await Promise.all([
         get("SELECT * FROM profile WHERE id = 1"),
@@ -213,6 +295,7 @@ export const handler = async (event) => {
       }, event);
     }
 
+    // ═══ GENERIC CRUD ═══
     const table = segments[0];
     const id = segments[1] ? +segments[1] : null;
     if (table && TABLES[table]) return await handleCrud(table, method, id, body, user, event);
