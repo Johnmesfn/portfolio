@@ -485,15 +485,19 @@ $$("[data-form-input]").forEach((input) => {
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  formMsg.className = "form-message"; formMsg.style.display = "none";
-  const data = new FormData(form);
-  const action = form.getAttribute("action");
+  formMsg.className = "form-message";
+  formMsg.style.display = "none";
 
-  if (!action || action.includes("YOUR_FORM_ID")) {
-    const [name, email, msg] = ["fullname", "email", "message"].map((k) => data.get(k));
-    if (!name || !email || !msg) { showFormMsg("Please fill all fields.", "error"); return; }
-    location.href = `mailto:mesfiny711@gmail.com?subject=${enc(`Portfolio Contact from ${name}`)}&body=${enc(`${msg}\n\nFrom: ${name} (${email})`)}`;
-    showFormMsg("Opening your email client...", "success");
+  // 1. Gather data (including the honeypot)
+  const data = {
+    name: form.fullname.value.trim(),
+    email: form.email.value.trim(),
+    message: form.message.value.trim(),
+    website: form.querySelector('[name="website"]')?.value || "", // Honeypot
+  };
+
+  if (!data.name || !data.email || !data.message) {
+    showFormMsg("Please fill all required fields.", "error");
     return;
   }
 
@@ -503,12 +507,32 @@ form.addEventListener("submit", async (e) => {
   btnSpan.textContent = "Sending...";
 
   try {
-    const res = await fetch(action, { method: "POST", body: data, headers: { Accept: "application/json" } });
-    if (!res.ok) throw new Error();
-    form.reset(); formBtn.disabled = true;
-    showFormMsg("✓ Message sent successfully!", "success");
-  } catch {
-    showFormMsg("✗ Failed to send. Please try emailing directly.", "error");
+    // 2. Send to our in-house API
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      if (res.status === 429) {
+        showFormMsg("⏱ Please wait a few minutes before sending another message.", "error");
+      } else {
+        throw new Error(result.error || "Failed to send");
+      }
+      formBtn.disabled = false;
+      btnSpan.textContent = orig;
+      return;
+    }
+
+    // 3. Success!
+    form.reset();
+    formBtn.disabled = true;
+    showFormMsg("✓ Message sent successfully! I'll get back to you soon.", "success");
+  } catch (err) {
+    showFormMsg("✗ Failed to send. Please try again or email me directly.", "error");
     formBtn.disabled = false;
   }
   btnSpan.textContent = orig;
@@ -1073,3 +1097,39 @@ document.addEventListener("visibilitychange", () => {
     startPolling();
   }
 });
+
+/* ============================================
+   ANALYTICS TRACKING (IN-HOUSE)
+   ============================================ */
+function trackEvent(eventType, page = null) {
+  // Fire-and-forget: sends data to API without blocking the UI
+  fetch("/api/analytics", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ event_type: eventType, page }),
+    keepalive: true, // Ensures the request finishes even if the user navigates away
+  }).catch(() => { }); // Silently fail if offline
+}
+
+// Hook into the existing navigation to track page views
+const originalNavigateToPage = window.navigateToPage;
+window.navigateToPage = function (pageName) {
+  originalNavigateToPage(pageName);
+  trackEvent("page_view", pageName);
+};
+
+// Track the initial page load
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    const hash = location.hash.slice(1).toLowerCase() || "about";
+    trackEvent("page_view", hash);
+  }, 2000); // Delay to avoid tracking bots/preloader
+});
+
+// Hook into the CV download button
+const cvDownloadBtn = document.getElementById("download-cv-btn");
+if (cvDownloadBtn) {
+  cvDownloadBtn.addEventListener("click", () => {
+    trackEvent("cv_download");
+  });
+}
