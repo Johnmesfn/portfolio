@@ -825,7 +825,7 @@ function cmsRenderStats(stats) {
   if (!el || !stats?.length) return;
   el.innerHTML = stats.map((s) => `
     <li class="stats-item" data-reveal="${s.reveal || "bottom"}">
-      <div class="stats-icon-box"><ion-icon name="${s.icon}"></ion-icon></div>
+      <div class="stats-icon-box">${renderIcon(s.icon)}</div>
       <div class="stats-content">
         <span class="stats-number" data-counter="${s.value}">0</span>
         <span class="stats-suffix">${s.suffix || ""}</span>
@@ -839,7 +839,9 @@ function cmsRenderServices(services) {
   if (!el || !services?.length) return;
   el.innerHTML = services.map((s) => `
     <li class="service-item" data-reveal="${s.reveal || "left"}">
-      <div class="service-icon-box"><ion-icon name="${s.icon}" class="service-icon"></ion-icon></div>
+      <div class="service-icon-box">
+        <span class="service-icon">${renderIcon(s.icon)}</span>
+      </div>
       <div class="service-content-box">
         <h4 class="h4 service-item-title">${s.title}</h4>
         <p class="service-item-text">${s.description}</p>
@@ -986,7 +988,7 @@ function cmsRenderCertificates(certs) {
           <ion-icon name="eye-outline"></ion-icon>
           <span>View Credential</span>
         </div>
-        <div class="certificate-icon"><ion-icon name="${c.icon}"></ion-icon></div>
+        <div class="certificate-icon">${renderIcon(c.icon)}</div>
         <div class="certificate-content">
           <h3 class="h4 certificate-title">${c.title}</h3>
           <p class="certificate-issuer">${c.issuer}</p>

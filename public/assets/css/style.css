@@ -2982,13 +2982,72 @@ textarea.form-input::-webkit-resizer {
   }
 }
 
-/* Icon Library Normalization */
-i[class^="devicon"],
-i[class^="si"],
-i[class^="bi"],
-iconify-icon {
-  display: inline-block;
-  font-style: normal;
-  line-height: 1;
-  vertical-align: middle;
+/* ============================================
+   FINAL ICON LIBRARY FIXES (Alignment & Color)
+   ============================================ */
+
+/* 1. Impact & Metrics (Stats): Fix alignment to match old ion-icons */
+.stats-icon-box i,
+.stats-icon-box iconify-icon {
+  display: block !important;
+  margin: 0 auto !important;
+  font-size: 26px;
+  color: var(--accent-primary);
+}
+
+/* 2. What I Do (Services): Fix black icons and set size */
+/* ✅ FIXED: Added missing dot before 'service-icon' */
+.service-icon i,
+.service-icon iconify-icon,
+.service-icon ion-icon {
+  color: inherit !important;
+  font-size: 36px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* 3. Tech Stack: Ensure proper sizing and color inheritance */
+.tech-stack-item i,
+.tech-stack-item iconify-icon {
+  font-size: 24px;
+  color: var(--accent-primary);
+  transition: transform 0.3s ease;
+}
+
+/* Exception: Let Devicon's 'colored' class keep official brand colors */
+.tech-stack-item i.colored {
+  color: unset !important;
+}
+
+.tech-stack-item:hover i,
+.tech-stack-item:hover iconify-icon {
+  transform: scale(1.15);
+}
+
+/* 4. Timeline (Experience/Education): Ensure icons inherit color */
+.timeline-group-icon i,
+.timeline-group-icon iconify-icon {
+  font-size: 20px;
+  color: var(--accent-primary);
+}
+
+/* 5. Certificates: Ensure icons inherit color */
+.certificate-icon i,
+.certificate-icon iconify-icon {
+  font-size: 22px;
+  color: var(--accent-primary);
+}
+
+/* 6. Contacts (Sidebar): Ensure icons inherit color */
+.icon-box i,
+.icon-box iconify-icon {
+  font-size: 16px;
+  color: var(--accent-primary);
+}
+
+/* 7. Social Links: Ensure icons inherit color */
+.social-link i,
+.social-link iconify-icon {
+  font-size: 18px;
+  color: inherit;
 }
