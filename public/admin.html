@@ -9,6 +9,11 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
     rel="stylesheet" />
+
+  <!-- Icon Libraries -->
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-icons-font@latest/font/simple-icons.min.css">
+
   <style>
     :root {
       --bg-0: #010409;
@@ -1336,7 +1341,9 @@
       transform: translateY(-2px);
     }
 
-    .icon-browser-item ion-icon {
+    .icon-browser-item ion-icon,
+    .icon-browser-item iconify-icon,
+    .icon-browser-item i.si {
       font-size: 22px;
       color: var(--text-1);
     }
@@ -1361,7 +1368,13 @@
       font-size: 13px;
     }
 
-    /* ── Text Formatting Toolbar ── */
+    /* Icon Library Normalization */
+    i.si,
+    iconify-icon {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
     .text-toolbar {
       display: flex;
       gap: 4px;
@@ -1497,6 +1510,16 @@
     let currentTab = "", currentUser = "";
     const _cache = {};
     const esc = v => { const d = document.createElement("div"); d.textContent = v == null ? "" : String(v); return d.innerHTML; };
+
+    // ═══ UNIVERSAL ICON RENDERER ═══
+    function renderIcon(name) {
+      if (!name) return '';
+      if (name.startsWith('dev:')) return `<i class="devicon-${name.substring(4)} colored"></i>`;
+      if (name.startsWith('si:')) return `<i class="si si-${name.substring(3)}"></i>`;
+      if (name.startsWith('bi:')) return `<i class="bi bi-${name.substring(3)}"></i>`;
+      if (name.includes(':')) return `<iconify-icon icon="${name}" width="22" height="22"></iconify-icon>`;
+      return `<ion-icon name="${name}"></ion-icon>`;
+    }
 
     async function apiFetch(endpoint, method = "GET", body = null) {
       if (method === "GET" && _cache[endpoint]) return _cache[endpoint];
@@ -1653,31 +1676,63 @@
       return body;
     }
 
+    // ═══ ENHANCED ICON CATEGORIES ═══
     const ICON_CATEGORIES = {
       "All": null,
-      "Social": ["logo-linkedin", "logo-github", "logo-twitter", "logo-facebook", "logo-instagram", "logo-youtube", "logo-whatsapp", "logo-discord", "logo-slack", "logo-medium", "logo-stackoverflow", "logo-reddit", "logo-tiktok", "logo-pinterest", "logo-snapchat", "logo-twitch"],
-      "Tech Logos": ["logo-python", "logo-javascript", "logo-nodejs", "logo-react", "logo-vue", "logo-angular", "logo-docker", "logo-gitlab", "logo-chrome", "logo-firefox", "logo-edge", "logo-html5", "logo-css3", "logo-sass", "logo-electron", "logo-npm", "logo-bitcoin"],
-      "Code & Dev": ["code-slash-outline", "code-outline", "terminal-outline", "hardware-chip-outline", "server-outline", "cube-outline", "git-branch-outline", "git-commit-outline", "git-merge-outline", "git-network-outline", "rocket-outline", "cloud-outline", "cloud-done-outline", "cloud-upload-outline", "wifi-outline", "bluetooth-outline", "bug-outline", "construct-outline"],
-      "Business": ["business-outline", "briefcase-outline", "people-outline", "people-circle-outline", "person-outline", "hand-left-outline", "hand-right-outline", "cash-outline", "card-outline", "wallet-outline", "trending-up-outline", "trending-down-outline", "bar-chart-outline"],
-      "Communication": ["mail-outline", "mail-open-outline", "mail-unread-outline", "call-outline", "phone-portrait-outline", "chatbubble-outline", "chatbubbles-outline", "chatbox-outline", "send-outline", "paper-plane-outline", "megaphone-outline", "notifications-outline"],
-      "Location": ["location-outline", "navigate-outline", "compass-outline", "airplane-outline", "bus-outline", "car-outline", "bicycle-outline", "map-outline", "globe-outline"],
-      "Education": ["school-outline", "book-outline", "library-outline", "newspaper-outline", "document-text-outline", "document-outline", "albums-outline", "reader-outline", "pencil-outline", "create-outline"],
-      "Awards & Status": ["ribbon-outline", "trophy-outline", "medal-outline", "star-outline", "star-half-outline", "checkmark-circle-outline", "checkmark-done-outline", "shield-outline", "shield-checkmark-outline", "lock-closed-outline", "key-outline", "finger-print-outline"],
-      "UI & Actions": ["eye-outline", "eye-off-outline", "cloud-upload-outline", "arrow-up-circle-outline", "share-social-outline", "link-outline", "open-outline", "create-outline", "trash-outline", "copy-outline", "cut-outline", "save-outline", "print-outline", "refresh-outline", "sync-outline"],
-      "Metrics": ["speedometer-outline", "analytics-outline", "stats-chart-outline", "pie-chart-outline", "pulse-outline", "time-outline", "timer-outline", "calendar-outline", "calendar-number-outline", "stopwatch-outline", "hourglass-outline"],
-      "Media": ["image-outline", "images-outline", "camera-outline", "videocam-outline", "musical-notes-outline", "film-outline", "color-palette-outline", "brush-outline", "color-fill-outline"],
-      "Misc": ["cog-outline", "settings-outline", "hammer-outline", "options-outline", "laptop-outline", "desktop-outline", "tablet-portrait-outline", "watch-outline", "heart-outline", "thumbs-up-outline", "flash-outline", "bulb-outline", "pricetag-outline", "cart-outline", "home-outline", "information-circle-outline", "help-circle-outline", "warning-outline", "alert-circle-outline", "close-circle-outline"]
+      "Tech & Testing (Devicon)": [
+        "dev:python-plain", "dev:javascript-plain", "dev:typescript-plain", "dev:java-plain",
+        "dev:selenium-original", "dev:cypress-plain", "dev:pytest-plain", "dev:junit-plain",
+        "dev:react-original", "dev:vuejs-plain", "dev:angularjs-plain", "dev:nodejs-plain",
+        "dev:html5-plain", "dev:css3-plain", "dev:sass-original", "dev:php-plain", "dev:ruby-plain",
+        "dev:go-original-wordmark", "dev:rust-plain", "dev:swift-plain", "dev:kotlin-plain"
+      ],
+      "DevOps & Cloud (Devicon/Bootstrap)": [
+        "dev:docker-plain", "dev:kubernetes-plain", "dev:jenkins-plain", "dev:git-plain",
+        "dev:gitlab-plain", "dev:github-original", "dev:ansible-plain", "dev:terraform-plain",
+        "dev:amazonwebservices-plain-wordmark", "dev:azure-plain", "dev:googlecloud-plain",
+        "dev:heroku-plain", "dev:digitalocean-original", "dev:nginx-original", "dev:apache-plain",
+        "dev:linux-plain", "dev:ubuntu-plain", "dev:redhat-plain",
+        "bi:aws", "bi:microsoft", "bi:google", "bi:cloud-fill", "bi:server", "bi:diagram-3"
+      ],
+      "Brands & Tools (Simple Icons)": [
+        "si:linkedin", "si:github", "si:twitter", "si:facebook", "si:instagram", "si:youtube",
+        "si:whatsapp", "si:telegram", "si:discord", "si:slack", "si:medium", "si:stackoverflow",
+        "si:reddit", "si:tiktok", "si:pinterest", "si:upwork", "si:fiverr", "si:dribbble",
+        "si:figma", "si:adobe", "si:notion", "si:netlify", "si:vercel", "si:cloudflare",
+        "si:postman", "si:swagger", "si:jira", "si:confluence", "si:trello", "si:bitbucket"
+      ],
+      "QA & Testing (Iconify)": [
+        "mdi:robot", "mdi:test-tube", "mdi:flask", "mdi:bug-check", "mdi:check-circle",
+        "mdi:shield-check", "mdi:security", "mdi:lock-check", "mdi:eye-check",
+        "mdi:clipboard-check", "mdi:clipboard-list", "mdi:file-document-check",
+        "mdi:checkbox-marked-circle", "mdi:check-all", "mdi:tick-circle"
+      ],
+      "UI & Actions (Ionicons)": [
+        "mail-outline", "call-outline", "location-outline", "globe-outline", "person-outline",
+        "people-outline", "briefcase-outline", "school-outline", "ribbon-outline", "trophy-outline",
+        "star-outline", "checkmark-circle-outline", "shield-checkmark-outline", "code-slash-outline",
+        "terminal-outline", "speedometer-outline", "analytics-outline", "pie-chart-outline",
+        "rocket-outline", "cloud-upload-outline", "download-outline", "share-social-outline",
+        "link-outline", "eye-outline", "settings-outline"
+      ],
+      "UI & Misc (Bootstrap)": [
+        "bi:award", "bi:patch-check", "bi:clock-history", "bi:calendar-check", "bi:graph-up-arrow",
+        "bi:bar-chart-line", "bi:bug", "bi:shield-lock", "bi:lock", "bi:key", "bi:fingerprint",
+        "bi:lightbulb", "bi:hammer", "bi:wrench", "bi:tools", "bi:gear", "bi:clipboard-check",
+        "bi:file-earmark-code", "bi:terminal", "bi:database", "bi:cpu"
+      ]
     };
+
     const ALL_ICONS = Object.entries(ICON_CATEGORIES).filter(([cat]) => cat !== "All").flatMap(([_, icons]) => icons);
     let _iconPickerTarget = null, _iconPickerPreview = null, _activeIconCat = "All";
 
     function buildIconPicker(fieldName, currentValue) {
       const pid = "ip" + (++_uid); const val = currentValue || "";
-      const html = `<div class="icon-picker" id="${pid}"><div class="icon-picker-preview ${val ? '' : 'empty'}" data-ip-preview="${pid}">${val ? `<ion-icon name="${val}"></ion-icon>` : "?"}</div><div class="icon-picker-input-wrap"><input type="text" name="${fieldName}" value="${esc(val)}" placeholder="e.g. speedometer-outline" data-ip-input="${pid}" /><button type="button" class="icon-picker-browse" data-ip-browse="${pid}"><ion-icon name="grid-outline"></ion-icon>Browse</button></div></div>`;
+      const html = `<div class="icon-picker" id="${pid}"><div class="icon-picker-preview ${val ? '' : 'empty'}" data-ip-preview="${pid}">${val ? renderIcon(val) : "?"}</div><div class="icon-picker-input-wrap"><input type="text" name="${fieldName}" value="${esc(val)}" placeholder="e.g. dev:python-plain" data-ip-input="${pid}" /><button type="button" class="icon-picker-browse" data-ip-browse="${pid}"><ion-icon name="grid-outline"></ion-icon>Browse</button></div></div>`;
       function bind(root = document) {
         const input = root.querySelector(`[data-ip-input="${pid}"]`), preview = root.querySelector(`[data-ip-preview="${pid}"]`), browseBtn = root.querySelector(`[data-ip-browse="${pid}"]`);
         if (!input || !preview || !browseBtn) return;
-        input.addEventListener("input", () => { const v = input.value.trim(); if (v) { preview.innerHTML = `<ion-icon name="${esc(v)}"></ion-icon>`; preview.classList.remove("empty"); } else { preview.innerHTML = "?"; preview.classList.add("empty"); } });
+        input.addEventListener("input", () => { const v = input.value.trim(); if (v) { preview.innerHTML = renderIcon(v); preview.classList.remove("empty"); } else { preview.innerHTML = "?"; preview.classList.add("empty"); } });
         browseBtn.addEventListener("click", () => { _iconPickerTarget = input; _iconPickerPreview = preview; openIconBrowser(); });
       }
       return { html, bind };
@@ -1685,7 +1740,7 @@
     function openIconBrowser() { $("#icon-browser-ov").classList.add("open"); $("#icon-search").value = ""; _activeIconCat = "All"; renderIconCategories(); renderIconGrid(); setTimeout(() => $("#icon-search").focus(), 100); }
     function closeIconBrowser() { $("#icon-browser-ov").classList.remove("open"); _iconPickerTarget = null; _iconPickerPreview = null; }
     function renderIconCategories() { const cats = $("#icon-cats"); cats.innerHTML = Object.keys(ICON_CATEGORIES).map(cat => `<button type="button" class="icon-browser-cat ${cat === _activeIconCat ? 'active' : ''}" data-cat="${cat}">${cat}</button>`).join(""); cats.querySelectorAll(".icon-browser-cat").forEach(btn => btn.addEventListener("click", () => { _activeIconCat = btn.dataset.cat; renderIconCategories(); renderIconGrid(); })); }
-    function renderIconGrid() { const grid = $("#icon-grid"); const search = $("#icon-search").value.toLowerCase().trim(); let icons = _activeIconCat === "All" ? ALL_ICONS : (ICON_CATEGORIES[_activeIconCat] || []); if (search) icons = icons.filter(name => name.toLowerCase().includes(search)); if (icons.length === 0) { grid.innerHTML = `<div class="icon-browser-empty">No icons match "${esc(search)}"</div>`; return; } grid.innerHTML = icons.map(name => `<button type="button" class="icon-browser-item" data-icon="${name}" title="${name}"><ion-icon name="${name}"></ion-icon><span>${name.replace(/-outline$/, "").replace(/-/, " ")}</span></button>`).join(""); grid.querySelectorAll(".icon-browser-item").forEach(item => item.addEventListener("click", () => { if (_iconPickerTarget) { _iconPickerTarget.value = item.dataset.icon; _iconPickerTarget.dispatchEvent(new Event("input")); } closeIconBrowser(); })); }
+    function renderIconGrid() { const grid = $("#icon-grid"); const search = $("#icon-search").value.toLowerCase().trim(); let icons = _activeIconCat === "All" ? ALL_ICONS : (ICON_CATEGORIES[_activeIconCat] || []); if (search) icons = icons.filter(name => name.toLowerCase().includes(search)); if (icons.length === 0) { grid.innerHTML = `<div class="icon-browser-empty">No icons match "${esc(search)}"</div>`; return; } grid.innerHTML = icons.map(name => { let displayName = name.replace(/-plain|-original|-wordmark|-outline|-original-wordmark/g, "").replace(/:/, " "); return `<button type="button" class="icon-browser-item" data-icon="${name}" title="${name}">${renderIcon(name)}<span>${displayName}</span></button>`; }).join(""); grid.querySelectorAll(".icon-browser-item").forEach(item => item.addEventListener("click", () => { if (_iconPickerTarget) { _iconPickerTarget.value = item.dataset.icon; _iconPickerTarget.dispatchEvent(new Event("input")); } closeIconBrowser(); })); }
     document.addEventListener("input", (e) => { if (e.target.id === "icon-search") renderIconGrid(); });
     $("#icon-browser-ov").addEventListener("click", (e) => { if (e.target.id === "icon-browser-ov") closeIconBrowser(); });
 
@@ -1693,8 +1748,8 @@
       { group: "Content" },
       { key: "profile", title: "Profile", icon: "person-outline", custom: true },
       { key: "typing_texts", title: "Typing Texts", icon: "text-outline", fields: [{ key: "text", label: "Text", type: "text", ph: "QA Automation Lead" }, { key: "sort_order", label: "Order", type: "number" }], display: i => esc(i.text), subtitle: i => "Order: " + (i.sort_order || 0) },
-      { key: "stats", title: "Impact Metrics", icon: "speedometer-outline", fields: [{ key: "label", label: "Label", type: "text", ph: "Testing Time Reduced" }, { key: "value", label: "Value", type: "number", ph: "40" }, { key: "suffix", label: "Suffix", type: "text", ph: "%" }, { key: "icon", label: "Icon", type: "icon" }, { key: "reveal", label: "Reveal direction", type: "select", options: ["left", "right", "bottom"] }, { key: "sort_order", label: "Order", type: "number" }], display: i => `<ion-icon name="${i.icon}" style="font-size:14px;vertical-align:middle;margin-right:4px"></ion-icon>${esc(i.label)}: <strong>${i.value}${esc(i.suffix || "")}</strong>`, subtitle: i => "" },
-      { key: "tech_stack", title: "Tech Stack", icon: "hardware-chip-outline", fields: [{ key: "name", label: "Name", type: "text", ph: "Python" }, { key: "icon", label: "Icon", type: "icon" }, { key: "sort_order", label: "Order", type: "number" }], display: i => `<ion-icon name="${i.icon}" style="font-size:14px;vertical-align:middle;margin-right:4px"></ion-icon>${esc(i.name)}`, subtitle: () => "" },
+      { key: "stats", title: "Impact Metrics", icon: "speedometer-outline", fields: [{ key: "label", label: "Label", type: "text", ph: "Testing Time Reduced" }, { key: "value", label: "Value", type: "number", ph: "40" }, { key: "suffix", label: "Suffix", type: "text", ph: "%" }, { key: "icon", label: "Icon", type: "icon" }, { key: "reveal", label: "Reveal direction", type: "select", options: ["left", "right", "bottom"] }, { key: "sort_order", label: "Order", type: "number" }], display: i => `<span style="font-size:14px;vertical-align:middle;margin-right:4px;display:inline-block">${renderIcon(i.icon)}</span>${esc(i.label)}: <strong>${i.value}${esc(i.suffix || "")}</strong>`, subtitle: i => "" },
+      { key: "tech_stack", title: "Tech Stack", icon: "hardware-chip-outline", fields: [{ key: "name", label: "Name", type: "text", ph: "Python" }, { key: "icon", label: "Icon", type: "icon" }, { key: "sort_order", label: "Order", type: "number" }], display: i => `<span style="font-size:14px;vertical-align:middle;margin-right:4px;display:inline-block">${renderIcon(i.icon)}</span>${esc(i.name)}`, subtitle: () => "" },
       { key: "testimonials", title: "Testimonials", icon: "chatbubbles-outline", fields: [{ key: "name", label: "Name", type: "text" }, { key: "avatar_url", label: "Avatar", type: "image" }, { key: "text", label: "Testimonial text", type: "textarea" }, { key: "sort_order", label: "Order", type: "number" }], display: i => esc(i.name), subtitle: i => (i.text || "").slice(0, 50) + "…" },
       { group: "Resume" },
       { key: "experience", title: "Experience", icon: "briefcase-outline", custom: true },
@@ -1704,8 +1759,8 @@
       { key: "projects", title: "Projects", icon: "images-outline", fields: [{ key: "title", label: "Title", type: "text" }, { key: "category", label: "Category", type: "text", ph: "fintech / automation / web apps" }, { key: "image_url", label: "Project image", type: "image" }, { key: "description", label: "Category label", type: "text", ph: "FinTech — Company" }, { key: "link", label: "Link", type: "text", ph: "#" }, { key: "sort_order", label: "Order", type: "number" }], display: i => esc(i.title), subtitle: i => "[" + i.category + "] " + (i.description || "") },
       { key: "certificates", title: "Certificates", icon: "ribbon-outline", fields: [{ key: "title", label: "Title", type: "text" }, { key: "issuer", label: "Issuer", type: "text" }, { key: "credential_id", label: "Credential ID", type: "text" }, { key: "issue_date", label: "Issue date", type: "monthyear" }, { key: "expiry", label: "Expiry date", type: "monthyear_optional" }, { key: "verify_url", label: "Verify URL", type: "text", ph: "https://…" }, { key: "status", label: "Status", type: "select", options: ["Verified", "ALUMNI", "Pending"] }, { key: "sort_order", label: "Order", type: "number" }], display: i => esc(i.title), subtitle: i => i.issuer + " · " + i.status },
       { group: "Sidebar" },
-      { key: "contacts", title: "Contacts", icon: "call-outline", fields: [{ key: "type", label: "Type", type: "text", ph: "Email / Phone / Location" }, { key: "value", label: "Value", type: "text", ph: "mesfiny711@gmail.com" }, { key: "icon", label: "Icon", type: "icon" }, { key: "sort_order", label: "Order", type: "number" }], display: i => `<ion-icon name="${i.icon}" style="font-size:14px;vertical-align:middle;margin-right:4px"></ion-icon><strong>${esc(i.type)}</strong>: ${esc(i.value)}`, subtitle: () => "" },
-      { key: "social_links", title: "Social Links", icon: "share-social-outline", fields: [{ key: "platform", label: "Platform", type: "text", ph: "LinkedIn" }, { key: "url", label: "URL", type: "text", ph: "https://linkedin.com/in/…" }, { key: "icon", label: "Icon", type: "icon" }, { key: "sort_order", label: "Order", type: "number" }], display: i => `<ion-icon name="${i.icon}" style="font-size:14px;vertical-align:middle;margin-right:4px"></ion-icon><strong>${esc(i.platform)}</strong>`, subtitle: i => i.url },
+      { key: "contacts", title: "Contacts", icon: "call-outline", fields: [{ key: "type", label: "Type", type: "text", ph: "Email / Phone / Location" }, { key: "value", label: "Value", type: "text", ph: "mesfiny711@gmail.com" }, { key: "icon", label: "Icon", type: "icon" }, { key: "sort_order", label: "Order", type: "number" }], display: i => `<span style="font-size:14px;vertical-align:middle;margin-right:4px;display:inline-block">${renderIcon(i.icon)}</span><strong>${esc(i.type)}</strong>: ${esc(i.value)}`, subtitle: () => "" },
+      { key: "social_links", title: "Social Links", icon: "share-social-outline", fields: [{ key: "platform", label: "Platform", type: "text", ph: "LinkedIn" }, { key: "url", label: "URL", type: "text", ph: "https://linkedin.com/in/…" }, { key: "icon", label: "Icon", type: "icon" }, { key: "sort_order", label: "Order", type: "number" }], display: i => `<span style="font-size:14px;vertical-align:middle;margin-right:4px;display:inline-block">${renderIcon(i.icon)}</span><strong>${esc(i.platform)}</strong>`, subtitle: i => i.url },
       { group: "Inbox" },
       { key: "messages", title: "Messages", icon: "mail-outline", custom: true },
       { key: "analytics", title: "Analytics", icon: "analytics-outline", custom: true },
@@ -1782,7 +1837,7 @@
     async function renderTimeline(el, section, label) {
       const [allCo, allRoles] = await Promise.all([apiFetch("/companies"), apiFetch("/roles")]);
       const cos = allCo.filter(c => c.section === section); const icon = section === "education" ? "school" : "briefcase";
-      el.innerHTML = `<div class="sec-header"><h2 class="sec-title"><ion-icon name="${icon}-outline"></ion-icon> ${label} <span class="sec-count">${cos.length}</span></h2><button class="btn btn-primary" id="add-co"><ion-icon name="add-outline"></ion-icon> Add ${section === "education" ? "School" : "Company"}</button></div><div id="co-list">${cos.length === 0 ? `<div class="empty"><ion-icon name="${icon}-outline"></ion-icon><p>No entries yet</p></div>` : cos.map(c => { const roles = allRoles.filter(r => r.company_id === c.id); return `<div class="item-card" data-cid="${c.id}" style="flex-direction:column;align-items:stretch;margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center"><div class="ic-body"><div class="ic-title"><ion-icon name="${c.icon}" style="font-size:14px;vertical-align:middle;margin-right:4px"></ion-icon>${esc(c.name)}</div><div class="ic-sub">${esc(c.meta || "No location set")}</div></div><div class="ic-actions"><span class="ic-order">${c.sort_order || 0}</span><button class="btn btn-ghost btn-sm btn-eco">Edit</button><button class="btn btn-danger btn-sm btn-dco">Delete</button></div></div><div class="roles-wrap">${roles.map(r => `<div class="item-card" data-rid="${r.id}"><div class="ic-body"><div class="ic-title" style="font-size:13px">${esc(r.title)}</div><div class="ic-sub">${esc(r.date_range)}</div></div><div class="ic-actions"><span class="ic-order">${r.sort_order || 0}</span><button class="btn btn-ghost btn-sm btn-ero">Edit</button><button class="btn btn-danger btn-sm btn-dro">Delete</button></div></div>`).join("")}<button class="add-role-btn" data-fcid="${c.id}">+ Add Role</button></div></div>`; }).join("")}</div>`;
+      el.innerHTML = `<div class="sec-header"><h2 class="sec-title"><ion-icon name="${icon}-outline"></ion-icon> ${label} <span class="sec-count">${cos.length}</span></h2><button class="btn btn-primary" id="add-co"><ion-icon name="add-outline"></ion-icon> Add ${section === "education" ? "School" : "Company"}</button></div><div id="co-list">${cos.length === 0 ? `<div class="empty"><ion-icon name="${icon}-outline"></ion-icon><p>No entries yet</p></div>` : cos.map(c => { const roles = allRoles.filter(r => r.company_id === c.id); return `<div class="item-card" data-cid="${c.id}" style="flex-direction:column;align-items:stretch;margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center"><div class="ic-body"><div class="ic-title"><span style="font-size:14px;vertical-align:middle;margin-right:4px;display:inline-block">${renderIcon(c.icon)}</span>${esc(c.name)}</div><div class="ic-sub">${esc(c.meta || "No location set")}</div></div><div class="ic-actions"><span class="ic-order">${c.sort_order || 0}</span><button class="btn btn-ghost btn-sm btn-eco">Edit</button><button class="btn btn-danger btn-sm btn-dco">Delete</button></div></div><div class="roles-wrap">${roles.map(r => `<div class="item-card" data-rid="${r.id}"><div class="ic-body"><div class="ic-title" style="font-size:13px">${esc(r.title)}</div><div class="ic-sub">${esc(r.date_range)}</div></div><div class="ic-actions"><span class="ic-order">${r.sort_order || 0}</span><button class="btn btn-ghost btn-sm btn-ero">Edit</button><button class="btn btn-danger btn-sm btn-dro">Delete</button></div></div>`).join("")}<button class="add-role-btn" data-fcid="${c.id}">+ Add Role</button></div></div>`; }).join("")}</div>`;
       $("#add-co").onclick = () => openCustomForm("Add " + (section === "education" ? "School" : "Company"), COMPANY_FIELDS(section), null, async body => { body.section = section; await apiFetch("/companies", "POST", body); toast("Added!"); switchTab(section); }, cos);
       $("#co-list").addEventListener("click", async e => {
         if (e.target.closest(".btn-eco")) { const cid = +e.target.closest("[data-cid]").dataset.cid; const c = cos.find(x => x.id === cid); openCustomForm("Edit " + esc(c.name), COMPANY_FIELDS(section), c, async body => { body.section = section; await apiFetch("/companies/" + cid, "PUT", body); toast("Updated!"); switchTab(section); }, cos); return; }

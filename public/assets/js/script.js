@@ -7,6 +7,16 @@ const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 const enc = encodeURIComponent;
 
+// ═══ UNIVERSAL ICON RENDERER ═══
+function renderIcon(name) {
+  if (!name) return '';
+  if (name.startsWith('dev:')) return `<i class="devicon-${name.substring(4)} colored"></i>`;
+  if (name.startsWith('si:')) return `<i class="si si-${name.substring(3)}"></i>`;
+  if (name.startsWith('bi:')) return `<i class="bi bi-${name.substring(3)}"></i>`;
+  if (name.includes(':')) return `<iconify-icon icon="${name}" width="22" height="22"></iconify-icon>`;
+  return `<ion-icon name="${name}"></ion-icon>`;
+}
+
 /* ============================================
    DATE CALCULATION ENGINE
    ============================================ */
@@ -777,25 +787,37 @@ function cmsRenderAbout(aboutText) {
 function cmsRenderContacts(contacts) {
   const el = $(".contacts-list");
   if (!el || !contacts?.length) return;
-  el.innerHTML = contacts.map((c) => `
+  el.innerHTML = contacts
+    .map(
+      (c) => `
     <li class="contact-item">
-      <div class="icon-box"><ion-icon name="${c.icon}"></ion-icon></div>
+      <div class="icon-box">${renderIcon(c.icon)}</div>
       <div class="contact-info">
         <p class="contact-title">${c.type}</p>
-        ${c.type === "Location" ? `<address>${c.value}</address>` : `<a href="${c.type === "Email" ? "mailto:" : "tel:"}${c.value.replace(/\s/g, "")}" class="contact-link">${c.value}</a>`}
+        ${c.type === "Location"
+          ? `<address>${c.value}</address>`
+          : `<a href="${c.type === "Email" ? "mailto:" : "tel:"}${c.value.replace(/\s/g, "")}" class="contact-link">${c.value}</a>`
+        }
       </div>
-    </li>`).join("");
+    </li>`,
+    )
+    .join("");
 }
 
 function cmsRenderSocial(links) {
   const el = $(".social-list");
   if (!el || !links?.length) return;
-  el.innerHTML = links.map((s) => `
+  el.innerHTML = links
+    .map(
+      (s) => `
     <li class="social-item">
-      <a href="${s.url}" class="social-link" title="${s.platform}" target="_blank" rel="noopener noreferrer" aria-label="${s.platform}">
-        <ion-icon name="${s.icon}"></ion-icon>
+      <a href="${s.url}" class="social-link" title="${s.platform}" target="_blank"
+         rel="noopener noreferrer" aria-label="${s.platform}">
+        ${renderIcon(s.icon)}
       </a>
-    </li>`).join("");
+    </li>`,
+    )
+    .join("");
 }
 
 function cmsRenderStats(stats) {
@@ -828,10 +850,14 @@ function cmsRenderServices(services) {
 function cmsRenderTechStack(items) {
   const el = $(".tech-stack-list");
   if (!el || !items?.length) return;
-  el.innerHTML = items.map((t) => `
+  el.innerHTML = items
+    .map(
+      (t) => `
     <li class="tech-stack-item" data-reveal="bottom" title="${t.name}">
-      <ion-icon name="${t.icon}"></ion-icon><span>${t.name}</span>
-    </li>`).join("");
+      ${renderIcon(t.icon)}<span>${t.name}</span>
+    </li>`,
+    )
+    .join("");
 }
 
 function cmsRenderTestimonials(items) {
@@ -877,7 +903,7 @@ function cmsRenderTimeline(companies, timelineEl) {
     timelineEl.insertAdjacentHTML("beforeend", `
       <div class="timeline-group${singleCls}" data-reveal="left">
         <div class="timeline-group-header">
-          <div class="timeline-group-icon"><ion-icon name="${c.icon}"></ion-icon></div>
+          <div class="timeline-group-icon">${renderIcon(c.icon)}</div>
           <div class="timeline-group-info">
             <h4 class="h4 timeline-group-company">${c.name}</h4>
             <span class="timeline-group-meta">${metaDisplay}</span>
