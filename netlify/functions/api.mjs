@@ -1,4 +1,6 @@
 // netlify/functions/api.mjs
+import { config as loadEnv } from "dotenv";
+loadEnv();
 import { query, get, run, initSchema, updateLastUpdated, getLastUpdated, hashIP, checkRateLimit, saveMessage, getMessages, getMessage, markMessageRead, markAllMessagesRead, deleteMessage, getUnreadCount, logAnalytics, getAnalytics } from "../../lib/db.mjs";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
@@ -64,12 +66,13 @@ async function handleCrud(table, method, id, body, user, event) {
   if (!fields) return bad("Unknown resource", 404, event);
   if ((method === "PUT" || method === "DELETE") && !id) return bad("Missing resource ID", 400, event);
 
+  if (!user) return unauthorized(event);
+
   if (method === "GET" && !id) return ok(await query(`SELECT * FROM ${table} ORDER BY sort_order, id`), event);
   if (method === "GET" && id) {
     const row = await get(`SELECT * FROM ${table} WHERE id = ?`, [id]);
     return row ? ok(row, event) : bad("Not found", 404, event);
   }
-  if (!user) return unauthorized(event);
 
   if (method === "POST") {
     const cols = fields.filter(f => body[f] !== undefined);
@@ -153,8 +156,15 @@ export const handler = async (event) => {
         if (!username || !password) return bad("Username and password required", 400, event);
         const u = await get("SELECT * FROM admin_users WHERE username = ?", [username]);
         if (!u || !bcrypt.compareSync(password, u.password_hash)) return bad("Invalid credentials", 401, event);
-        const token = jwt.sign({ id: u.id, username: u.username }, ACTIVE_SECRET, { expiresIn: "24h" });
-        return ok({ token, username: u.username }, event);
+        const SESSION_TTL = 60 * 60; // 1 hour session
+        const token = jwt.sign({ id: u.id, username: u.username }, ACTIVE_SECRET, { expiresIn: SESSION_TTL });
+        return ok({ token, username: u.username, expiresIn: SESSION_TTL }, event);
+      }
+      if (segments[1] === "session" && method === "GET") {
+        if (!user) return unauthorized(event);
+        const exp = user.exp || Math.floor(Date.now() / 1000) + 3600;
+        const expiresAt = exp * 1000;
+        return ok({ username: user.username, expiresAt }, event);
       }
       if (segments[1] === "change-password" && method === "POST") {
         if (!user) return unauthorized(event);
@@ -242,6 +252,7 @@ export const handler = async (event) => {
     // ═══ PROFILE ═══
     if (segments[0] === "profile") {
       if (method === "GET") {
+        if (!user) return unauthorized(event);
         let profile = await get("SELECT * FROM profile WHERE id = 1");
         if (!profile) {
           await run(`INSERT OR IGNORE INTO profile (id, name, title, about_text, avatar_url, "availability") VALUES (1, '', '', '', '', 'available')`);

@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "seed": "node scripts/seed.js",
-    "dev": "netlify dev"
+    "seed": "node lib/seed.mjs",
+    "reset": "node lib/reset.mjs",
+    "dev": "netlify dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro:dev": "astro dev"
   },
   "dependencies": {
     "@libsql/client": "^0.5.0",
@@ -13,6 +17,8 @@
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
+    "@astrojs/netlify": "^8.1.3",
+    "astro": "^7.1.6",
     "netlify-cli": "^17.0.0"
   }
 }

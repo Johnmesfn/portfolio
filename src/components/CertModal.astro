@@ -1,0 +1,29 @@
+<div class="modal-container" data-cert-modal role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="overlay" data-cert-overlay></div>
+  <section class="testimonials-modal" style="max-width:520px" role="document">
+    <button class="modal-close-btn" data-cert-close aria-label="Close credential">
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+    <div class="modal-img-wrapper">
+      <figure class="modal-avatar-box" data-cert-modal-icon>
+        <ion-icon name="ribbon-outline" style="font-size:48px;color:var(--accent)"></ion-icon>
+        <span data-cert-modal-status style="font-size:11px;color:var(--text-3);font-family:var(--mono);display:block;margin-top:4px">Verified Credential</span>
+      </figure>
+    </div>
+    <div class="modal-content">
+      <h4 class="h3 modal-title" data-cert-modal-title>Title</h4>
+      <p style="font-size:13px;color:var(--accent);margin-bottom:8px" data-cert-modal-issuer>Issuer</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;color:var(--text-2)">
+        <div><span style="color:var(--text-3);font-family:var(--mono);font-size:10px;text-transform:uppercase">Credential ID</span><br /><span data-cert-modal-id style="word-break:break-all;font-family:var(--mono);font-size:11px">—</span></div>
+        <div><span style="color:var(--text-3);font-family:var(--mono);font-size:10px;text-transform:uppercase">Issue Date</span><br /><span data-cert-modal-date>—</span></div>
+        <div><span style="color:var(--text-3);font-family:var(--mono);font-size:10px;text-transform:uppercase">Expiration</span><br /><span data-cert-modal-expiry>No Expiration</span></div>
+        <div><span style="color:var(--text-3);font-family:var(--mono);font-size:10px;text-transform:uppercase">Status</span><br /><span data-cert-modal-status-text>Active</span></div>
+      </div>
+      <div style="margin-top:16px;text-align:center">
+        <a href="#" data-cert-modal-url target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display:inline-flex;align-items:center;gap:6px;padding:9px 20px;background:var(--accent);color:var(--bg-0);border-radius:8px;font-weight:600;font-size:13px;text-decoration:none">
+          <ion-icon name="open-outline"></ion-icon>Verify Credential
+        </a>
+      </div>
+    </div>
+  </section>
+</div>

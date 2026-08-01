@@ -1,0 +1,95 @@
+---
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio CMS — Admin</title>
+  <link rel="shortcut icon" href="/assets/images/logo.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <script is:inline src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-icons-font@latest/font/simple-icons.min.css" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+</head>
+<body>
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-logo"><span class="br">&lt;</span>YM<span class="sl">/</span><span class="br">&gt;</span></div>
+      <p class="login-sub">Portfolio Admin Panel</p>
+      <form id="login-form">
+        <div class="field"><label for="lu">Username</label><input id="lu" type="text" placeholder="admin" autocomplete="username" required /></div>
+        <div class="field"><label for="lp">Password</label>
+          <div class="pw-wrap">
+            <input id="lp" type="password" placeholder="••••••••" autocomplete="current-password" required />
+            <button type="button" class="pw-toggle" data-pw-toggle="lp" aria-label="Toggle password visibility">
+              <ion-icon name="eye-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-lg" type="submit" style="width:100%;margin-top:8px">Sign In</button>
+      </form>
+      <div class="login-err" id="login-err"></div>
+    </div>
+  </div>
+
+  <div id="admin-panel">
+    <header class="panel-header">
+      <div class="panel-logo"><span>&lt;<span class="accent">YM</span>/&gt;</span><span class="cms-badge">CMS</span></div>
+      <div class="ph-right">
+        <span class="ph-user" id="ph-user"></span>
+        <a href="/" class="btn btn-ghost btn-sm" target="_blank">View Site</a>
+        <button class="btn btn-ghost btn-sm" id="logout-btn">Logout</button>
+      </div>
+    </header>
+    <div class="panel-body">
+      <nav class="admin-nav" id="admin-nav"></nav>
+      <main class="admin-content" id="admin-content"></main>
+    </div>
+    <nav class="mobile-nav" id="mobile-nav"></nav>
+  </div>
+
+  <div class="modal-ov" id="modal-ov">
+    <div class="modal-box" id="modal-box"></div>
+  </div>
+  <div class="cfm-ov" id="cfm-ov">
+    <div class="cfm-box">
+      <h3 id="cfm-title">Are you sure?</h3>
+      <p id="cfm-text">This action cannot be undone.</p>
+      <div class="cfm-acts">
+        <button class="btn btn-ghost" id="cfm-cancel">Cancel</button>
+        <button class="btn btn-danger" id="cfm-ok">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-ov" id="icon-browser-ov">
+    <div class="modal-box" style="max-width: 680px">
+      <div class="modal-head">
+        <h2>Browse Icons</h2>
+        <button class="btn btn-icon btn-ghost" onclick="closeIconBrowser()"><ion-icon name="close-outline"></ion-icon></button>
+      </div>
+      <div class="icon-browser-head">
+        <div class="icon-browser-search">
+          <ion-icon name="search-outline"></ion-icon>
+          <input type="text" id="icon-search" placeholder="Search icons... (e.g. 'python', 'mail', 'shield')" />
+        </div>
+        <div class="icon-browser-cats" id="icon-cats"></div>
+      </div>
+      <div class="icon-browser-grid" id="icon-grid"></div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" onclick="closeIconBrowser()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toasts"></div>
+
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <script is:inline type="module" src="/assets/js/admin.js"></script>
+</body>
+</html>
+
