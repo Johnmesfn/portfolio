@@ -268,18 +268,18 @@ export const handler = async (event) => {
         if (!user) return unauthorized(event);
         let profile = await get("SELECT * FROM profile WHERE id = 1");
         if (!profile) {
-          await run(`INSERT OR IGNORE INTO profile (id, name, title, about_text, avatar_url, "availability") VALUES (1, '', '', '', '', 'available')`);
+          await run(`INSERT OR IGNORE INTO profile (id, name, title, company, about_text, avatar_url, "availability") VALUES (1, '', '', 'Safaricom Ethiopia', '', '', 'available')`);
           profile = await get("SELECT * FROM profile WHERE id = 1");
         }
         return ok(profile || {}, event);
       }
       if (method === "PUT") {
         if (!user) return unauthorized(event);
-        const { name, title, about_text, avatar_url, availability } = body;
+        const { name, title, company, about_text, avatar_url, availability } = body;
         await run(
-          `INSERT INTO profile (id, name, title, about_text, avatar_url, "availability") VALUES (1, ?, ?, ?, ?, ?)
-           ON CONFLICT(id) DO UPDATE SET name = excluded.name, title = excluded.title, about_text = excluded.about_text, avatar_url = excluded.avatar_url, "availability" = excluded.availability`,
-          [name || "", title || "", about_text || "", avatar_url || "", availability || "available"]
+          `INSERT INTO profile (id, name, title, company, about_text, avatar_url, "availability") VALUES (1, ?, ?, ?, ?, ?, ?)
+           ON CONFLICT(id) DO UPDATE SET name = excluded.name, title = excluded.title, company = excluded.company, about_text = excluded.about_text, avatar_url = excluded.avatar_url, "availability" = excluded.availability`,
+          [name || "", title || "", company || "Safaricom Ethiopia", about_text || "", avatar_url || "", availability || "available"]
         );
         await updateLastUpdated();
         return ok({ message: "Profile updated" }, event);

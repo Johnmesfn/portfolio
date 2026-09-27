@@ -756,6 +756,10 @@ navLinks.forEach((link) => {
 
 window.addEventListener("load", () => {
   const pText = $("[data-preloader-text]");
+  const pCompBadge = $("[data-preloader-company]");
+  const initialCompany = localStorage.getItem("portfolio_company") || "Safaricom Ethiopia";
+  if (pCompBadge) pCompBadge.textContent = `${initialCompany.toUpperCase()} · CVM & QA`;
+
   const step1 = $('[data-step="1"]');
   const step2 = $('[data-step="2"]');
   const step3 = $('[data-step="3"]');
@@ -765,7 +769,8 @@ window.addEventListener("load", () => {
   if (step1) step1.classList.add("active");
 
   setTimeout(() => {
-    if (pText) pText.textContent = "Routing Safaricom Ethiopia Telecom Pipelines...";
+    const comp = localStorage.getItem("portfolio_company") || "Safaricom Ethiopia";
+    if (pText) pText.textContent = `Routing ${comp} Telecom Pipelines...`;
     if (step2) step2.classList.add("active");
     if (line1) line1.classList.add("active");
   }, 450);
@@ -811,6 +816,12 @@ function cmsRenderProfile(profile, typTexts) {
   if (nameEl && profile.name) nameEl.textContent = profile.name;
   const avatarImg = $(".avatar-box img");
   if (avatarImg && profile.avatar_url) avatarImg.src = profile.avatar_url;
+
+  if (profile.company) {
+    localStorage.setItem("portfolio_company", profile.company);
+    const pCompBadge = $("[data-preloader-company]");
+    if (pCompBadge) pCompBadge.textContent = `${profile.company.toUpperCase()} · CVM & QA`;
+  }
 
   if (typTexts?.length) {
     typingTexts.length = 0;
