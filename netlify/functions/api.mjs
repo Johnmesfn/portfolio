@@ -9,7 +9,19 @@ const SECRET = process.env.JWT_SECRET;
 if (!SECRET && process.env.NODE_ENV === "production") throw new Error("FATAL: JWT_SECRET missing in prod!");
 const ACTIVE_SECRET = SECRET || "dev-secret-change-me";
 
-const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(",") : ["http://localhost:3000", "http://localhost:5173"];
+const DEFAULT_ORIGINS = [
+  "https://yohannesweb.netlify.app",
+  "http://localhost:4321",
+  "http://localhost:8888",
+  "http://localhost:3000",
+  "http://localhost:5173",
+  "http://127.0.0.1:4321",
+  "http://127.0.0.1:8888",
+  "http://127.0.0.1:5173",
+];
+const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS
+  ? [...new Set([...process.env.ALLOWED_ORIGINS.split(",").map(o => o.trim()).filter(Boolean), ...DEFAULT_ORIGINS])]
+  : DEFAULT_ORIGINS;
 
 let schemaReady = false;
 async function ensureSchema() {
@@ -101,7 +113,8 @@ async function handleCrud(table, method, id, body, user, event) {
 async function handleUpload(body, event) {
   const { image } = body;
   if (!image) return bad("No image data", 400, event);
-  if (typeof image === 'string' && image.length > 5 * 1024 * 1024) return bad("Image too large (Max 5MB)", 413, event);
+  // Base64 encoding is ~33% larger than raw binary; 5MB binary data translates to ~7MB Base64 string
+  if (typeof image === 'string' && image.length > 7 * 1024 * 1024) return bad("Image too large (Max 5MB)", 413, event);
 
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
   const apiKey = process.env.CLOUDINARY_API_KEY;
@@ -275,10 +288,9 @@ export const handler = async (event) => {
 
     // ═══ META (REAL-TIME POLLING) ═══
     if (segments[0] === "meta" && method === "GET") {
-      const [lastUpdated, unreadCount] = await Promise.all([
-        getLastUpdated(),
-        getUnreadCount()
-      ]);
+      const lastUpdated = await getLastUpdated();
+      // Only disclose unread message count to authenticated admin users
+      const unreadCount = user ? await getUnreadCount() : 0;
       return ok({ last_updated: lastUpdated, unread_messages: unreadCount }, event);
     }
 

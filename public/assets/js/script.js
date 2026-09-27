@@ -698,6 +698,19 @@ cvBtn.addEventListener("click", async (e) => {
 });
 
 /* ============================================
+   ANALYTICS TRACKING (IN-HOUSE)
+   ============================================ */
+function trackEvent(eventType, page = null) {
+  // Fire-and-forget: sends data to API without blocking the UI
+  fetch("/api/analytics", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ event_type: eventType, page }),
+    keepalive: true, // Ensures request finishes even if navigating away
+  }).catch(() => { }); // Silently fail if offline
+}
+
+/* ============================================
    PAGE NAVIGATION
    ============================================ */
 const navLinks = $$("[data-nav-link]");
@@ -707,6 +720,9 @@ function navigateToPage(pageName) {
   pages.forEach((p) => p.classList.toggle("active", p.dataset.page === pageName));
   navLinks.forEach((l) => l.classList.toggle("active", l.textContent.trim().toLowerCase() === pageName));
   scrollTo(0, 0);
+
+  // Directly track page view event for accurate analytics
+  trackEvent("page_view", pageName);
 
   countersRan = false; skillsRan = false;
   skillFills.forEach((f) => (f.style.width = "0%"));
@@ -738,7 +754,11 @@ window.addEventListener("load", () => {
   setTimeout(() => {
     const hash = location.hash.slice(1).toLowerCase();
     const valid = pages.map((p) => p.dataset.page);
-    if (hash && hash !== "about" && valid.includes(hash)) navigateToPage(hash);
+    if (hash && hash !== "about" && valid.includes(hash)) {
+      navigateToPage(hash);
+    } else {
+      trackEvent("page_view", "about");
+    }
   }, 100);
 });
 
@@ -1105,8 +1125,10 @@ async function checkForUpdates() {
 }
 
 function startPolling() {
+  if (pollInterval) return;
   checkForUpdates();
-  pollInterval = setInterval(checkForUpdates, 5000);
+  // Poll every 60 seconds instead of 5s to avoid exhausting serverless invocations and DB quota
+  pollInterval = setInterval(checkForUpdates, 60000);
 }
 
 function stopPolling() {
@@ -1124,34 +1146,6 @@ document.addEventListener("visibilitychange", () => {
   } else {
     startPolling();
   }
-});
-
-/* ============================================
-   ANALYTICS TRACKING (IN-HOUSE)
-   ============================================ */
-function trackEvent(eventType, page = null) {
-  // Fire-and-forget: sends data to API without blocking the UI
-  fetch("/api/analytics", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ event_type: eventType, page }),
-    keepalive: true, // Ensures the request finishes even if the user navigates away
-  }).catch(() => { }); // Silently fail if offline
-}
-
-// Hook into the existing navigation to track page views
-const originalNavigateToPage = window.navigateToPage;
-window.navigateToPage = function (pageName) {
-  originalNavigateToPage(pageName);
-  trackEvent("page_view", pageName);
-};
-
-// Track the initial page load
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    const hash = location.hash.slice(1).toLowerCase() || "about";
-    trackEvent("page_view", hash);
-  }, 2000); // Delay to avoid tracking bots/preloader
 });
 
 // Hook into the CV download button
