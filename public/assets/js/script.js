@@ -756,23 +756,29 @@ navLinks.forEach((link) => {
 
 window.addEventListener("load", () => {
   const pText = $("[data-preloader-text]");
-  const pDots = $$(".status-dot");
+  const step1 = $('[data-step="1"]');
+  const step2 = $('[data-step="2"]');
+  const step3 = $('[data-step="3"]');
+  const line1 = $(".step-line-1");
+  const line2 = $(".step-line-2");
 
-  if (pDots[0]) pDots[0].classList.add("active");
+  if (step1) step1.classList.add("active");
 
   setTimeout(() => {
-    if (pText) pText.textContent = "Calibrating CVM & Automation Frameworks...";
-    if (pDots[1]) pDots[1].classList.add("active");
-  }, 400);
+    if (pText) pText.textContent = "Routing Safaricom Ethiopia Telecom Pipelines...";
+    if (step2) step2.classList.add("active");
+    if (line1) line1.classList.add("active");
+  }, 450);
 
   setTimeout(() => {
-    if (pText) pText.textContent = "Systems Verified · All Telecom Nodes Active ✓";
-    if (pDots[2]) pDots[2].classList.add("active");
-  }, 850);
+    if (pText) pText.textContent = "Ethiopic Cyber Telemetry Active · All Nodes Verified ✓";
+    if (step3) step3.classList.add("active");
+    if (line2) line2.classList.add("active");
+  }, 950);
 
   setTimeout(() => {
     if (preloader) preloader.classList.add("loaded");
-  }, 1250);
+  }, 1400);
 
   setTimeout(() => {
     const hash = location.hash.slice(1).toLowerCase();

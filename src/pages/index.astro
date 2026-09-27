@@ -15,36 +15,116 @@ import CertModal from "../components/CertModal.astro";
   <div class="preloader" data-preloader>
     <div class="preloader-backdrop-glow"></div>
     <div class="preloader-inner">
-      <div class="preloader-badge">
-        <div class="flag-stripes">
-          <span class="stripe-g"></span>
-          <span class="stripe-y"></span>
-          <span class="stripe-r"></span>
-        </div>
-        <span class="badge-text">ADDIS ABABA · SAFARICOM ETHIOPIA</span>
+      <!-- Top Ethiopic Telecom Badge -->
+      <div class="preloader-badge ethiopic-badge">
+        <span class="fidel-sigil" title="Ge'ez Fidel Yo for Yohannes">ዮ</span>
+        <span class="badge-pipe">|</span>
+        <span class="badge-text">SAFARICOM ETHIOPIA · CVM & QA</span>
         <span class="live-signal-pulse"></span>
       </div>
 
-      <div class="preloader-emblem">
-        <div class="halo-ring ethiopian-halo"></div>
-        <div class="radar-wave wave-1"></div>
-        <div class="radar-wave wave-2"></div>
-        <div class="orbit-track">
-          <div class="orbit-node"></div>
-        </div>
-        <div class="emblem-core">
-          <div class="core-brackets">&lt;<span class="core-name">YM</span><span class="core-slash">/</span>&gt;</div>
+      <!-- Center Ethiopic Futuristic Emblem -->
+      <div class="preloader-emblem ethiopic-emblem">
+        <!-- SVG Ethiopic Rotating Fidel Astrolabe + Sacred Geometry Cross Lattice -->
+        <svg class="ethiopic-astrolabe-svg" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="ethiopic-emerald-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00e5ff" />
+              <stop offset="50%" stop-color="#00c853" />
+              <stop offset="100%" stop-color="#007934" />
+            </linearGradient>
+            <radialGradient id="matrix-pulse" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="rgba(0, 200, 83, 0.22)" />
+              <stop offset="65%" stop-color="rgba(0, 229, 255, 0.06)" />
+              <stop offset="100%" stop-color="transparent" />
+            </radialGradient>
+            <!-- Orbit Path for Ethiopic Fidel Letters (Yohannes Mesfin + Ge'ez Numerals) -->
+            <path id="fidel-orbit-path" d="M 120, 120 m -94, 0 a 94,94 0 1,1 188,0 a 94,94 0 1,1 -188,0" />
+          </defs>
+
+          <!-- Ambient Matrix Glow -->
+          <circle cx="120" cy="120" r="102" fill="url(#matrix-pulse)" />
+
+          <!-- Outer Caliper & Radar Tracks -->
+          <circle cx="120" cy="120" r="114" stroke="rgba(0, 200, 83, 0.25)" stroke-width="1" stroke-dasharray="3 6" />
+          <circle cx="120" cy="120" r="104" stroke="rgba(255, 255, 255, 0.12)" stroke-width="1" />
+          <circle cx="120" cy="120" r="84" stroke="rgba(0, 229, 255, 0.2)" stroke-width="1" stroke-dasharray="2 4" />
+
+          <!-- Rotating Outer Ethiopic Fidel Dial (ዮሐንስ መስፍን ፩፪፫፬፭፮፯፰) -->
+          <g class="fidel-orbit-group">
+            <text class="fidel-orbit-text">
+              <textPath href="#fidel-orbit-path" xlink:href="#fidel-orbit-path" startOffset="0%">
+                ዮ • ሐ • ን • ስ • መ • ስ • ፍ • ን • ፩ • ፪ • ፫ • ፬ • ፭ • ፮ • ፯ • ፰ •
+              </textPath>
+            </text>
+          </g>
+
+          <!-- Ethiopic Sacred Geometry: Modern Cyber-Lalibela Cross Matrix -->
+          <g class="ethiopic-cross-lattice">
+            <!-- Central diamond lattice -->
+            <polygon points="120,78 138,120 120,162 102,120" stroke="rgba(0, 200, 83, 0.55)" stroke-width="1.2" fill="none" />
+            <polygon points="78,120 120,102 162,120 120,138" stroke="rgba(0, 229, 255, 0.45)" stroke-width="1.2" fill="none" />
+            
+            <!-- Radiating Cross Arms with Geometric Stepped Nodes -->
+            <!-- North Arm -->
+            <path d="M 112,78 L 112,48 L 104,48 L 104,36 L 120,24 L 136,36 L 136,48 L 128,48 L 128,78" stroke="url(#ethiopic-emerald-grad)" stroke-width="1.5" fill="none" />
+            <!-- South Arm -->
+            <path d="M 112,162 L 112,192 L 104,192 L 104,204 L 120,216 L 136,204 L 136,192 L 128,192 L 128,162" stroke="url(#ethiopic-emerald-grad)" stroke-width="1.5" fill="none" />
+            <!-- West Arm -->
+            <path d="M 78,112 L 48,112 L 48,104 L 36,104 L 24,120 L 36,136 L 48,136 L 48,128 L 78,128" stroke="url(#ethiopic-emerald-grad)" stroke-width="1.5" fill="none" />
+            <!-- East Arm -->
+            <path d="M 162,112 L 192,112 L 192,104 L 204,104 L 216,120 L 204,136 L 192,136 L 192,128 L 162,128" stroke="url(#ethiopic-emerald-grad)" stroke-width="1.5" fill="none" />
+
+            <!-- Diagonal Interlocking Diamond Pointers -->
+            <circle cx="56" cy="56" r="2.5" fill="#00e5ff" opacity="0.8" />
+            <circle cx="184" cy="56" r="2.5" fill="#00e5ff" opacity="0.8" />
+            <circle cx="56" cy="184" r="2.5" fill="#00e5ff" opacity="0.8" />
+            <circle cx="184" cy="184" r="2.5" fill="#00e5ff" opacity="0.8" />
+          </g>
+
+          <!-- Concentric Telecom Radar Pulses -->
+          <circle cx="120" cy="120" r="70" class="radar-circle-1" />
+          <circle cx="120" cy="120" r="84" class="radar-circle-2" />
+          
+          <!-- QA Precision Reticle Crosshairs -->
+          <line x1="120" y1="14" x2="120" y2="28" stroke="#00c853" stroke-width="1.5" />
+          <line x1="120" y1="212" x2="120" y2="226" stroke="#00c853" stroke-width="1.5" />
+          <line x1="14" y1="120" x2="28" y2="120" stroke="#00c853" stroke-width="1.5" />
+          <line x1="212" y1="120" x2="226" y2="120" stroke="#00c853" stroke-width="1.5" />
+
+          <!-- Orbiting QA Verification Satellite -->
+          <g class="qa-orbit-runner">
+            <circle cx="120" cy="36" r="4.5" fill="#00e5ff" filter="drop-shadow(0 0 6px #00e5ff)" />
+          </g>
+        </svg>
+
+        <!-- Center Emblem Core: The Monumental 'ዮ' Fidel Glyph & Tech Monogram -->
+        <div class="emblem-core ethiopic-core">
+          <div class="fidel-monogram" title="Ge'ez letter Yo for Yohannes">ዮ</div>
+          <div class="core-sub">&lt;<span class="core-name">YM</span><span class="core-slash">/</span>&gt;</div>
           <div class="core-tag">CVM · QA</div>
         </div>
       </div>
 
+      <!-- Telemetry Progress HUD with Ge'ez Numerals (፩ · ፪ · ፫) -->
       <div class="preloader-status">
-        <div class="status-indicator">
-          <span class="status-dot green"></span>
-          <span class="status-dot yellow"></span>
-          <span class="status-dot red"></span>
+        <div class="geez-steps-container">
+          <div class="geez-step-wrapper active" data-step="1">
+            <span class="geez-glyph">፩</span>
+            <span class="step-label">INIT</span>
+          </div>
+          <div class="geez-step-line step-line-1"></div>
+          <div class="geez-step-wrapper" data-step="2">
+            <span class="geez-glyph">፪</span>
+            <span class="step-label">ROUTE</span>
+          </div>
+          <div class="geez-step-line step-line-2"></div>
+          <div class="geez-step-wrapper" data-step="3">
+            <span class="geez-glyph">፫</span>
+            <span class="step-label">SYNC</span>
+          </div>
         </div>
-        <span class="preloader-text" data-preloader-text>Connecting Safaricom Telecom Telemetry...</span>
+        <span class="preloader-text" data-preloader-text>Initializing Ethiopic Fidel & CVM Protocol...</span>
       </div>
     </div>
   </div>
