@@ -295,8 +295,13 @@ document.addEventListener("visibilitychange", () => {
    ============================================ */
 const typingEl = $("[data-typing]");
 let typingTexts = [
-  "QA Automation Lead", "Python & Robot Framework", "CI/CD Pipeline Expert",
-  "FinTech QA Specialist", "Scrum Certified", "DevOps Enthusiast", "ISO/IEC 27001 Compliant",
+  "Specialist — CVM Development & Operations",
+  "Safaricom Ethiopia Telecommunications",
+  "Customer Value Management Architect",
+  "FinTech & Telecom Automation",
+  "Python & CI/CD Pipelines",
+  "QA & Platform Reliability",
+  "ISO/IEC 27001 Compliant",
 ];
 let tIdx = 0, cIdx = 0, deleting = false, speed = 80;
 
@@ -750,7 +755,25 @@ navLinks.forEach((link) => {
 });
 
 window.addEventListener("load", () => {
-  setTimeout(() => preloader.classList.add("loaded"), 1800);
+  const pText = $("[data-preloader-text]");
+  const pDots = $$(".status-dot");
+
+  if (pDots[0]) pDots[0].classList.add("active");
+
+  setTimeout(() => {
+    if (pText) pText.textContent = "Calibrating CVM & Automation Frameworks...";
+    if (pDots[1]) pDots[1].classList.add("active");
+  }, 400);
+
+  setTimeout(() => {
+    if (pText) pText.textContent = "Systems Verified · All Telecom Nodes Active ✓";
+    if (pDots[2]) pDots[2].classList.add("active");
+  }, 850);
+
+  setTimeout(() => {
+    if (preloader) preloader.classList.add("loaded");
+  }, 1250);
+
   setTimeout(() => {
     const hash = location.hash.slice(1).toLowerCase();
     const valid = pages.map((p) => p.dataset.page);

@@ -13,17 +13,39 @@ import CertModal from "../components/CertModal.astro";
 
 <BaseLayout>
   <div class="preloader" data-preloader>
+    <div class="preloader-backdrop-glow"></div>
     <div class="preloader-inner">
-      <div class="preloader-logo">
-        <span class="preloader-bracket">&lt;</span>
-        <span class="preloader-name">YM</span>
-        <span class="preloader-slash">/</span>
-        <span class="preloader-bracket">&gt;</span>
+      <div class="preloader-badge">
+        <div class="flag-stripes">
+          <span class="stripe-g"></span>
+          <span class="stripe-y"></span>
+          <span class="stripe-r"></span>
+        </div>
+        <span class="badge-text">ADDIS ABABA · SAFARICOM ETHIOPIA</span>
+        <span class="live-signal-pulse"></span>
       </div>
-      <div class="preloader-bar">
-        <div class="preloader-bar-fill"></div>
+
+      <div class="preloader-emblem">
+        <div class="halo-ring ethiopian-halo"></div>
+        <div class="radar-wave wave-1"></div>
+        <div class="radar-wave wave-2"></div>
+        <div class="orbit-track">
+          <div class="orbit-node"></div>
+        </div>
+        <div class="emblem-core">
+          <div class="core-brackets">&lt;<span class="core-name">YM</span><span class="core-slash">/</span>&gt;</div>
+          <div class="core-tag">CVM · QA</div>
+        </div>
       </div>
-      <span class="preloader-text">Initializing test suite...</span>
+
+      <div class="preloader-status">
+        <div class="status-indicator">
+          <span class="status-dot green"></span>
+          <span class="status-dot yellow"></span>
+          <span class="status-dot red"></span>
+        </div>
+        <span class="preloader-text" data-preloader-text>Connecting Safaricom Telecom Telemetry...</span>
+      </div>
     </div>
   </div>
 
