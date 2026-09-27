@@ -12,7 +12,11 @@ export default defineConfig({
   site: "https://yohannesweb.netlify.app",
   server: {
     proxy: {
-      "/api": "http://localhost:8888",
+      "/api": {
+        target: "http://localhost:8888/.netlify/functions/api",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
     },
   },
 });
