@@ -31,13 +31,27 @@ function bindPwToggles(root) {
   });
 }
 
+function parseUTCDate(raw) {
+  if (!raw) return null;
+  const s = String(raw).trim();
+  const d = new Date(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}/.test(s) ? s.replace(" ", "T") + "Z" : s);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+function formatLocalDateTime(raw) {
+  const d = parseUTCDate(raw);
+  return d ? d.toLocaleString() : esc(raw || "");
+}
+
 function renderIcon(name) {
   if (!name) return '';
-  if (name.startsWith('dev:')) return `<i class="devicon-${name.substring(4)} colored"></i>`;
-  if (name.startsWith('si:')) return `<i class="si si-${name.substring(3)}"></i>`;
-  if (name.startsWith('bi:')) return `<i class="bi bi-${name.substring(3)}"></i>`;
-  if (name.includes(':')) return `<iconify-icon icon="${name}" width="22" height="22"></iconify-icon>`;
-  return `<ion-icon name="${name}"></ion-icon>`;
+  const clean = esc(String(name).trim());
+  if (!clean) return '';
+  if (clean.startsWith('dev:')) return `<i class="devicon-${clean.substring(4)} colored"></i>`;
+  if (clean.startsWith('si:')) return `<i class="si si-${clean.substring(3)}"></i>`;
+  if (clean.startsWith('bi:')) return `<i class="bi bi-${clean.substring(3)}"></i>`;
+  if (clean.includes(':')) return `<iconify-icon icon="${clean}" width="22" height="22"></iconify-icon>`;
+  return `<ion-icon name="${clean}"></ion-icon>`;
 }
 
 async function apiFetch(endpoint, method = "GET", body = null) {
@@ -59,14 +73,14 @@ async function apiFetch(endpoint, method = "GET", body = null) {
 const broadcastChannel = typeof BroadcastChannel !== "undefined" ? new BroadcastChannel("portfolio-updates") : null;
 function clearCache() { Object.keys(_cache).forEach(key => delete _cache[key]); }
 function showLoading(el) { el.innerHTML = `<div class="loading-state"><div class="spinner"></div><p>Loading data...</p></div>`; }
-function toast(msg, type = "ok") {
+function toast(msg, type = "ok", syncTabs = true) {
   const el = document.createElement("div");
   el.className = "toast " + type;
   el.innerHTML = `<ion-icon name="${type === "ok" ? "checkmark-circle" : "alert-circle"}"></ion-icon>${esc(msg)}`;
   $("#toasts").appendChild(el);
   requestAnimationFrame(() => el.classList.add("show"));
   setTimeout(() => { el.classList.remove("show"); setTimeout(() => el.remove(), 300); }, 3500);
-  if (type === "ok" && !msg.includes("Status:") && broadcastChannel) {
+  if (type === "ok" && syncTabs && !msg.includes("Status:") && broadcastChannel) {
     broadcastChannel.postMessage({ type: "update", timestamp: Date.now() });
   }
 }
@@ -138,7 +152,7 @@ function buildPicker(opts = {}) {
     document.getElementById(id + "cl")?.addEventListener("click", () => { selM = null; present = false; none = false; syncToggles(); renderMonths(); commit(""); closeThisDrop(); });
     document.getElementById(id + "ap")?.addEventListener("click", () => { let v = ""; if (present) v = "Present"; else if (none) v = opts.noneLabel || "No Expiration"; else if (selM !== null) v = fmtMY({ m: selM, y: selY }); commit(v); closeThisDrop(); });
     function closeThisDrop() { drop.classList.remove("open"); T.classList.remove("open"); }
-    T.addEventListener("click", e => { e.stopPropagation(); const wasOpen = drop.classList.contains("open"); closePickers(); if (!wasOpen) { drop.classList.add("open"); T.classList.add("open"); renderMonths(); } });
+    T.addEventListener("click", e => { e.stopPropagation(); const wasOpen = drop.classList.contains("open"); closePickers(); if (!wasOpen) { drop.classList.add("open"); T.classList.add("open"); renderMonths(); drop.scrollIntoView({ block: "nearest", behavior: "smooth" }); } });
     drop.addEventListener("click", e => e.stopPropagation());
     renderMonths();
   }
@@ -336,8 +350,22 @@ function logout(msg) {
   if (msg && err) err.textContent = msg;
 }
 $("#logout-btn").addEventListener("click", logout);
-function initPanel() { $("#login-screen").style.display = "none"; $("#admin-panel").style.display = "block"; $("#ph-user").textContent = currentUser || "admin"; buildNav(); switchTab("profile"); }
-function buildNav() { let nav = "", mob = ""; SECTIONS.forEach(s => { if (s.group) { nav += `<div class="nav-group">${s.group}</div>`; return; } nav += `<button class="nav-btn" data-tab="${s.key}"><ion-icon name="${s.icon}"></ion-icon>${s.title}</button>`; mob += `<button data-tab="${s.key}"><ion-icon name="${s.icon}"></ion-icon>${s.title}</button>`; }); $("#admin-nav").innerHTML = nav; $("#mobile-nav").innerHTML = mob; $$("[data-tab]").forEach(b => b.addEventListener("click", () => switchTab(b.dataset.tab))); }
+async function refreshUnreadBadge(forceCount = null) {
+  let count = forceCount;
+  if (count === null) {
+    delete _cache["/messages/unread-count"];
+    try {
+      const res = await apiFetch("/messages/unread-count");
+      count = Number(res?.count) || 0;
+    } catch { return; }
+  }
+  $$("[data-msg-badge]").forEach(b => {
+    b.textContent = count > 99 ? "99+" : String(count);
+    b.style.display = count > 0 ? "inline-flex" : "none";
+  });
+}
+function initPanel() { $("#login-screen").style.display = "none"; $("#admin-panel").style.display = "block"; $("#ph-user").textContent = currentUser || "admin"; buildNav(); switchTab("profile"); refreshUnreadBadge(); }
+function buildNav() { let nav = "", mob = ""; SECTIONS.forEach(s => { if (s.group) { nav += `<div class="nav-group">${s.group}</div>`; return; } const badge = s.key === "messages" ? `<span class="nav-badge" data-msg-badge style="display:none">0</span>` : ""; nav += `<button class="nav-btn" data-tab="${s.key}"><ion-icon name="${s.icon}"></ion-icon>${s.title}${badge}</button>`; mob += `<button data-tab="${s.key}"><ion-icon name="${s.icon}"></ion-icon>${s.title}${badge}</button>`; }); $("#admin-nav").innerHTML = nav; $("#mobile-nav").innerHTML = mob; $$("[data-tab]").forEach(b => b.addEventListener("click", () => switchTab(b.dataset.tab))); }
 async function switchTab(key) { currentTab = key; $$("[data-tab]").forEach(b => b.classList.toggle("active", b.dataset.tab === key)); const el = $("#admin-content"), sec = secMap[key]; if (!sec) return; showLoading(el); try { if (sec.custom) { if (key === "profile") await renderProfile(el); else if (key === "experience") await renderTimeline(el, "experience", "Experience"); else if (key === "education") await renderTimeline(el, "education", "Education"); else if (key === "settings") renderSettings(el); else if (key === "messages") await renderMessages(el); else if (key === "analytics") await renderAnalytics(el); } else await renderCrud(el, key); } catch (err) { el.innerHTML = `<div class="empty"><ion-icon name="alert-circle-outline"></ion-icon><p>Error: ${esc(err.message)}</p><button type="button" class="btn btn-ghost" data-retry-tab="${esc(key)}">Retry</button></div>`; el.querySelector("[data-retry-tab]")?.addEventListener("click", () => switchTab(key)); } }
 
 async function renderCrud(el, key) {
@@ -411,15 +439,18 @@ async function renderTimeline(el, section, label) {
 
 async function renderMessages(el) {
   const messages = await apiFetch("/messages"); const unreadCount = messages.filter(m => !m.is_read).length;
-  el.innerHTML = `<div class="sec-header"><h2 class="sec-title"><ion-icon name="mail-outline"></ion-icon> Messages<span class="sec-count">${messages.length}</span>${unreadCount > 0 ? `<span class="sec-count" style="background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)">${unreadCount} unread</span>` : ""}</h2>${messages.length > 0 ? `<button class="btn btn-ghost btn-sm" id="mark-all-read"><ion-icon name="checkmark-done-outline"></ion-icon> Mark all read</button>` : ""}</div><div id="messages-list">${messages.length === 0 ? `<div class="empty"><ion-icon name="mail-open-outline"></ion-icon><p>No messages yet</p><p style="font-size:12px;color:var(--text-3)">Messages from your contact form will appear here</p></div>` : `<div class="item-list">${messages.map(m => `<div class="item-card" data-mid="${m.id}" style="cursor:pointer;${!m.is_read ? 'border-left:3px solid var(--accent);' : ''}"><div class="ic-body"><div class="ic-title" style="display:flex;align-items:center;gap:8px">${!m.is_read ? '<span style="width:8px;height:8px;background:var(--accent);border-radius:50%;flex-shrink:0"></span>' : ''}${esc(m.name)} <span style="color:var(--text-3);font-weight:400;font-size:12px">&lt;${esc(m.email)}&gt;</span></div><div class="ic-sub" style="margin-top:4px;white-space:normal;line-height:1.4">${esc(m.message.substring(0, 120))}${m.message.length > 120 ? '…' : ''}</div><div class="ic-sub" style="margin-top:4px">${new Date(m.created_at).toLocaleString()}</div></div><div class="ic-actions"><button class="btn btn-ghost btn-sm btn-view-msg">View</button><button class="btn btn-danger btn-sm btn-del-msg">Delete</button></div></div>`).join("")}</div>`}</div>`;
+  refreshUnreadBadge(unreadCount);
+  el.innerHTML = `<div class="sec-header"><h2 class="sec-title"><ion-icon name="mail-outline"></ion-icon> Messages<span class="sec-count">${messages.length}</span>${unreadCount > 0 ? `<span class="sec-count" style="background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-border)">${unreadCount} unread</span>` : ""}</h2>${messages.length > 0 ? `<button class="btn btn-ghost btn-sm" id="mark-all-read"><ion-icon name="checkmark-done-outline"></ion-icon> Mark all read</button>` : ""}</div><div id="messages-list">${messages.length === 0 ? `<div class="empty"><ion-icon name="mail-open-outline"></ion-icon><p>No messages yet</p><p style="font-size:12px;color:var(--text-3)">Messages from your contact form will appear here</p></div>` : `<div class="item-list">${messages.map(m => `<div class="item-card" data-mid="${m.id}" data-unread="${!m.is_read ? "1" : "0"}" style="cursor:pointer;${!m.is_read ? 'border-left:3px solid var(--accent);' : ''}"><div class="ic-body"><div class="ic-title" style="display:flex;align-items:center;gap:8px">${!m.is_read ? '<span style="width:8px;height:8px;background:var(--accent);border-radius:50%;flex-shrink:0"></span>' : ''}${esc(m.name)} <span style="color:var(--text-3);font-weight:400;font-size:12px">&lt;${esc(m.email)}&gt;</span></div><div class="ic-sub" style="margin-top:4px;white-space:normal;line-height:1.4">${esc(m.message.substring(0, 120))}${m.message.length > 120 ? '…' : ''}</div><div class="ic-sub" style="margin-top:4px">${formatLocalDateTime(m.created_at)}</div></div><div class="ic-actions"><button class="btn btn-ghost btn-sm btn-view-msg">View</button><button class="btn btn-danger btn-sm btn-del-msg">Delete</button></div></div>`).join("")}</div>`}</div>`;
   $("#mark-all-read")?.addEventListener("click", async () => { await apiFetch("/messages/mark-all-read", "POST"); clearCache(); toast("All marked as read"); renderMessages(el); });
   $("#messages-list").addEventListener("click", async (e) => {
     const card = e.target.closest("[data-mid]"); if (!card) return; const mid = +card.dataset.mid;
     if (e.target.closest(".btn-del-msg")) { if (!await cfmDialog("Delete message?", "This cannot be undone.")) return; await apiFetch("/messages/" + mid, "DELETE"); clearCache(); toast("Message deleted"); renderMessages(el); return; }
     if (e.target.closest(".btn-view-msg") || e.target.closest(".ic-body")) {
+      const wasUnread = card.dataset.unread === "1";
       const msg = await apiFetch("/messages/" + mid); clearCache();
-      openModal(`<div class="modal-head"><h2>Message from ${esc(msg.name)}</h2><button type="button" class="btn btn-icon btn-ghost btn-close-modal" aria-label="Close modal"><ion-icon name="close-outline"></ion-icon></button></div><div class="modal-body"><div class="field"><label>From</label><div style="padding:10px;background:var(--bg-1);border-radius:var(--r);font-size:13px"><strong>${esc(msg.name)}</strong> &lt;<a href="mailto:${esc(msg.email)}" style="color:var(--accent)">${esc(msg.email)}</a>&gt;</div></div><div class="field"><label>Date</label><div style="padding:10px;background:var(--bg-1);border-radius:var(--r);font-size:13px;color:var(--text-2)">${new Date(msg.created_at).toLocaleString()}</div></div><div class="field"><label>Message</label><div style="padding:14px;background:var(--bg-1);border-radius:var(--r);font-size:14px;line-height:1.6;white-space:pre-wrap">${esc(msg.message)}</div></div><div style="display:flex;gap:8px;margin-top:16px"><a href="mailto:${esc(msg.email)}?subject=Re: Your message on my portfolio" class="btn btn-primary"><ion-icon name="mail-outline"></ion-icon> Reply via Email</a><button type="button" class="btn btn-danger" id="modal-del-msg"><ion-icon name="trash-outline"></ion-icon> Delete</button></div></div>`);
-      $("#modal-del-msg")?.addEventListener("click", async () => { await apiFetch("/messages/" + mid, "DELETE"); clearCache(); closeModal(); toast("Message deleted"); switchTab("messages"); });
+      openModal(`<div class="modal-head"><h2>Message from ${esc(msg.name)}</h2><button type="button" class="btn btn-icon btn-ghost btn-close-modal" aria-label="Close modal"><ion-icon name="close-outline"></ion-icon></button></div><div class="modal-body"><div class="field"><label>From</label><div style="padding:10px;background:var(--bg-1);border-radius:var(--r);font-size:13px"><strong>${esc(msg.name)}</strong> &lt;<a href="mailto:${esc(msg.email)}" style="color:var(--accent)">${esc(msg.email)}</a>&gt;</div></div><div class="field"><label>Date</label><div style="padding:10px;background:var(--bg-1);border-radius:var(--r);font-size:13px;color:var(--text-2)">${formatLocalDateTime(msg.created_at)}</div></div><div class="field"><label>Message</label><div style="padding:14px;background:var(--bg-1);border-radius:var(--r);font-size:14px;line-height:1.6;white-space:pre-wrap">${esc(msg.message)}</div></div><div style="display:flex;gap:8px;margin-top:16px"><a href="mailto:${esc(msg.email)}?subject=Re: Your message on my portfolio" class="btn btn-primary"><ion-icon name="mail-outline"></ion-icon> Reply via Email</a><button type="button" class="btn btn-danger" id="modal-del-msg"><ion-icon name="trash-outline"></ion-icon> Delete</button></div></div>`);
+      if (wasUnread) renderMessages(el).catch(() => {});
+      $("#modal-del-msg")?.addEventListener("click", async () => { if (!await cfmDialog("Delete message?", "This cannot be undone.")) return; await apiFetch("/messages/" + mid, "DELETE"); clearCache(); closeModal(); toast("Message deleted"); switchTab("messages"); });
     }
   });
 }
@@ -435,17 +466,52 @@ async function renderAnalytics(el) {
 }
 
 function renderSettings(el) {
-  el.innerHTML = `<div class="sec-header"><h2 class="sec-title"><ion-icon name="settings-outline"></ion-icon> Settings</h2></div><div style="max-width:400px"><h3 style="font-size:15px;margin-bottom:14px">Change Password</h3><form id="pw-form"><div class="field"><label>Current password</label><div class="pw-wrap"><input type="password" name="current" required autocomplete="current-password" /><button type="button" class="pw-toggle" aria-label="Toggle password visibility"><ion-icon name="eye-outline"></ion-icon></button></div></div><div class="field"><label>New password</label><div class="pw-wrap"><input type="password" name="np" required minlength="6" autocomplete="new-password" /><button type="button" class="pw-toggle" aria-label="Toggle password visibility"><ion-icon name="eye-outline"></ion-icon></button></div></div><div class="field"><label>Confirm new password</label><div class="pw-wrap"><input type="password" name="cp" required minlength="6" autocomplete="new-password" /><button type="button" class="pw-toggle" aria-label="Toggle password visibility"><ion-icon name="eye-outline"></ion-icon></button></div></div><button type="submit" class="btn btn-primary"><ion-icon name="lock-closed-outline"></ion-icon> Update Password</button></form><div style="margin-top:36px;padding-top:20px;border-top:1px solid var(--border)"><p style="font-size:12px;color:var(--text-3);line-height:1.8">Portfolio CMS v1.0 · Netlify Functions · Turso · Cloudinary<br><a href="/" target="_blank">View live portfolio →</a></p></div></div>`;
+  el.innerHTML = `<div class="sec-header"><h2 class="sec-title"><ion-icon name="settings-outline"></ion-icon> Settings</h2></div><div style="max-width:440px"><h3 style="font-size:15px;margin-bottom:14px">Change Password</h3><form id="pw-form"><div class="field"><label>Current password</label><div class="pw-wrap"><input type="password" name="current" required autocomplete="current-password" /><button type="button" class="pw-toggle" aria-label="Toggle password visibility"><ion-icon name="eye-outline"></ion-icon></button></div></div><div class="field"><label>New password</label><div class="pw-wrap"><input type="password" name="np" required minlength="6" autocomplete="new-password" /><button type="button" class="pw-toggle" aria-label="Toggle password visibility"><ion-icon name="eye-outline"></ion-icon></button></div></div><div class="field"><label>Confirm new password</label><div class="pw-wrap"><input type="password" name="cp" required minlength="6" autocomplete="new-password" /><button type="button" class="pw-toggle" aria-label="Toggle password visibility"><ion-icon name="eye-outline"></ion-icon></button></div></div><button type="submit" class="btn btn-primary"><ion-icon name="lock-closed-outline"></ion-icon> Update Password</button></form><div style="margin-top:28px;padding-top:22px;border-top:1px solid var(--border)"><h3 style="font-size:15px;margin-bottom:6px">Data &amp; Backup</h3><p style="font-size:12px;color:var(--text-3);margin-bottom:12px;line-height:1.5">Download a full JSON snapshot of your public portfolio data (profile, skills, projects, timeline, testimonials, certificates).</p><button type="button" class="btn btn-ghost" id="backup-json-btn"><ion-icon name="download-outline"></ion-icon> Download Portfolio JSON Backup</button></div><div style="margin-top:28px;padding-top:20px;border-top:1px solid var(--border)"><p style="font-size:12px;color:var(--text-3);line-height:1.8">Portfolio CMS · Astro · Netlify Functions · Turso · Cloudinary · Resend<br><a href="/" target="_blank">View live portfolio →</a></p></div></div>`;
   bindPwToggles(el);
   $("#pw-form").onsubmit = async e => { e.preventDefault(); const cur = $('[name="current"]').value, np = $('[name="np"]').value, cp = $('[name="cp"]').value; if (np !== cp) { toast("Passwords don't match", "err"); return; } if (np.length < 6) { toast("Min 6 characters", "err"); return; } try { await apiFetch("/auth/change-password", "POST", { current: cur, newPassword: np }); toast("Password changed!"); e.target.reset(); } catch (err) { toast(err.message, "err"); } };
+  $("#backup-json-btn")?.addEventListener("click", async () => {
+    const btn = $("#backup-json-btn");
+    btn.disabled = true;
+    try {
+      delete _cache["/portfolio"];
+      const data = await apiFetch("/portfolio");
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `portfolio-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      toast("Backup downloaded!", "ok", false);
+    } catch (err) {
+      toast(err.message || "Backup failed", "err");
+    } finally {
+      btn.disabled = false;
+    }
+  });
 }
 
 (async () => {
   bindPwToggles(document);
   if (TOKEN) {
     if (isSessionExpired()) { clearSession(); logout(); return; }
-    try { await apiFetch("/profile"); currentUser = "admin"; startSessionTimer(); initPanel(); return; } catch { /* token expired */ }
+    try {
+      const ses = await apiFetch("/auth/session");
+      currentUser = ses?.username || "admin";
+      if (ses?.expiresAt) localStorage.setItem(SESSION_KEY, String(ses.expiresAt));
+      startSessionTimer();
+      initPanel();
+      return;
+    } catch { /* token expired */ }
   }
   logout();
 })();
-broadcastChannel?.addEventListener("message", (event) => { if (event.data.type === "update") { console.log("🔄 Update detected in another tab — refreshing..."); switchTab(currentTab); } });
+broadcastChannel?.addEventListener("message", (event) => {
+  if (event.data?.type === "update" && TOKEN && !isSessionExpired() && currentTab) {
+    clearCache();
+    switchTab(currentTab);
+    refreshUnreadBadge();
+  }
+});
