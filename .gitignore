@@ -37,9 +37,5 @@ dist/
 build/
 .astro/
 
-# Uploads (local dev only — production uses Cloudinary)
-public/assets/images/uploads/*
-!public/assets/images/uploads/.gitkeep
-
-# Vanilla backups (kept for rollback, not deployed)
-backups/
+# Uploads (local scratch — production uses Cloudinary)
+public/assets/images/uploads/

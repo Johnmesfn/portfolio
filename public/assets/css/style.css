@@ -91,6 +91,18 @@
   --onyx: hsl(210, 10%, 90%);
   --light-gray: hsl(220, 5%, 40%);
   --light-gray-70: hsla(220, 5%, 40%, 0.7);
+
+  /* High-Contrast WCAG AA Emerald Accent for Light Mode */
+  --accent-primary: hsl(155, 85%, 26%);
+  --accent-secondary: hsl(175, 90%, 25%);
+  --accent-glow: hsla(155, 85%, 26%, 0.15);
+  --accent-glow-strong: hsla(155, 85%, 26%, 0.25);
+  --orange-yellow-crayola: hsl(155, 85%, 26%);
+  --vegas-gold: hsl(155, 75%, 28%);
+  --text-gradient-yellow: linear-gradient(to right,
+      hsl(155, 85%, 26%),
+      hsl(175, 90%, 25%));
+
   --shadow-1: -4px 8px 24px hsla(0, 0%, 0%, 0.06);
   --shadow-2: 0 16px 30px hsla(0, 0%, 0%, 0.06);
   --shadow-3: 0 16px 40px hsla(0, 0%, 0%, 0.06);
@@ -178,423 +190,366 @@ textarea {
 }
 
 /*-----------------------------------
-  PRELOADER - ETHIOPIAN CVM & QA TELECOM SUITE
+  PRELOADER — AUTHENTIC THEATER CURTAIN (PORTFOLIO EMERALD & OBSIDIAN)
 -----------------------------------*/
 
-.preloader {
+.theater-stage {
   position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  overflow: hidden;
+  background: transparent;
+  pointer-events: all;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.theater-stage.loaded {
+  pointer-events: none;
+}
+
+/* ── 1. Overhead Stage Spotlight Beam ── */
+.theater-spotlight {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 0%,
+    hsla(155, 80%, 55%, 0.22) 0%,
+    hsla(155, 60%, 35%, 0.1) 35%,
+    transparent 75%
+  );
+  transition: opacity 0.8s ease;
+}
+
+.theater-stage.loaded .theater-spotlight {
+  animation: fadeSpotlight 0.8s ease forwards;
+}
+
+@keyframes fadeSpotlight {
+  0% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+/* ── 2. Top Stage Valance / Pelmet Header ── */
+.theater-valance {
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background: hsl(220, 10%, 4%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  overflow: hidden;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-              visibility 0.5s ease;
-}
-
-.preloader.loaded {
-  opacity: 0;
-  transform: scale(1.04);
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.preloader-backdrop-glow {
-  position: absolute;
-  width: 480px;
-  height: 480px;
-  border-radius: 50%;
-  background: radial-gradient(circle,
-    hsla(145, 80%, 42%, 0.15) 0%,
-    hsla(45, 95%, 50%, 0.08) 40%,
-    hsla(355, 85%, 52%, 0.06) 65%,
-    transparent 80%);
-  filter: blur(60px);
-  pointer-events: none;
-  animation: backdrop-pulse 3s ease-in-out infinite alternate;
-}
-
-@keyframes backdrop-pulse {
-  0% { transform: scale(0.9) rotate(0deg); opacity: 0.7; }
-  100% { transform: scale(1.15) rotate(45deg); opacity: 1; }
-}
-
-.preloader-inner {
-  position: relative;
+  height: 85px;
+  z-index: 10;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 26px;
-  z-index: 2;
+  will-change: transform;
 }
 
-/* ── Top Ethiopic Telecom Badge ── */
-.preloader-badge.ethiopic-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: hsla(220, 8%, 12%, 0.82);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid hsla(155, 70%, 40%, 0.35);
-  padding: 6px 16px;
-  border-radius: 24px;
-  box-shadow: 0 4px 20px hsla(0, 0%, 0%, 0.3), 0 0 14px hsla(155, 70%, 45%, 0.12);
+.theater-stage.loaded .theater-valance {
+  animation: liftValance 1.2s cubic-bezier(0.7, 0, 0.2, 1) forwards;
 }
 
-.fidel-sigil {
-  font-family: var(--ff-ethiopic);
-  font-size: 16px;
-  font-weight: 800;
-  line-height: 1;
-  color: var(--accent-primary);
-  text-shadow: 0 0 10px hsla(155, 80%, 45%, 0.65);
+@keyframes liftValance {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-120%); }
 }
 
-.badge-pipe {
-  color: hsla(220, 6%, 42%, 0.7);
-  font-size: 11px;
-}
-
-.preloader-badge .badge-text {
-  font-family: var(--ff-mono);
-  font-size: 10.5px;
-  font-weight: 600;
-  letter-spacing: 1.2px;
-  color: var(--light-gray);
-  text-transform: uppercase;
-}
-
-.live-signal-pulse {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent-primary);
-  box-shadow: 0 0 8px var(--accent-primary);
-  animation: live-blip 1.4s ease-in-out infinite;
-}
-
-@keyframes live-blip {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.35; transform: scale(1.4); }
-}
-
-/* ── Center Ethiopic Futuristic Emblem ── */
-.preloader-emblem.ethiopic-emblem {
-  position: relative;
-  width: 210px;
-  height: 210px;
+.valance-swags {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
+  height: 75px;
 }
 
-.ethiopic-astrolabe-svg {
+.swag {
+  flex: 1;
+  height: 100%;
+  background: hsl(220, 8%, 8%);
+  background-image: radial-gradient(
+    ellipse at 50% -20%,
+    hsl(155, 65%, 28%) 0%,
+    hsl(155, 50%, 17%) 45%,
+    hsl(220, 8%, 9%) 85%,
+    hsl(220, 10%, 4%) 100%
+  );
+  border-bottom-left-radius: 50% 32px;
+  border-bottom-right-radius: 50% 32px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.85), inset 0 2px 6px hsla(155, 70%, 45%, 0.25);
+  position: relative;
+  border-left: 1px solid rgba(0, 0, 0, 0.45);
+  border-right: 1px solid rgba(0, 0, 0, 0.45);
+}
+
+.gold-fringe {
+  width: 100%;
+  height: 10px;
+  background: repeating-linear-gradient(
+    90deg,
+    hsl(155, 70%, 35%) 0px,
+    hsl(155, 100%, 48%) 2px,
+    hsl(170, 85%, 48%) 4px,
+    hsl(155, 70%, 35%) 6px,
+    hsl(155, 50%, 22%) 8px
+  );
+  box-shadow: 0 4px 14px hsla(155, 70%, 45%, 0.4);
+  border-bottom: 1px solid hsla(155, 100%, 55%, 0.7);
+}
+
+/* ── 3. Left and Right Stage Curtains (Opening from Both Ends) ── */
+.theater-curtain {
   position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 5;
+  overflow: hidden;
+  will-change: transform;
+}
+
+.curtain-left {
+  left: 0;
+  transform: translateX(0);
+  box-shadow: 15px 0 45px rgba(0, 0, 0, 0.8);
+}
+
+.curtain-right {
+  right: 0;
+  transform: translateX(0);
+  box-shadow: -15px 0 45px rgba(0, 0, 0, 0.8);
+}
+
+/* Realistic Curtain Opening: Parts from Center and Slides all the way to Both Ends */
+.theater-stage.loaded .curtain-left {
+  animation: openCurtainLeft 1.4s cubic-bezier(0.7, 0, 0.2, 1) forwards;
+}
+
+.theater-stage.loaded .curtain-right {
+  animation: openCurtainRight 1.4s cubic-bezier(0.7, 0, 0.2, 1) forwards;
+}
+
+@keyframes openCurtainLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes openCurtainRight {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+
+/* Realistic Repeating Velvet Pleats with Highlights and Deep Shadow Folds */
+.curtain-fabric {
   width: 100%;
   height: 100%;
-  overflow: visible;
+  background-color: hsl(220, 8%, 6%);
+  background-image: repeating-linear-gradient(
+    90deg,
+    hsl(220, 10%, 4%) 0px,
+    hsl(220, 7%, 8%) 14px,
+    hsl(155, 45%, 15%) 28px,
+    hsl(155, 65%, 26%) 42px,
+    hsl(155, 80%, 38%) 48px,
+    hsl(155, 65%, 26%) 54px,
+    hsl(155, 45%, 15%) 68px,
+    hsl(220, 7%, 8%) 82px,
+    hsl(220, 10%, 4%) 96px
+  );
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.95);
+}
+
+/* Glowing Emerald-Cyan Braided Cord on the Center Touching Seam */
+.curtain-inner-cord {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: repeating-linear-gradient(
+    180deg,
+    hsl(155, 100%, 45%) 0px,
+    hsl(170, 80%, 50%) 6px,
+    hsl(155, 60%, 28%) 12px,
+    hsl(155, 100%, 45%) 18px
+  );
+  box-shadow: 0 0 14px hsla(155, 100%, 45%, 0.65);
+  z-index: 6;
+}
+
+.curtain-left .curtain-inner-cord {
+  right: 0;
+}
+
+.curtain-right .curtain-inner-cord {
+  left: 0;
+}
+
+/* Emerald & Teal Fringe at the Bottom Edge of the Curtains */
+.curtain-bottom-fringe {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 12px;
+  background: repeating-linear-gradient(
+    90deg,
+    hsl(155, 70%, 35%) 0px,
+    hsl(155, 100%, 48%) 2px,
+    hsl(170, 85%, 48%) 4px,
+    hsl(155, 70%, 35%) 6px,
+    hsl(155, 50%, 22%) 8px
+  );
+  box-shadow: 0 -3px 12px hsla(155, 70%, 45%, 0.35);
+  z-index: 6;
+}
+
+/* ── 4. Center Theatrical Marquee Plaque ── */
+.theater-marquee {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   pointer-events: none;
 }
 
-/* Rotating Outer Ethiopic Fidel Dial */
-.fidel-orbit-group {
-  transform-origin: 120px 120px;
-  animation: fidel-orbit-spin 26s linear infinite;
+.theater-stage.loaded .theater-marquee {
+  animation: fadeMarquee 0.35s ease forwards;
 }
 
-@keyframes fidel-orbit-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+@keyframes fadeMarquee {
+  0% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.9); visibility: hidden; }
 }
 
-.fidel-orbit-text {
-  font-family: var(--ff-ethiopic);
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 2.2px;
-  fill: hsla(185, 95%, 55%, 0.85);
-  filter: drop-shadow(0 0 5px hsla(155, 75%, 45%, 0.5));
-}
-
-/* Ethiopic Sacred Geometry Cross Matrix */
-.ethiopic-cross-lattice {
-  transform-origin: 120px 120px;
-  animation: cross-matrix-pulse 4s ease-in-out infinite alternate;
-}
-
-@keyframes cross-matrix-pulse {
-  0% { opacity: 0.75; transform: scale(0.97); }
-  100% { opacity: 1; transform: scale(1.03); filter: drop-shadow(0 0 8px hsla(155, 80%, 45%, 0.4)); }
-}
-
-/* Concentric Telecom Waves */
-.radar-circle-1,
-.radar-circle-2 {
-  fill: none;
-  stroke: var(--accent-primary);
-  stroke-width: 1;
-  transform-origin: 120px 120px;
-  animation: radar-telecom 2.4s cubic-bezier(0.1, 0.7, 0.3, 1) infinite;
-  opacity: 0;
-}
-
-.radar-circle-2 {
-  animation-delay: 1.2s;
-}
-
-@keyframes radar-telecom {
-  0% { transform: scale(0.65); opacity: 0.8; }
-  100% { transform: scale(1.35); opacity: 0; }
-}
-
-/* QA Orbiting Satellite Runner */
-.qa-orbit-runner {
-  transform-origin: 120px 120px;
-  animation: qa-runner-spin 3.2s linear infinite;
-}
-
-@keyframes qa-runner-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Center Emblem Core: The Monumental 'ዮ' Fidel Glyph */
-.emblem-core.ethiopic-core {
-  width: 94px;
-  height: 94px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, hsla(220, 10%, 14%, 0.95), hsla(220, 12%, 7%, 0.98));
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1.5px solid hsla(155, 75%, 45%, 0.45);
+.marquee-frame {
+  background: linear-gradient(145deg, hsla(220, 8%, 14%, 0.95) 0%, hsla(220, 8%, 7%, 0.98) 100%);
+  border: 1px solid hsla(155, 70%, 45%, 0.5);
+  border-radius: 16px;
+  padding: 26px 44px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 
+    0 0 0 1px hsla(155, 70%, 45%, 0.2),
+    0 24px 60px rgba(0, 0, 0, 0.95),
+    0 0 45px hsla(155, 70%, 45%, 0.25);
+  text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1px;
-  box-shadow: 0 0 24px hsla(155, 80%, 42%, 0.25),
-              inset 0 0 14px hsla(185, 90%, 50%, 0.12);
-  z-index: 3;
-}
-
-.fidel-monogram {
-  font-family: var(--ff-ethiopic);
-  font-size: 27px;
-  font-weight: 800;
-  line-height: 1.05;
-  color: var(--white-1);
-  background: linear-gradient(135deg, #ffffff 15%, #00e5ff 60%, #00c853 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 10px hsla(155, 80%, 45%, 0.55));
-  animation: fidel-glow 2.5s ease-in-out infinite alternate;
-}
-
-@keyframes fidel-glow {
-  0% { filter: drop-shadow(0 0 6px hsla(155, 80%, 45%, 0.4)); }
-  100% { filter: drop-shadow(0 0 14px hsla(185, 95%, 55%, 0.75)); }
-}
-
-.core-sub {
-  font-family: var(--ff-mono);
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--light-gray);
-  letter-spacing: -0.2px;
-}
-
-.core-sub .core-name {
-  color: var(--white-1);
-}
-
-.core-sub .core-slash {
-  color: var(--accent-primary);
-}
-
-.core-tag {
-  font-family: var(--ff-mono);
-  font-size: 8px;
-  font-weight: 700;
-  color: var(--accent-primary);
-  letter-spacing: 0.8px;
-  text-transform: uppercase;
-  background: hsla(155, 60%, 18%, 0.45);
-  padding: 1px 6px;
-  border-radius: 4px;
-  border: 1px solid hsla(155, 70%, 45%, 0.3);
-  margin-top: 2px;
-}
-
-/* ── Ge'ez Telemetry Progress HUD (፩ · ፪ · ፫) ── */
-.preloader-status {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-
-.geez-steps-container {
-  display: flex;
   align-items: center;
   gap: 8px;
+  max-width: 90vw;
+  animation: marquee-emerald-pulse 2.6s ease-in-out infinite alternate;
 }
 
-.geez-step-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  opacity: 0.35;
-  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+@keyframes marquee-emerald-pulse {
+  0% {
+    box-shadow: 
+      0 0 0 1px hsla(155, 70%, 45%, 0.2),
+      0 24px 60px rgba(0, 0, 0, 0.95),
+      0 0 25px hsla(155, 70%, 45%, 0.2);
+  }
+  100% {
+    box-shadow: 
+      0 0 0 1px hsla(155, 70%, 45%, 0.45),
+      0 24px 60px rgba(0, 0, 0, 0.95),
+      0 0 55px hsla(155, 70%, 45%, 0.45);
+  }
 }
 
-.geez-step-wrapper.active {
-  opacity: 1;
-  transform: scale(1.08);
-}
-
-.geez-glyph {
-  font-family: var(--ff-ethiopic);
-  font-size: 14px;
-  font-weight: 700;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: hsla(220, 8%, 14%, 0.85);
-  border: 1px solid hsla(220, 6%, 26%, 0.6);
-  color: var(--light-gray);
-  transition: all 0.35s ease;
-}
-
-.geez-step-wrapper.active .geez-glyph {
-  background: hsla(155, 70%, 18%, 0.7);
-  border-color: var(--accent-primary);
-  color: var(--white-1);
-  box-shadow: 0 0 12px hsla(155, 80%, 42%, 0.5);
-}
-
-.step-label {
+.marquee-monogram {
   font-family: var(--ff-mono);
-  font-size: 8px;
-  font-weight: 600;
-  letter-spacing: 0.6px;
-  color: var(--light-gray);
-  text-transform: uppercase;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 2px;
 }
 
-.geez-step-wrapper.active .step-label {
+.marquee-monogram .bracket {
+  color: var(--light-gray);
+  opacity: 0.5;
+}
+
+.marquee-monogram .accent {
+  background: var(--text-gradient-yellow);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 16px var(--accent-glow);
+}
+
+.marquee-monogram .slash {
   color: var(--accent-primary);
 }
 
-.geez-step-line {
-  width: 22px;
-  height: 1.5px;
-  background: hsla(220, 6%, 26%, 0.6);
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 14px;
-}
-
-.geez-step-line::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, var(--accent-primary), #00e5ff);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.35s ease;
-}
-
-.geez-step-line.active::after {
-  transform: scaleX(1);
-}
-
-.preloader-text {
-  color: var(--light-gray);
-  font-size: 11.5px;
+.marquee-eyebrow {
   font-family: var(--ff-mono);
-  letter-spacing: 0.8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--accent-primary);
+  text-transform: uppercase;
+}
+
+.marquee-title {
+  font-family: var(--ff-primary);
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 2.5px;
+  color: var(--white-1);
+  text-shadow: 0 0 18px var(--accent-glow-strong), 0 2px 4px rgba(0, 0, 0, 0.8);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.marquee-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin: 4px 0;
+}
+
+.marquee-divider .star {
+  color: var(--accent-primary);
+  font-size: 12px;
+  filter: drop-shadow(0 0 4px var(--accent-primary));
+}
+
+.marquee-divider .divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+}
+
+.marquee-subtitle {
+  font-family: var(--ff-mono);
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  color: var(--light-gray);
+  text-transform: uppercase;
   opacity: 0.9;
-  text-align: center;
-  min-height: 18px;
-  transition: opacity 0.2s ease;
 }
 
-[data-theme="light"] .preloader {
-  background: hsl(210, 20%, 97%);
-}
-
-[data-theme="light"] .emblem-core.ethiopic-core {
-  background: hsla(0, 0%, 100%, 0.95);
-  border-color: hsla(155, 60%, 40%, 0.4);
-  box-shadow: 0 0 24px hsla(155, 60%, 45%, 0.15), inset 0 0 14px hsla(185, 80%, 45%, 0.08);
-}
-
-[data-theme="light"] .fidel-monogram {
-  background: linear-gradient(135deg, #101828 20%, #00873e 70%, #00a651 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-[data-theme="light"] .core-name {
-  color: hsl(220, 15%, 15%);
-}
-
-[data-theme="light"] .preloader-badge.ethiopic-badge {
-  background: hsla(0, 0%, 100%, 0.9);
-  border-color: hsla(155, 50%, 45%, 0.3);
-  box-shadow: 0 4px 16px hsla(0, 0%, 0%, 0.08);
-}
-
-[data-theme="light"] .preloader-badge .badge-text {
-  color: hsl(220, 15%, 35%);
-}
-
-[data-theme="light"] .fidel-orbit-text {
-  fill: hsla(155, 85%, 28%, 0.85);
-}
-
-[data-theme="light"] .geez-glyph {
-  background: hsla(0, 0%, 100%, 0.9);
-  border-color: hsla(220, 10%, 82%, 0.8);
-  color: hsl(220, 15%, 35%);
-}
-
-[data-theme="light"] .geez-step-wrapper.active .geez-glyph {
-  background: hsla(155, 60%, 92%, 0.9);
-  border-color: var(--accent-primary);
-  color: hsl(155, 85%, 25%);
-}
-
-[data-theme="light"] .preloader-text {
-  color: hsl(220, 15%, 35%);
-}
-
-@keyframes glow-pulse {
-
-  0%,
-  100% {
-    text-shadow: 0 0 5px var(--accent-glow);
+@media (max-width: 580px) {
+  .theater-valance {
+    height: 65px;
   }
-
-  50% {
-    text-shadow: 0 0 20px var(--accent-glow-strong), 0 0 40px var(--accent-glow);
+  .valance-swags {
+    height: 55px;
   }
-}
-
-@keyframes load-bar {
-  to {
-    width: 100%;
+  .swag:nth-child(n+4) {
+    display: none;
+  }
+  .marquee-frame {
+    padding: 20px 24px;
+  }
+  .marquee-title {
+    font-size: 20px;
+    letter-spacing: 1.5px;
   }
 }
 
@@ -630,10 +585,20 @@ textarea {
   align-items: center;
   color: var(--accent-primary);
   font-size: 20px;
-  z-index: 100;
+  z-index: 15;
   cursor: pointer;
   transition: var(--transition-1);
   box-shadow: var(--shadow-2);
+}
+
+@media (max-width: 579px) {
+  .theme-toggle-btn {
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
 }
 
 .theme-toggle-btn:hover {
@@ -691,6 +656,17 @@ textarea {
 .back-to-top:hover {
   transform: translateY(-3px);
   box-shadow: 0 0 35px var(--accent-glow-strong);
+}
+
+@media (max-width: 1023px) {
+  .back-to-top {
+    bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 16px;
+  }
 }
 
 /*-----------------------------------
@@ -930,9 +906,11 @@ article.active {
 -----------------------------------*/
 
 .typing-cursor {
+  display: inline;
+  margin-left: 1px;
   color: var(--accent-primary);
   animation: blink 0.7s step-end infinite;
-  font-weight: var(--fw-300);
+  font-weight: var(--fw-400);
 }
 
 /*-----------------------------------
@@ -971,6 +949,18 @@ main {
   min-width: 259px;
   max-width: 100%;
   overflow-x: hidden;
+  animation: stageContentReveal 1s cubic-bezier(0.25, 1, 0.5, 1) 0.35s both;
+}
+
+@keyframes stageContentReveal {
+  0% {
+    opacity: 0.88;
+    transform: scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /*-----------------------------------
@@ -979,13 +969,7 @@ main {
 
 .sidebar {
   margin-bottom: 15px;
-  max-height: 112px;
-  overflow: hidden;
   transition: var(--transition-2);
-}
-
-.sidebar.active {
-  max-height: 480px;
 }
 
 .sidebar-info {
@@ -1078,6 +1062,12 @@ main {
 
 /* --- Info Content --- */
 
+.info-content {
+  flex: 1;
+  min-width: 0;
+  padding-right: 40px;
+}
+
 .info-content .name {
   color: var(--white-2);
   font-size: var(--fs-3);
@@ -1093,13 +1083,14 @@ main {
   font-size: var(--fs-8);
   font-weight: var(--fw-400);
   font-family: var(--ff-mono);
-  width: max-content;
+  width: fit-content;
   max-width: 100%;
-  padding: 4px 12px;
+  padding: 5px 12px;
   border-radius: 8px;
-  display: flex;
-  align-items: center;
-  min-height: 24px;
+  display: block;
+  line-height: 1.5;
+  text-align: left;
+  min-height: 28px;
   border: 1px solid var(--jet);
 }
 
@@ -1146,15 +1137,26 @@ main {
   display: none;
 }
 
+.info_more-btn ion-icon {
+  transition: transform 0.3s ease;
+}
+
+.sidebar.active .info_more-btn ion-icon {
+  transform: rotate(180deg);
+}
+
 /* --- Sidebar More Info --- */
 
 .sidebar-info_more {
+  max-height: 0;
+  overflow: hidden;
   opacity: 0;
   visibility: hidden;
-  transition: var(--transition-2);
+  transition: max-height 0.45s ease, opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .sidebar.active .sidebar-info_more {
+  max-height: 900px;
   opacity: 1;
   visibility: visible;
 }
@@ -1261,6 +1263,10 @@ main {
   pointer-events: none;
 }
 
+[data-theme="light"] .download-cv-btn {
+  color: #ffffff;
+}
+
 /*-----------------------------------
   NAVBAR
 -----------------------------------*/
@@ -1285,16 +1291,16 @@ main {
 
 .navbar-list {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap;
+  justify-content: space-around;
   align-items: center;
-  padding: 0 10px;
+  padding: 0 4px;
 }
 
 .navbar-link {
   color: var(--light-gray);
   font-size: var(--fs-8);
-  padding: 18px 7px;
+  padding: 14px 4px;
   transition: color var(--transition-1);
   display: flex;
   flex-direction: column;
@@ -1507,8 +1513,14 @@ main {
 
 .tech-stack-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
+}
+
+@media (min-width: 360px) {
+  .tech-stack-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .tech-stack-item {
@@ -1628,9 +1640,10 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 16px;
   overflow-y: auto;
   overscroll-behavior: contain;
-  z-index: 20;
+  z-index: 200;
   pointer-events: none;
   visibility: hidden;
 }
@@ -1668,7 +1681,9 @@ main {
   background: var(--eerie-black-2);
   position: relative;
   padding: 15px;
-  margin: 15px 12px;
+  margin: auto;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
   border: 1px solid var(--jet);
   border-radius: 14px;
   box-shadow: var(--shadow-5);
@@ -2257,7 +2272,9 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 25;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  z-index: 200;
   pointer-events: none;
   visibility: hidden;
   padding: 20px;
@@ -2287,7 +2304,11 @@ main {
   border: 1px solid var(--jet);
   border-radius: 24px;
   padding: 40px 30px 30px;
+  margin: auto;
   max-width: 460px;
+  max-height: calc(100vh - 32px);
+  overflow-x: hidden;
+  overflow-y: auto;
   width: 100%;
   z-index: 2;
   text-align: center;
@@ -2295,7 +2316,6 @@ main {
   opacity: 0;
   transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
   box-shadow: var(--shadow-5);
-  overflow: hidden;
 }
 
 .cert-modal-container.active .cert-modal {
@@ -2366,6 +2386,12 @@ main {
   align-items: center;
   font-size: 36px;
   color: var(--accent-primary);
+}
+
+.cert-modal-badge i,
+.cert-modal-badge iconify-icon,
+.cert-modal-badge ion-icon {
+  font-size: 36px;
 }
 
 .cert-modal-status {
@@ -2474,6 +2500,10 @@ main {
 .cert-verify-btn.disabled {
   opacity: 0.5;
   pointer-events: none;
+}
+
+[data-theme="light"] .cert-verify-btn {
+  color: #ffffff;
 }
 
 /*-----------------------------------
@@ -2652,9 +2682,8 @@ textarea.form-input::-webkit-resizer {
     scroll-behavior: auto !important;
   }
 
-  .preloader-bar-fill {
-    animation: none;
-    width: 100%;
+  .theater-stage {
+    display: none !important;
   }
 
   .typing-cursor {
@@ -2683,10 +2712,10 @@ textarea.form-input::-webkit-resizer {
   < 580px  (default — already above)
 -----------------------------------*/
 
-/* Prevent article bottom from being hidden behind navbar */
+/* Prevent article bottom from being hidden behind fixed bottom navbar */
 @media (max-width: 1023px) {
   article {
-    padding-bottom: 30px;
+    padding-bottom: calc(85px + env(safe-area-inset-bottom, 20px));
   }
 }
 
@@ -2754,16 +2783,15 @@ textarea.form-input::-webkit-resizer {
   }
 
   .sidebar {
-    max-height: 180px;
     margin-bottom: 30px;
-  }
-
-  .sidebar.active {
-    max-height: 650px;
   }
 
   .sidebar-info {
     gap: 25px;
+  }
+
+  .info-content {
+    padding-right: 118px;
   }
 
   .avatar-box {
@@ -2834,12 +2862,14 @@ textarea.form-input::-webkit-resizer {
 
   .navbar-list {
     gap: 20px;
+    padding: 0 10px;
   }
 
   .navbar-link {
     --fs-8: 14px;
     flex-direction: row;
     gap: 6px;
+    padding: 18px 7px;
   }
 
   .navbar-link span {
@@ -3120,7 +3150,8 @@ textarea.form-input::-webkit-resizer {
 
   .main-content {
     position: relative;
-    width: max-content;
+    width: 100%;
+    max-width: 950px;
     margin: auto;
   }
 
@@ -3248,6 +3279,11 @@ textarea.form-input::-webkit-resizer {
     width: 150px;
   }
 
+  .info-content {
+    width: 100%;
+    padding-right: 0;
+  }
+
   .info-content .name {
     white-space: nowrap;
     text-align: center;
@@ -3255,7 +3291,7 @@ textarea.form-input::-webkit-resizer {
 
   .info-content .title {
     margin: auto;
-    justify-content: center;
+    text-align: center;
   }
 
   .info_more-btn {
@@ -3263,6 +3299,8 @@ textarea.form-input::-webkit-resizer {
   }
 
   .sidebar-info_more {
+    max-height: none;
+    overflow: visible;
     opacity: 1;
     visibility: visible;
   }

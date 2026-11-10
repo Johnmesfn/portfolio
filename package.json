@@ -8,7 +8,7 @@
     "dev": "netlify dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro:dev": "astro dev"
+    "astro:dev": "astro dev --force"
   },
   "dependencies": {
     "@astrojs/netlify": "^8.1.3",

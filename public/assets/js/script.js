@@ -7,14 +7,35 @@ const $ = (sel, ctx = document) => ctx.querySelector(sel);
 const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 const enc = encodeURIComponent;
 
+function escapeHtml(value) {
+  const s = value == null ? "" : String(value);
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function safeUrl(url, fallback = "#") {
+  if (!url) return fallback;
+  const trimmed = String(url).trim();
+  if (trimmed === "#" || trimmed.startsWith("/") || trimmed.startsWith("./") || trimmed.startsWith("../")) {
+    return trimmed;
+  }
+  if (/^(https?:|mailto:|tel:)/i.test(trimmed)) return trimmed;
+  return fallback;
+}
+
 // ═══ UNIVERSAL ICON RENDERER ═══
 function renderIcon(name) {
   if (!name) return '';
-  if (name.startsWith('dev:')) return `<i class="devicon-${name.substring(4)} colored"></i>`;
-  if (name.startsWith('si:')) return `<i class="si si-${name.substring(3)}"></i>`;
-  if (name.startsWith('bi:')) return `<i class="bi bi-${name.substring(3)}"></i>`;
-  if (name.includes(':')) return `<iconify-icon icon="${name}" width="22" height="22"></iconify-icon>`;
-  return `<ion-icon name="${name}"></ion-icon>`;
+  const clean = escapeHtml(String(name).trim());
+  if (clean.startsWith('dev:')) return `<i class="devicon-${clean.substring(4)} colored"></i>`;
+  if (clean.startsWith('si:')) return `<i class="si si-${clean.substring(3)}"></i>`;
+  if (clean.startsWith('bi:')) return `<i class="bi bi-${clean.substring(3)}"></i>`;
+  if (clean.includes(':')) return `<iconify-icon icon="${clean}" width="22" height="22"></iconify-icon>`;
+  return `<ion-icon name="${clean}"></ion-icon>`;
 }
 
 /* ============================================
@@ -160,17 +181,23 @@ function setupModal(containerSel, overlaySel, closeSel) {
   const container = $(containerSel);
   const ov = overlaySel ? $(overlaySel) : null;
   const btn = closeSel ? $(closeSel) : null;
+  let lastFocused = null;
   const open = () => {
+    if (!container) return;
+    lastFocused = document.activeElement;
     container.classList.add("active");
     container.setAttribute("aria-hidden", "false");
     if (ov) ov.classList.add("active");
     document.body.style.overflow = "hidden";
+    btn?.focus();
   };
   const close = () => {
+    if (!container) return;
     container.classList.remove("active");
     container.setAttribute("aria-hidden", "true");
     if (ov) ov.classList.remove("active");
     document.body.style.overflow = "";
+    if (lastFocused && typeof lastFocused.focus === "function") lastFocused.focus();
   };
   if (btn) btn.addEventListener("click", close);
   if (ov) ov.addEventListener("click", close);
@@ -178,27 +205,25 @@ function setupModal(containerSel, overlaySel, closeSel) {
 }
 
 /* ============================================
-   PRELOADER
-   ============================================ */
-const preloader = $("[data-preloader]");
-
-/* ============================================
-   PARTICLES (OPTIMIZED FOR MOBILE)
+   PARTICLES (ACCESSIBLE & OPTIMIZED)
    ============================================ */
 const canvas = document.getElementById("particles-canvas");
-const ctx = canvas.getContext("2d");
+const ctx = canvas?.getContext("2d");
 let particles = [];
 let animationId = null;
 let isTabVisible = true;
 let resizeTimer;
+const prefersReducedMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
 
 function resizeCanvas() {
+  if (!canvas) return;
   canvas.width = innerWidth;
   canvas.height = innerHeight;
 }
-resizeCanvas();
+if (canvas) resizeCanvas();
 
 window.addEventListener("resize", () => {
+  if (!canvas || prefersReducedMotionMedia.matches) return;
   resizeCanvas();
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
@@ -214,8 +239,8 @@ window.addEventListener("resize", () => {
 class Particle {
   constructor() { this.reset(); }
   reset() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
+    this.x = Math.random() * (canvas?.width || 800);
+    this.y = Math.random() * (canvas?.height || 600);
     this.size = Math.random() * 2 + 0.3;
     this.vx = (Math.random() - 0.5) * 0.4;
     this.vy = (Math.random() - 0.5) * 0.4;
@@ -224,10 +249,12 @@ class Particle {
   update() {
     this.x += this.vx;
     this.y += this.vy;
+    if (!canvas) return;
     if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
     if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
   }
   draw(color) {
+    if (!ctx) return;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.fillStyle = `rgba(${color},${this.opacity})`;
@@ -236,17 +263,18 @@ class Particle {
 }
 
 function initParticles() {
+  if (!canvas || prefersReducedMotionMedia.matches) return;
   const count = Math.min(Math.floor((canvas.width * canvas.height) / 18000), 70);
   particles = Array.from({ length: count }, () => new Particle());
 }
 
 function getParticleColor() {
-  return document.documentElement.dataset.theme === "light" ? "34,139,100" : "46,204,135";
+  return document.documentElement.dataset.theme === "light" ? "10,102,52" : "46,204,135";
 }
 
 function connectParticles(color) {
   // ✅ OPTIMIZATION: Skip heavy line-drawing on mobile to save battery/CPU
-  if (window.innerWidth < 768) return;
+  if (!ctx || window.innerWidth < 768) return;
 
   const max = 110;
   const maxSq = max * max;
@@ -269,7 +297,7 @@ function connectParticles(color) {
 }
 
 function animate() {
-  if (!isTabVisible) { animationId = null; return; }
+  if (!canvas || !ctx || !isTabVisible || prefersReducedMotionMedia.matches) { animationId = null; return; }
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   const color = getParticleColor();
   particles.forEach((p) => { p.update(); p.draw(color); });
@@ -277,10 +305,27 @@ function animate() {
   animationId = requestAnimationFrame(animate);
 }
 
-initParticles();
-animate();
+if (!prefersReducedMotionMedia.matches && canvas) {
+  initParticles();
+  animate();
+} else if (canvas) {
+  canvas.style.display = "none";
+}
+
+prefersReducedMotionMedia.addEventListener("change", (e) => {
+  if (e.matches) {
+    if (animationId) cancelAnimationFrame(animationId);
+    animationId = null;
+    if (canvas) canvas.style.display = "none";
+  } else {
+    if (canvas) canvas.style.display = "block";
+    initParticles();
+    animate();
+  }
+});
 
 document.addEventListener("visibilitychange", () => {
+  if (prefersReducedMotionMedia.matches) return;
   if (document.hidden) {
     isTabVisible = false;
     if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
@@ -391,7 +436,15 @@ if (skillFills.length) {
 /* ============================================
    SIDEBAR
    ============================================ */
-$("[data-sidebar-btn]").addEventListener("click", () => $("[data-sidebar]").classList.toggle("active"));
+const sidebarEl = $("[data-sidebar]");
+const sidebarBtnEl = $("[data-sidebar-btn]");
+sidebarBtnEl?.addEventListener("click", () => {
+  if (!sidebarEl) return;
+  const isOpen = sidebarEl.classList.toggle("active");
+  sidebarBtnEl.setAttribute("aria-expanded", String(isOpen));
+  const label = $("span", sidebarBtnEl);
+  if (label) label.textContent = isOpen ? "Hide Contacts" : "Show Contacts";
+});
 
 /* ============================================
    TESTIMONIALS MODAL
@@ -423,28 +476,64 @@ const ce = {
 };
 
 function openCertFromCard(card) {
+  if (!card || !certModal.container) return;
   const d = card.dataset;
-  ce.title.textContent = d.certTitle; ce.issuer.textContent = d.certIssuer;
-  ce.id.textContent = d.certId; ce.date.textContent = d.certDate;
-  ce.expiry.textContent = d.certExpiry || "No Expiration";
-  ce.statusText.textContent = d.certStatus === "ALUMNI" ? "ALUMNI" : "Active";
-  $("span", ce.status).textContent = d.certStatus === "ALUMNI" ? "Alumni Credential" : "Verified Credential";
-  $("ion-icon", ce.icon).setAttribute("name", d.certIcon);
-  if (d.certUrl && d.certUrl !== "#") { ce.url.href = d.certUrl; ce.url.classList.remove("disabled"); }
-  else { ce.url.href = "#"; ce.url.classList.add("disabled"); }
+  if (ce.title) ce.title.textContent = d.certTitle || "Credential";
+  if (ce.issuer) ce.issuer.textContent = d.certIssuer || "—";
+  if (ce.id) ce.id.textContent = d.certId || "—";
+  if (ce.date) ce.date.textContent = d.certDate || "—";
+  if (ce.expiry) ce.expiry.textContent = d.certExpiry || "No Expiration";
+  if (ce.statusText) ce.statusText.textContent = d.certStatus === "ALUMNI" ? "ALUMNI" : (d.certStatus || "Active");
+  const statusLabel = ce.status ? ($("span", ce.status) || ce.status) : null;
+  if (statusLabel) statusLabel.textContent = d.certStatus === "ALUMNI" ? "Alumni Credential" : "Verified Credential";
+  if (ce.icon) ce.icon.innerHTML = renderIcon(d.certIcon || "ribbon-outline");
+  const verifyHref = safeUrl(d.certUrl, "#");
+  if (ce.url) {
+    if (verifyHref !== "#") {
+      ce.url.href = verifyHref;
+      ce.url.classList.remove("disabled");
+      ce.url.removeAttribute("aria-disabled");
+    } else {
+      ce.url.href = "#";
+      ce.url.classList.add("disabled");
+      ce.url.setAttribute("aria-disabled", "true");
+    }
+  }
   certModal.open();
 }
 
-$$("[data-cert-item]").forEach((card) => card.addEventListener("click", () => openCertFromCard(card)));
-$(".certificates-list")?.addEventListener("click", (e) => {
+ce.url?.addEventListener("click", (e) => {
+  if (ce.url.classList.contains("disabled") || ce.url.getAttribute("href") === "#") {
+    e.preventDefault();
+  }
+});
+
+const certListEl = $(".certificates-list");
+certListEl?.addEventListener("click", (e) => {
   const card = e.target.closest("[data-cert-item]");
   if (card) openCertFromCard(card);
+});
+certListEl?.addEventListener("keydown", (e) => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const card = e.target.closest("[data-cert-item]");
+  if (card) {
+    e.preventDefault();
+    openCertFromCard(card);
+  }
+});
+
+// Prevent placeholder '#' project links from clearing URL hash & redirecting to About
+$(".project-list")?.addEventListener("click", (e) => {
+  const link = e.target.closest("a");
+  if (!link) return;
+  const href = (link.getAttribute("href") || "").trim();
+  if (!href || href === "#") e.preventDefault();
 });
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
-    if (certModal.container.classList.contains("active")) certModal.close();
-    if (testimModal.container.classList.contains("active")) testimModal.close();
+    if (certModal.container?.classList.contains("active")) certModal.close();
+    if (testimModal.container?.classList.contains("active")) testimModal.close();
   }
 });
 
@@ -638,6 +727,7 @@ function buildCVHTML(d) {
 
 cvBtn.addEventListener("click", async (e) => {
   e.preventDefault();
+  trackEvent("cv_download");
 
   // ✅ OPTIMIZATION: Dynamically load html2pdf ONLY when the button is clicked
   if (typeof window.html2pdf === "undefined") {
@@ -716,15 +806,23 @@ function trackEvent(eventType, page = null) {
 }
 
 /* ============================================
-   PAGE NAVIGATION
+   PAGE NAVIGATION (ACCESSIBLE ARIA TABS)
    ============================================ */
 const navLinks = $$("[data-nav-link]");
 const pages = $$("[data-page]");
 
 function navigateToPage(pageName) {
   pages.forEach((p) => p.classList.toggle("active", p.dataset.page === pageName));
-  navLinks.forEach((l) => l.classList.toggle("active", l.textContent.trim().toLowerCase() === pageName));
+  navLinks.forEach((l) => {
+    const isAct = (l.querySelector("span")?.textContent || l.textContent).trim().toLowerCase() === pageName;
+    l.classList.toggle("active", isAct);
+    l.setAttribute("aria-selected", isAct ? "true" : "false");
+  });
   scrollTo(0, 0);
+
+  // Update document title for accessibility & browser history
+  const formattedTitle = pageName.charAt(0).toUpperCase() + pageName.slice(1);
+  document.title = `${formattedTitle} | Yohannes Mesfin`;
 
   // Directly track page view event for accurate analytics
   trackEvent("page_view", pageName);
@@ -748,53 +846,30 @@ function navigateToPage(pageName) {
 
 navLinks.forEach((link) => {
   link.addEventListener("click", () => {
-    const name = link.textContent.trim().toLowerCase();
+    const name = (link.querySelector("span")?.textContent || link.textContent).trim().toLowerCase();
     location.hash = name;
     navigateToPage(name);
   });
 });
 
-window.addEventListener("load", () => {
-  const pText = $("[data-preloader-text]");
-  const pCompBadge = $("[data-preloader-company]");
-  const initialCompany = localStorage.getItem("portfolio_company") || "Safaricom Ethiopia";
-  if (pCompBadge) pCompBadge.textContent = `${initialCompany.toUpperCase()} · CVM & QA`;
+/* ============================================
+   INITIAL HASH ROUTING
+   ============================================ */
+function handleInitialRoute() {
+  const hash = location.hash.slice(1).toLowerCase();
+  const valid = pages.map((p) => p.dataset.page);
+  if (hash && hash !== "about" && valid.includes(hash)) {
+    navigateToPage(hash);
+  } else {
+    trackEvent("page_view", "about");
+  }
+}
 
-  const step1 = $('[data-step="1"]');
-  const step2 = $('[data-step="2"]');
-  const step3 = $('[data-step="3"]');
-  const line1 = $(".step-line-1");
-  const line2 = $(".step-line-2");
-
-  if (step1) step1.classList.add("active");
-
-  setTimeout(() => {
-    const comp = localStorage.getItem("portfolio_company") || "Safaricom Ethiopia";
-    if (pText) pText.textContent = `Routing ${comp} Telecom Pipelines...`;
-    if (step2) step2.classList.add("active");
-    if (line1) line1.classList.add("active");
-  }, 450);
-
-  setTimeout(() => {
-    if (pText) pText.textContent = "Ethiopic Cyber Telemetry Active · All Nodes Verified ✓";
-    if (step3) step3.classList.add("active");
-    if (line2) line2.classList.add("active");
-  }, 950);
-
-  setTimeout(() => {
-    if (preloader) preloader.classList.add("loaded");
-  }, 1400);
-
-  setTimeout(() => {
-    const hash = location.hash.slice(1).toLowerCase();
-    const valid = pages.map((p) => p.dataset.page);
-    if (hash && hash !== "about" && valid.includes(hash)) {
-      navigateToPage(hash);
-    } else {
-      trackEvent("page_view", "about");
-    }
-  }, 100);
-});
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", handleInitialRoute, { once: true });
+} else {
+  handleInitialRoute();
+}
 
 window.addEventListener("hashchange", () => {
   const hash = location.hash.slice(1).toLowerCase();
@@ -807,20 +882,21 @@ window.addEventListener("hashchange", () => {
    CMS DATA LOADER (THE HANDSHAKE)
    ============================================ */
 function mdHighlight(text) {
-  return text.replace(/\*\*(.*?)\*\*/g, '<span class="highlight">$1</span>');
+  return escapeHtml(text).replace(/\*\*(.*?)\*\*/g, '<span class="highlight">$1</span>');
 }
 
 function cmsRenderProfile(profile, typTexts) {
   if (!profile) return;
   const nameEl = $(".sidebar .name");
-  if (nameEl && profile.name) nameEl.textContent = profile.name;
+  if (nameEl && profile.name) {
+    nameEl.textContent = profile.name;
+    nameEl.title = profile.name;
+  }
   const avatarImg = $(".avatar-box img");
-  if (avatarImg && profile.avatar_url) avatarImg.src = profile.avatar_url;
+  if (avatarImg && profile.avatar_url) avatarImg.src = safeUrl(profile.avatar_url, "/assets/images/my-avatar.png");
 
   if (profile.company) {
     localStorage.setItem("portfolio_company", profile.company);
-    const pCompBadge = $("[data-preloader-company]");
-    if (pCompBadge) pCompBadge.textContent = `${profile.company.toUpperCase()} · CVM & QA`;
   }
 
   if (typTexts?.length) {
@@ -853,10 +929,10 @@ function cmsRenderContacts(contacts) {
     <li class="contact-item">
       <div class="icon-box">${renderIcon(c.icon)}</div>
       <div class="contact-info">
-        <p class="contact-title">${c.type}</p>
+        <p class="contact-title">${escapeHtml(c.type)}</p>
         ${c.type === "Location"
-          ? `<address>${c.value}</address>`
-          : `<a href="${c.type === "Email" ? "mailto:" : "tel:"}${c.value.replace(/\s/g, "")}" class="contact-link">${c.value}</a>`
+          ? `<address>${escapeHtml(c.value)}</address>`
+          : `<a href="${escapeHtml((c.type === "Email" ? "mailto:" : "tel:") + String(c.value || "").replace(/\s/g, ""))}" class="contact-link">${escapeHtml(c.value)}</a>`
         }
       </div>
     </li>`,
@@ -871,8 +947,8 @@ function cmsRenderSocial(links) {
     .map(
       (s) => `
     <li class="social-item">
-      <a href="${s.url}" class="social-link" title="${s.platform}" target="_blank"
-         rel="noopener noreferrer" aria-label="${s.platform}">
+      <a href="${escapeHtml(safeUrl(s.url))}" class="social-link" title="${escapeHtml(s.platform)}" target="_blank"
+         rel="noopener noreferrer" aria-label="${escapeHtml(s.platform)}">
         ${renderIcon(s.icon)}
       </a>
     </li>`,
@@ -884,13 +960,13 @@ function cmsRenderStats(stats) {
   const el = $(".stats-list");
   if (!el || !stats?.length) return;
   el.innerHTML = stats.map((s) => `
-    <li class="stats-item" data-reveal="${s.reveal || "bottom"}">
+    <li class="stats-item" data-reveal="${escapeHtml(s.reveal || "bottom")}">
       <div class="stats-icon-box">${renderIcon(s.icon)}</div>
       <div class="stats-content">
-        <span class="stats-number" data-counter="${s.value}">0</span>
-        <span class="stats-suffix">${s.suffix || ""}</span>
+        <span class="stats-number" data-counter="${Number(s.value) || 0}">0</span>
+        <span class="stats-suffix">${escapeHtml(s.suffix || "")}</span>
       </div>
-      <p class="stats-label">${s.label}</p>
+      <p class="stats-label">${escapeHtml(s.label)}</p>
     </li>`).join("");
 }
 
@@ -898,13 +974,13 @@ function cmsRenderServices(services) {
   const el = $(".service-list");
   if (!el || !services?.length) return;
   el.innerHTML = services.map((s) => `
-    <li class="service-item" data-reveal="${s.reveal || "left"}">
+    <li class="service-item" data-reveal="${escapeHtml(s.reveal || "left")}">
       <div class="service-icon-box">
         <span class="service-icon">${renderIcon(s.icon)}</span>
       </div>
       <div class="service-content-box">
-        <h4 class="h4 service-item-title">${s.title}</h4>
-        <p class="service-item-text">${s.description}</p>
+        <h4 class="h4 service-item-title">${escapeHtml(s.title)}</h4>
+        <p class="service-item-text">${escapeHtml(s.description)}</p>
       </div>
     </li>`).join("");
 }
@@ -915,8 +991,8 @@ function cmsRenderTechStack(items) {
   el.innerHTML = items
     .map(
       (t) => `
-    <li class="tech-stack-item" data-reveal="bottom" title="${t.name}">
-      ${renderIcon(t.icon)}<span>${t.name}</span>
+    <li class="tech-stack-item" data-reveal="bottom" title="${escapeHtml(t.name)}">
+      ${renderIcon(t.icon)}<span>${escapeHtml(t.name)}</span>
     </li>`,
     )
     .join("");
@@ -929,10 +1005,10 @@ function cmsRenderTestimonials(items) {
     <li class="testimonials-item">
       <div class="content-card" data-testimonials-item>
         <figure class="testimonials-avatar-box">
-          <img src="${t.avatar_url}" alt="${t.name}" width="60" data-testimonials-avatar />
+          <img src="${escapeHtml(safeUrl(t.avatar_url, "/assets/images/avatar-1.png"))}" alt="${escapeHtml(t.name)}" width="60" data-testimonials-avatar />
         </figure>
-        <h4 class="h4 testimonials-item-title" data-testimonials-title>${t.name}</h4>
-        <div class="testimonials-text" data-testimonials-text><p>${t.text}</p></div>
+        <h4 class="h4 testimonials-item-title" data-testimonials-title>${escapeHtml(t.name)}</h4>
+        <div class="testimonials-text" data-testimonials-text><p>${escapeHtml(t.text)}</p></div>
       </div>
     </li>`).join("");
 }
@@ -958,7 +1034,7 @@ function cmsRenderTimeline(companies, timelineEl) {
     const parseTags = (t) => {
       try {
         const arr = JSON.parse(t || "[]");
-        return arr.length ? `<ul class="timeline-tags">${arr.map((x) => `<li>${x}</li>`).join("")}</ul>` : "";
+        return Array.isArray(arr) && arr.length ? `<ul class="timeline-tags">${arr.map((x) => `<li>${escapeHtml(x)}</li>`).join("")}</ul>` : "";
       } catch { return ""; }
     };
 
@@ -967,8 +1043,8 @@ function cmsRenderTimeline(companies, timelineEl) {
         <div class="timeline-group-header">
           <div class="timeline-group-icon">${renderIcon(c.icon)}</div>
           <div class="timeline-group-info">
-            <h4 class="h4 timeline-group-company">${c.name}</h4>
-            <span class="timeline-group-meta">${metaDisplay}</span>
+            <h4 class="h4 timeline-group-company">${escapeHtml(c.name)}</h4>
+            <span class="timeline-group-meta">${escapeHtml(metaDisplay)}</span>
           </div>
         </div>
         <div class="timeline-group-roles">
@@ -978,9 +1054,9 @@ function cmsRenderTimeline(companies, timelineEl) {
               <div class="timeline-role">
                 <div class="timeline-role-dot"></div>
                 <div class="timeline-role-content">
-                  <h5 class="timeline-role-title">${r.title}</h5>
-                  <span class="timeline-role-date">${liveDate}</span>
-                  ${r.description ? `<p class="timeline-text">${r.description}</p>` : ""}
+                  <h5 class="timeline-role-title">${escapeHtml(r.title)}</h5>
+                  <span class="timeline-role-date">${escapeHtml(liveDate)}</span>
+                  ${r.description ? `<p class="timeline-text">${escapeHtml(r.description)}</p>` : ""}
                   ${parseTags(r.tags)}
                 </div>
               </div>`;
@@ -993,45 +1069,53 @@ function cmsRenderTimeline(companies, timelineEl) {
 function cmsRenderSkills(skills) {
   const el = $(".skills-list");
   if (!el || !skills?.length) return;
-  el.innerHTML = skills.map((s) => `
+  el.innerHTML = skills.map((s) => {
+    const pct = Math.max(0, Math.min(100, Number(s.percentage) || 0));
+    return `
     <li class="skills-item">
       <div class="title-wrapper">
-        <h5 class="h5">${s.name}</h5>
-        <data value="${s.percentage}">${s.percentage}%</data>
+        <h5 class="h5">${escapeHtml(s.name)}</h5>
+        <data value="${pct}">${pct}%</data>
       </div>
       <div class="skill-progress-bg">
-        <div class="skill-progress-fill" data-skill-fill style="width:0%" data-width="${s.percentage}"></div>
+        <div class="skill-progress-fill" data-skill-fill style="width:0%" data-width="${pct}"></div>
       </div>
-    </li>`).join("");
+    </li>`;
+  }).join("");
 }
 
 function cmsRenderProjects(projects) {
   const el = $(".project-list");
   if (!el || !projects?.length) return;
-  const categories = [...new Set(projects.map((p) => p.category))];
+  const categories = [...new Set(projects.map((p) => String(p.category || "").trim()).filter(Boolean))];
   const filterList = $(".filter-list");
   const selectList = $(".select-list");
 
   if (filterList) {
     filterList.innerHTML = `<li class="filter-item"><button class="active" data-filter-btn>All</button></li>` +
-      categories.map((c) => `<li class="filter-item"><button data-filter-btn>${c.charAt(0).toUpperCase() + c.slice(1)}</button></li>`).join("");
+      categories.map((c) => `<li class="filter-item"><button data-filter-btn>${escapeHtml(c.charAt(0).toUpperCase() + c.slice(1))}</button></li>`).join("");
   }
   if (selectList) {
     selectList.innerHTML = `<li class="select-item"><button data-select-item>All</button></li>` +
-      categories.map((c) => `<li class="select-item"><button data-select-item>${c.charAt(0).toUpperCase() + c.slice(1)}</button></li>`).join("");
+      categories.map((c) => `<li class="select-item"><button data-select-item>${escapeHtml(c.charAt(0).toUpperCase() + c.slice(1))}</button></li>`).join("");
   }
 
-  el.innerHTML = projects.map((p) => `
-    <li class="project-item active" data-filter-item data-category="${p.category}" data-reveal="bottom">
-      <a href="${p.link || "#"}">
+  el.innerHTML = projects.map((p) => {
+    const href = safeUrl(p.link, "#");
+    const externalAttrs = href !== "#" ? ` target="_blank" rel="noopener noreferrer"` : "";
+    const cat = String(p.category || "").toLowerCase();
+    return `
+    <li class="project-item active" data-filter-item data-category="${escapeHtml(cat)}" data-reveal="bottom">
+      <a href="${escapeHtml(href)}"${externalAttrs}>
         <figure class="project-img">
           <div class="project-item-icon-box"><ion-icon name="eye-outline"></ion-icon></div>
-          <img src="${p.image_url}" alt="${p.title}" loading="lazy" />
+          <img src="${escapeHtml(safeUrl(p.image_url, "/assets/images/project-1.jpg"))}" alt="${escapeHtml(p.title)}" loading="lazy" />
         </figure>
-        <h3 class="project-title">${p.title}</h3>
-        <p class="project-category">${p.description || p.category}</p>
+        <h3 class="project-title">${escapeHtml(p.title)}</h3>
+        <p class="project-category">${escapeHtml(p.description || p.category)}</p>
       </a>
-    </li>`).join("");
+    </li>`;
+  }).join("");
 }
 
 function cmsRenderCertificates(certs) {
@@ -1039,20 +1123,20 @@ function cmsRenderCertificates(certs) {
   if (!el || !certs?.length) return;
   el.innerHTML = certs.map((c) => `
     <li class="certificate-item" data-reveal="bottom">
-      <div class="certificate-card" data-cert-item
-        data-cert-title="${c.title}" data-cert-issuer="${c.issuer}"
-        data-cert-id="${c.credential_id}" data-cert-date="${c.issue_date}"
-        data-cert-expiry="${c.expiry}" data-cert-url="${c.verify_url}"
-        data-cert-status="${c.status}" data-cert-icon="${c.icon}">
+      <div class="certificate-card" data-cert-item role="button" tabindex="0"
+        data-cert-title="${escapeHtml(c.title)}" data-cert-issuer="${escapeHtml(c.issuer)}"
+        data-cert-id="${escapeHtml(c.credential_id)}" data-cert-date="${escapeHtml(c.issue_date)}"
+        data-cert-expiry="${escapeHtml(c.expiry)}" data-cert-url="${escapeHtml(safeUrl(c.verify_url, "#"))}"
+        data-cert-status="${escapeHtml(c.status)}" data-cert-icon="${escapeHtml(c.icon || "ribbon-outline")}">
         <div class="certificate-eye-overlay">
           <ion-icon name="eye-outline"></ion-icon>
           <span>View Credential</span>
         </div>
-        <div class="certificate-icon">${renderIcon(c.icon)}</div>
+        <div class="certificate-icon">${renderIcon(c.icon || "ribbon-outline")}</div>
         <div class="certificate-content">
-          <h3 class="h4 certificate-title">${c.title}</h3>
-          <p class="certificate-issuer">${c.issuer}</p>
-          <span class="certificate-badge">${c.status}</span>
+          <h3 class="h4 certificate-title">${escapeHtml(c.title)}</h3>
+          <p class="certificate-issuer">${escapeHtml(c.issuer)}</p>
+          <span class="certificate-badge">${escapeHtml(c.status)}</span>
         </div>
       </div>
     </li>`).join("");
@@ -1148,13 +1232,15 @@ let pollInterval = null;
 
 async function checkForUpdates() {
   try {
+    // Safety guard: do not wipe/reload DOM while user is typing in form or viewing a modal
+    if (document.querySelector("[data-form]:focus-within") || document.querySelector(".modal-container.active") || document.querySelector(".cert-modal-container.active")) return;
     const res = await fetch("/api/meta");
     if (!res.ok) return;
     const data = await res.json();
 
     if (data.last_updated && data.last_updated !== lastKnownUpdate) {
       if (lastKnownUpdate !== null) {
-        console.log("🔄 Site updated detected — reloading CMS data...");
+        console.log("🔄 Site update detected — updating CMS data...");
         await loadCMSData();
       }
       lastKnownUpdate = data.last_updated;
@@ -1187,11 +1273,3 @@ document.addEventListener("visibilitychange", () => {
     startPolling();
   }
 });
-
-// Hook into the CV download button
-const cvDownloadBtn = document.getElementById("download-cv-btn");
-if (cvDownloadBtn) {
-  cvDownloadBtn.addEventListener("click", () => {
-    trackEvent("cv_download");
-  });
-}
