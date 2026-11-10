@@ -3,6 +3,10 @@
   functions = "netlify/functions"
   publish = "dist"
 
+[build.environment]
+  # Public/non-secret email settings intentionally appear in site code and fallbacks
+  SECRETS_SCAN_OMIT_KEYS = "CONTACT_NOTIFY_EMAIL,RESEND_FROM_EMAIL"
+
 [functions]
   node_bundler = "esbuild"
 
